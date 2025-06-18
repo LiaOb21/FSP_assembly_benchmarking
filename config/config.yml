@@ -5,10 +5,10 @@ threads: 8
 
 # Set the path to the input directory (this directory must contain 
 # one subdirectory for each sample, and the subdirectories must be named after the sample))
-input_path: "/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/clean_data/00_test/"
+input_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/test_data"
 
 # Customise the results directory 
-results_path: "results"
+output_dir: "results"
 
 # Customise spades parameters
 spades:

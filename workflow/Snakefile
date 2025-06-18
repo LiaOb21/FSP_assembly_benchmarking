@@ -3,28 +3,22 @@
 # https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html,
 # in particular regarding the standardized folder structure mentioned there.
 
-# set config file where you can specify your inputs
+import glob
+import os
+
 configfile: "config/config.yml"
 
-# set {samples} global variable - used to read input files
-samples_in_pattern = "{sample}/{sample}_trimmed.R1.fq.gz"
-samples = glob_wildcards(config["input_path"] + samples_in_pattern).sample
+input_dir = config["input_dir"]
+output_dir = config["output_dir"]
 
-# Include the common rule, where the inputs for rule_all are defined
-include: "rules/common.smk"
-# include spades rule
-include: "rules/spades.smk"
-
-# Define the rule all, which is the default rule that Snakemake runs when no specific rule or target is specified
-# input files are defined in the common.smk file
-
-print("Samples:", samples)
-for sample in samples:
-    print(f"{config['input_path']}/{sample}/{sample}_trimmed.R1.fq.gz")
+# Collect sample names from test_data directory
+SAMPLES = [os.path.basename(d) for d in glob.glob(f"{input_dir}/*") if os.path.isdir(d)]
 
 rule all:
-    input: 
-        get_all_inputs
+    input:
+        expand(f"{output_dir}" + "/{sample}/scaffolds.fasta", sample=SAMPLES)
 
-print("Samples:", samples)
-print("Expected outputs:", get_all_inputs())
+# include spades rules
+include: "rules/spades.smk"
+
+print("SAMPLES:", SAMPLES)
