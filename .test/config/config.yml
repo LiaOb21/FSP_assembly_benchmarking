@@ -1,8 +1,20 @@
-samplesheet: "config/samples.tsv"
+# Set memory limit for rules
+mem_mb: 16000
+# Set number of threads for rules
+threads: 8
 
-get_genome:
-  ncbi_ftp: https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/146/045/GCF_000146045.2_R64/GCF_000146045.2_R64_genomic.fna.gz
+# Set the path to the input directory (this directory must contain 
+# one subdirectory for each sample, and the subdirectories must be named after the sample))
+input_path: "data/input/"
 
-simulate_reads:
-  read_length: 100
-  read_number: 10000
+# Customise the results directory 
+results_path: "data/output/"
+
+# Customise spades parameters
+spades:
+  optional_params:
+#    - "--careful": true
+#    - "--only-assembler": true
+#    - "--disable-gzip-output": true
+#    - "--cov-cutoff": "auto"
+#    - "--min-contig-length": 500

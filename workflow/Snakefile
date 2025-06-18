@@ -3,35 +3,28 @@
 # https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html,
 # in particular regarding the standardized folder structure mentioned there.
 
-
-# load configuration
-# -----------------------------------------------------
+# set config file where you can specify your inputs
 configfile: "config/config.yml"
 
+# set {samples} global variable - used to read input files
+samples_in_pattern = "{sample}/{sample}_trimmed.R1.fq.gz"
+samples = glob_wildcards(config["input_path"] + samples_in_pattern).sample
 
-# load rules
-# -----------------------------------------------------
+# Include the common rule, where the inputs for rule_all are defined
 include: "rules/common.smk"
-include: "rules/process_reads.smk"
+# include spades rule
+include: "rules/spades.smk"
 
+# Define the rule all, which is the default rule that Snakemake runs when no specific rule or target is specified
+# input files are defined in the common.smk file
 
-# optional messages, log and error handling
-# -----------------------------------------------------
-onstart:
-    print("\n--- Analysis started ---\n")
+print("Samples:", samples)
+for sample in samples:
+    print(f"{config['input_path']}/{sample}/{sample}_trimmed.R1.fq.gz")
 
-
-onsuccess:
-    print("\n--- Workflow finished! ---\n")
-
-
-onerror:
-    print("\n--- An error occurred! ---\n")
-
-
-# target rules
-# -----------------------------------------------------
 rule all:
-    input:
-        "results/multiqc/multiqc_report.html",
-    default_target: True
+    input: 
+        get_all_inputs
+
+print("Samples:", samples)
+print("Expected outputs:", get_all_inputs())
