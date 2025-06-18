@@ -1,2 +1,2 @@
 input_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/test_data"
-output_dir: = "machines/results"
+output_dir: "results"
