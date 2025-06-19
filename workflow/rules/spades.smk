@@ -11,8 +11,8 @@ rule spades:
         result_dir = directory(f"{output_dir}" + "/{sample}"),
         scaffolds = f"{output_dir}" + "/{sample}/scaffolds.fasta",
     params:
-        optional_params=" ".join(
-            f"{k} {v}" for k, v in config["spades"]["optional_params"].items() if v
+        optional_params = " ".join(
+            k for k, v in config["spades"]["optional_params"].items() if v is True
         ),
     threads: config["threads"],  # access threads from config
     log:
