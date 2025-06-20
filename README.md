@@ -16,6 +16,10 @@ A Snakemake workflow for `<description>`
 
 ## Usage
 
+```
+snakemake --configfile config/config.yml --software-deployment-method conda --snakefile workflow/Snakefile --cores 8
+```
+
 The usage of this workflow is described in the [Snakemake Workflow Catalog](https://snakemake.github.io/snakemake-workflow-catalog/docs/workflows/<owner>/<repo>).
 
 Detailed information about input data and workflow configuration can also be found in the [`config/README.md`](config/README.md).

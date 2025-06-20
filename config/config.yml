@@ -5,10 +5,10 @@ threads: 8
 
 # Set the path to the input directory (this directory must contain 
 # one subdirectory for each sample, and the subdirectories must be named after the sample))
-input_dir: "test_data/clean_data/00_test"
+input_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/clean_data/00_test" # use absoolute path
 
 # Customise the results directory 
-output_dir: "results"
+output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results" # use absolute path
 
 # Customise spades parameters
 spades:
@@ -18,3 +18,29 @@ spades:
 #   "--disable-gzip-output": true
 #   "--cov-cutoff": "auto"
 #   "--min-contig-length": 500
+
+# Customise megahit parameters
+megahit:
+  optional_params:
+    "--no-mercy": True
+    "--min-count": 3
+    "--k-list": "31,51,71,91,99"
+
+# Customise abyss parameters
+abyss:
+  "k": 21
+  optional_params: {} # if you do not want to use any optional parameters, add `{}` here
+#    "--some-flag": True
+#    "--another-flag": False
+
+# Customise sparseassembler parameters
+sparseassembler:
+  "k": 21
+  "GS": 50000000 # genome size estimation in bp (used for memory pre-allocation), suggest a large value if possible.(e.g. ~ 3x genome size)
+  "Scaffold": 1 # for scaffolding with paired-end reads, set to 1
+  "ExpCov": 10 # expected coverage (for scaffolding)
+  optional_params: {} # if you do not want to use any optional parameters, add `{}` here
+#    "g": 10
+#    "LD": 0
+#    "NodeCovTh": 1
+#    "EdgeCovTh": 0

@@ -16,9 +16,20 @@ SAMPLES = [os.path.basename(d) for d in glob.glob(f"{input_dir}/*") if os.path.i
 
 rule all:
     input:
-        expand(f"{output_dir}" + "/{sample}/scaffolds.fasta", sample=SAMPLES)
+        expand(f"{output_dir}" + "/spades/{sample}/scaffolds.fasta", sample=SAMPLES),
+        expand(f"{output_dir}" + "/megahit/{sample}", sample=SAMPLES),
+        expand(f"{output_dir}" + "/abyss/{sample}/abyss-scaffolds.fa", sample=SAMPLES),
+        expand(f"{output_dir}" + "/sparseassembler/{sample}/SuperContigs.txt", sample=SAMPLES),
 
 # include spades rules
 include: "rules/spades.smk"
+# include megahit rule
+include: "rules/megahit.smk"
+# include abyss rule
+include: "rules/abyss.smk"
+# include decompress_reads rule
+include: "rules/decompress_reads.smk"
+# include sparseassembler rule
+include: "rules/sparseassembler.smk"
 
-print("SAMPLES:", SAMPLES)
+#print("SAMPLES:", SAMPLES)
