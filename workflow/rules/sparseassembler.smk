@@ -8,8 +8,8 @@ rule sparseassembler:
         forward_in = f"{output_dir}" + "/fqreads/{sample}/{sample}_trimmed.R1.fq",
         reverse_in = f"{output_dir}" + "/fqreads/{sample}/{sample}_trimmed.R2.fq",
     output:
-        result_dir = directory(f"{output_dir}" + "/sparseassembler/{sample}"),
-        scaffolds = f"{output_dir}" + "/sparseassembler/{sample}/SuperContigs.txt",
+        result_dir = directory(f"{output_dir}" + "/{sample}/sparseassembler"),
+        scaffolds = f"{output_dir}" + "/{sample}/sparseassembler/SuperContigs.txt",
     params:
         k = config["sparseassembler"]["k"],
         GS = config["sparseassembler"]["GS"],

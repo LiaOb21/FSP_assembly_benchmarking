@@ -8,8 +8,8 @@ rule spades:
         forward_in= f"{input_dir}" + "/{sample}/{sample}_trimmed.R1.fq.gz",
         reverse_in= f"{input_dir}" + "/{sample}/{sample}_trimmed.R2.fq.gz",
     output:
-        result_dir = directory(f"{output_dir}" + "/spades/{sample}"),
-        scaffolds = f"{output_dir}" + "/spades/{sample}/scaffolds.fasta",
+        result_dir = directory(f"{output_dir}" + "/{sample}/spades"),
+        scaffolds = f"{output_dir}" + "/{sample}/spades/scaffolds.fasta",
     params:
         optional_params = " ".join(
             k for k, v in config["spades"]["optional_params"].items() if v is True

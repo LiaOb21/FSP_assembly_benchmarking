@@ -8,7 +8,7 @@ rule megahit:
         forward_in= f"{input_dir}" + "/{sample}/{sample}_trimmed.R1.fq.gz",
         reverse_in= f"{input_dir}" + "/{sample}/{sample}_trimmed.R2.fq.gz",
     output:
-        result_dir = directory(f"{output_dir}" + "/megahit/{sample}"),
+        result_dir = directory(f"{output_dir}" + "/{sample}/megahit"),
     #    scaffolds = f"{output_dir}" + "/megahit/{sample}/final.contigs.fa",
     params:
         optional_params = " ".join(
