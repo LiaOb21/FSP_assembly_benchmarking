@@ -10,6 +10,7 @@ rule sparseassembler:
     output:
         result_dir = directory(f"{output_dir}" + "/{sample}/sparseassembler"),
         scaffolds = f"{output_dir}" + "/{sample}/sparseassembler/SuperContigs.txt",
+        link_assembly = f"{output_dir}" + "/assemblies/{sample}/{sample}_sparseassembler.fa"
     params:
         k = config["sparseassembler"]["k"],
         GS = config["sparseassembler"]["GS"],
@@ -31,4 +32,6 @@ rule sparseassembler:
         mkdir -p $(dirname {output.scaffolds})
         mv *txt {output.result_dir}
         mv *HT* {output.result_dir}
+
+        ln -srn {output.scaffolds} {output.link_assembly}
         """

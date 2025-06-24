@@ -10,6 +10,7 @@ rule spades:
     output:
         result_dir = directory(f"{output_dir}" + "/{sample}/spades"),
         scaffolds = f"{output_dir}" + "/{sample}/spades/scaffolds.fasta",
+        link_assembly = f"{output_dir}" + "/assemblies/{sample}/{sample}_spades.fa"
     params:
         optional_params = " ".join(
             k for k, v in config["spades"]["optional_params"].items() if v is True
@@ -24,4 +25,5 @@ rule spades:
     shell:
         """
         spades.py -t {threads} -1 {input.forward_in} -2 {input.reverse_in} -o {output.result_dir} {params.optional_params} >> {log} 2>&1
+        ln -srn {output.scaffolds} {output.link_assembly}
         """

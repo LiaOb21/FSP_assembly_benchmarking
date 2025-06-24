@@ -4,7 +4,7 @@ rule masurca_config:
         r2 = f"{input_dir}" + "/{sample}/{sample}_trimmed.R2.fq.gz",
         template = "workflow/scripts/masurca_config_template.txt"
     output:
-        cfg = f"{output_dir}" + "/{sample}/masurca/masurca_config.txt"
+        cfg = protected(f"{output_dir}" + "/{sample}/masurca/masurca_config.txt")
     params:
         insert_mean = config["masurca"].get("insert_mean", 500),
         insert_stdev = config["masurca"].get("insert_stdev", 50),

@@ -2,16 +2,15 @@
 import glob
 import os
 
-
 rule masurca:
     input:
         masurca_config= f"{output_dir}" + "/{sample}/masurca/masurca_config.txt",
     output:
-        assemble_sh = directory(f"{output_dir}" + "/{sample}/masurca"),
         scaffolds = f"{output_dir}" + "/{sample}/masurca/CA/primary.genome.scf.fasta",
+        link_assembly = f"{output_dir}" + "/assemblies/{sample}/{sample}_masurca.fa"
     threads: config["threads"],  # access threads from config
     params:
-#        config_dir = f"{output_dir}" + "/{sample}/masurca",
+        config_dir = f"{output_dir}" + "/{sample}/masurca",
     log:
         "logs/{sample}/masurca.log",
     resources:
@@ -21,11 +20,11 @@ rule masurca:
     shell:
         """
         cd {params.config_dir}
-        masurca {input.masurca_config} >> masurca_run.log 2>&1
-        mv assemble.sh {config_dir}
-        sed -i -E "s/memory 1000000000/memory {resources.mem_mb}00000/g" assemble.sh > assemble_1.sh
-        ./assemble_1.sh >> masurca_run.log 2>&1
+        masurca {input.masurca_config} 
+        ./assemble.sh >> masurca.log 2>&1
 
+        cd -
+        ln -srn {output.scaffolds} {output.link_assembly}
         """
 
 #Leaving as a note: 

@@ -8,7 +8,7 @@ threads: 8
 input_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/clean_data/00_test" # use absoolute path
 
 # Customise the results directory 
-output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results" # use absolute path
+output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results_full" # use absolute path
 
 # Customise spades parameters
 spades:
@@ -55,5 +55,17 @@ masurca:
   insert_mean: 500         # mean insert size for your PE library (adjust to your data)
   insert_stdev: 50         # stdev for your PE library (adjust to your data)
   kmer: auto               # or set a specific value, e.g. 96
-  jf_size: 10000000000       # jellyfish hash size (adjust for your genome size)
+  jf_size: 100000000       # jellyfish hash size (adjust for your genome size)
   ca_parameters: cgwErrorRate=0.15  # adjust for your organism (0.25 for bacteria)
+
+
+# Customise busco parameters
+busco:
+  lineage: "fungi_odb12" # or "fungi_odb10", "eukaryota_odb10", etc.
+  optional_params:  # if you do not want to use any optional parameters, add `{}` here
+    "--mode": "genome" 
+    "--metaeuk": True
+
+# Customise quast parameters
+quast:
+  optional_params: {} # if you do not want to use any optional parameters, add `{}` here

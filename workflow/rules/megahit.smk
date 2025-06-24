@@ -9,8 +9,9 @@ rule megahit:
         reverse_in= f"{input_dir}" + "/{sample}/{sample}_trimmed.R2.fq.gz",
     output:
         result_dir = directory(f"{output_dir}" + "/{sample}/megahit"),
-    #    scaffolds = f"{output_dir}" + "/megahit/{sample}/final.contigs.fa",
+        link_assembly = f"{output_dir}" + "/assemblies/{sample}/{sample}_megahit.fa"
     params:
+        scaffolds = f"{output_dir}" + "/{sample}/megahit/final.contigs.fa",
         optional_params = " ".join(
             k for k, v in config["megahit"]["optional_params"].items() if v is True
         ),
@@ -24,4 +25,6 @@ rule megahit:
     shell:
         """
         megahit -t {threads} -1 {input.forward_in} -2 {input.reverse_in} -o {output.result_dir} {params.optional_params} >> {log} 2>&1
+
+        ln -srn {params.scaffolds} {output.link_assembly}
         """

@@ -1,5 +1,6 @@
 test_data/**
 results/**
+results_full/**
 resources/**
 logs/**
 .snakemake
@@ -11,3 +12,5 @@ workflow/notebooks/.ipynb_checkpoints/**
 **/.Rproj.user/**
 **/.RData
 **/Rplots.pdf
+fungi*
+busco*

@@ -8,6 +8,7 @@ rule minia:
         merged_in= f"{input_dir}" + "/{sample}/{sample}_merge.fq.gz",
     output:
         scaffolds = f"{output_dir}" + "/{sample}/minia/{sample}.contigs.fa",
+        link_assembly = f"{output_dir}" + "/assemblies/{sample}/{sample}_minia.fa"
     params:
         k = config["minia"]["k"],
         result_prefix = f"{output_dir}" + "/{sample}/minia/{sample}",
@@ -24,4 +25,6 @@ rule minia:
     shell:
         """
         minia -in {input.merged_in} -kmer-size {params.k} -out {params.result_prefix} -nb-cores {threads} {params.optional_params} >> {log} 2>&1
+
+        ln -srn {output.scaffolds} {output.link_assembly}
         """
