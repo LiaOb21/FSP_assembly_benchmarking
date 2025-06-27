@@ -1,13 +1,14 @@
 # to set up Snakemake for a Slurm cluster environment 
 # for examples: https://github.com/jdblischak/smk-simple-slurm
-# Snakemake profile for Slurm plug in documentation: https://snakemake.github.io/snakemake-plugin-catalog/plugins/executor/slurm.html
+# Snakemake profile for cluster-generic plugin documentation: https://snakemake.github.io/snakemake-plugin-catalog/plugins/executor/cluster-generic.html
+# do not comment out lines in this file, if you do not want to use a specific option, just remove it
 
-executor: slurm
+
+executor: cluster-generic
 cluster-generic-submit-cmd:
   mkdir -p logs/{rule} &&
   sbatch
     --partition={resources.partition}
-#    --qos={resources.qos}
     --cpus-per-task={threads}
     --mem={resources.mem_mb}
     --job-name=smk-{rule}-{wildcards}
@@ -15,9 +16,7 @@ cluster-generic-submit-cmd:
     --parsable
 default-resources:
   - partition=short
-#  - qos=<name-of-quality-of-service>
   - mem_mb=16000
-  - runtime=24:00:00
 restart-times: 3
 max-jobs-per-second: 10
 max-status-checks-per-second: 1

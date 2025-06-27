@@ -29,7 +29,8 @@ Setting up and running snakemake in gruffalo:
 ```
 conda create -c conda-forge -c bioconda -n snakemake snakemake  #Use the full version of the commands, as otherwise an older version will be downloaded.
 conda activate snakemake
-pip install snakemake-executor-plugin-slurm
+pip install snakemake-executor-plugin-cluster-generic
+#pip install snakemake-executor-plugin-slurm
 ```
 
 Get the busco database that we will need for the QC

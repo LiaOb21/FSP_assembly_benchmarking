@@ -13,10 +13,10 @@ rule abyss:
         link_assembly = f"{output_dir}" + "/assemblies/{sample}/{sample}_abyss.fa"
     params:
         k = config["abyss"]["k"],
+        B = config["abyss"]["B"]
         optional_params = " ".join(
             k for k, v in config["abyss"]["optional_params"].items() if v is True
         ),
-        B = lambda wildcards, resources: int(resources.mem_mb) // 1000,  # Convert MB to GB,
     threads: config["threads"],  # access threads from config
     log:
         "logs/{sample}/abyss.log",
@@ -26,7 +26,7 @@ rule abyss:
         "../envs/abyss.yaml"
     shell:
         """
-        abyss-pe -C {output.result_dir} name=abyss k={params.k} B={params.B}G in='{input.forward_in} {input.reverse_in}' -j {threads} {params.optional_params} >> {log} 2>&1
+        abyss-pe -C {output.result_dir} name=abyss k={params.k} B={params.B} in='{input.forward_in} {input.reverse_in}' -j {threads} {params.optional_params} >> {log} 2>&1
 
         ln -srn {output.scaffolds} {output.link_assembly}
         """
