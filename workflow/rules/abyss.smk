@@ -13,7 +13,7 @@ rule abyss:
         link_assembly = f"{output_dir}" + "/assemblies/{sample}/{sample}_abyss.fa"
     params:
         k = config["abyss"]["k"],
-        B = config["abyss"]["B"]
+        B = config["abyss"]["B"],
         optional_params = " ".join(
             k for k, v in config["abyss"]["optional_params"].items() if v is True
         ),
