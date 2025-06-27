@@ -24,6 +24,9 @@ rule masurca:
         ./assemble.sh >> masurca.log 2>&1
 
         cd -
+
+        cp {params.config_dir}/masurca.log {log}
+        
         ln -srn {output.scaffolds} {output.link_assembly}
         """
 

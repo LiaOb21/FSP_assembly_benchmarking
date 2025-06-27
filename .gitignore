@@ -12,5 +12,5 @@ workflow/notebooks/.ipynb_checkpoints/**
 **/.Rproj.user/**
 **/.RData
 **/Rplots.pdf
-fungi*
-busco*
+fungi_*
+busco_*

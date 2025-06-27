@@ -16,8 +16,50 @@ A Snakemake workflow for `<description>`
 
 ## Usage
 
+Running Snakemake locally:
+
 ```
+conda install snakemake
+conda activate snakemake
 snakemake --configfile config/config.yml --software-deployment-method conda --snakefile workflow/Snakefile --cores 8
+```
+
+Setting up and running snakemake in gruffalo:
+
+```
+conda create -c conda-forge -c bioconda -n snakemake snakemake  #Use the full version of the commands, as otherwise an older version will be downloaded.
+conda activate snakemake
+pip install snakemake-executor-plugin-slurm
+```
+
+Get the busco database that we will need for the QC
+```
+cd /home/lobinu/scratch/FSP_assembly_benchmarking
+
+mkdir resources
+cd resources
+
+wget https://busco-data.ezlab.org/v5/data/lineages/fungi_odb12.2025-04-11.tar.gz
+tar -xzf fungi_odb12.2025-04-11.tar.gz
+
+cd ..
+```
+
+To set up the config file you must at least indicate the following:
+```
+nano config/config.yml
+---
+input_dir: "/home/lobinu/test_data/clean_data/00_test" #use absolute paths and do not add `/` at the end
+output_dir: "/home/lobinu/scratch/FSP_assembly_benchmarking/results"  #use absolute paths and do not add `/` at the end
+busco:
+  lineage: "resources/fungi_odb12"
+```
+
+Run snakemake:
+```
+screen -S snakemake_test
+conda activate snakemake
+snakemake --profile profile/
 ```
 
 The usage of this workflow is described in the [Snakemake Workflow Catalog](https://snakemake.github.io/snakemake-workflow-catalog/docs/workflows/<owner>/<repo>).

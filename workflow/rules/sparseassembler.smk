@@ -8,10 +8,10 @@ rule sparseassembler:
         forward_in = f"{output_dir}" + "/fqreads/{sample}/{sample}_trimmed.R1.fq",
         reverse_in = f"{output_dir}" + "/fqreads/{sample}/{sample}_trimmed.R2.fq",
     output:
-        result_dir = directory(f"{output_dir}" + "/{sample}/sparseassembler"),
         scaffolds = f"{output_dir}" + "/{sample}/sparseassembler/SuperContigs.txt",
         link_assembly = f"{output_dir}" + "/assemblies/{sample}/{sample}_sparseassembler.fa"
     params:
+        result_dir = directory(f"{output_dir}" + "/{sample}/sparseassembler"),
         k = config["sparseassembler"]["k"],
         GS = config["sparseassembler"]["GS"],
         Scaffold = config["sparseassembler"]["Scaffold"],
@@ -28,10 +28,12 @@ rule sparseassembler:
         "../envs/sparseassembler.yaml"
     shell:
         """
-        SparseAssembler k {params.k} GS {params.GS} p1 {input.forward_in} p2 {input.reverse_in} Scaffold {params.Scaffold} ExpCov {params.ExpCov} {params.optional_params} >> {log} 2>&1
-        mkdir -p $(dirname {output.scaffolds})
-        mv *txt {output.result_dir}
-        mv *HT* {output.result_dir}
+        cd {params.result_dir}
+        SparseAssembler k {params.k} GS {params.GS} p1 {input.forward_in} p2 {input.reverse_in} Scaffold {params.Scaffold} ExpCov {params.ExpCov} {params.optional_params} >> sparseassembler.log 2>&1
 
+        cd -
+
+        cp {params.result_dir}/sparseassembler.log {log}
+        
         ln -srn {output.scaffolds} {output.link_assembly}
         """
