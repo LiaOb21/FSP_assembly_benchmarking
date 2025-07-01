@@ -53,12 +53,17 @@ minia:
 
 # Customise masurca parameters
 masurca:
-  insert_mean: 500         # mean insert size for your PE library (adjust to your data)
-  insert_stdev: 50         # stdev for your PE library (adjust to your data)
-  kmer: auto               # or set a specific value, e.g. 96
-  jf_size: 100000000       # jellyfish hash size (adjust for your genome size)
-  ca_parameters: cgwErrorRate=0.15  # adjust for your organism (0.25 for bacteria)
-
+  fragment_mean: 500         # mean insert size for your PE library (adjust to your data)
+  fragment_stdev: 50         # stdev for your PE library (adjust to your data)
+  kmer: auto               # values between 25 and 127 are supported, auto will compute the optimal size based on the read data and GC content
+  jf_size: 100000000       # this is mandatory jellyfish hash size -- a safe value is estimated_genome_size*20
+  ca_parameters: cgwErrorRate=0.15  # set cgwErrorRate=0.25 for bacteria and 0.1<=cgwErrorRate<=0.15 for other organisms.
+# Note that the following parameters are always set as follows:
+# USE_GRID=0
+# CLOSE_GAPS=1
+# SOAP_ASSEMBLY=0
+# MEGA_READS_ONE_PASS=0
+# other parameters for long-reads, jump reads, mate-pairs, and slurm related options (customisable from masurca config) are ignored (for slurm, snakemake will take care of it).
 
 # Customise busco parameters
 busco:

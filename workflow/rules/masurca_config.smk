@@ -6,8 +6,8 @@ rule masurca_config:
     output:
         cfg = protected(f"{output_dir}" + "/{sample}/masurca/masurca_config.txt")
     params:
-        insert_mean = config["masurca"].get("insert_mean", 500),
-        insert_stdev = config["masurca"].get("insert_stdev", 50),
+        fragment_mean = config["masurca"].get("fragment_mean", 500),
+        fragment_stdev = config["masurca"].get("fragment_stdev", 50),
         kmer = config["masurca"].get("kmer", "auto"),
         threads = config["threads"],
         jf_size = config["masurca"].get("jf_size", 10000000000),
@@ -20,8 +20,8 @@ with open("{input.template}") as t, open("{output.cfg}", "w") as out:
     out.write(template.format(
         input_r1="{input.r1}",
         input_r2="{input.r2}",
-        insert_mean={params.insert_mean},
-        insert_stdev={params.insert_stdev},
+        fragment_mean={params.fragment_mean},
+        fragment_stdev={params.fragment_stdev},
         kmer="{params.kmer}",
         threads={params.threads},
         jf_size={params.jf_size},
