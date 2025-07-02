@@ -1,8 +1,7 @@
-# to set up Snakemake for a Slurm cluster environment 
+# to set up Snakemake for a Slurm cluster environment
 # for examples: https://github.com/jdblischak/smk-simple-slurm
 # Snakemake profile for cluster-generic plugin documentation: https://snakemake.github.io/snakemake-plugin-catalog/plugins/executor/cluster-generic.html
 # do not comment out lines in this file, if you do not want to use a specific option, just remove it
-
 
 executor: cluster-generic
 cluster-generic-submit-cmd:

@@ -5,21 +5,24 @@ import os
 
 rule sparseassembler:
     input:
-        forward_in = f"{output_dir}" + "fqreads/{sample}/{sample}_trimmed.R1.fq",
-        reverse_in = f"{output_dir}" + "fqreads/{sample}/{sample}_trimmed.R2.fq",
+        forward_in=f"{output_dir}" + "fqreads/{sample}/{sample}_trimmed.R1.fq",
+        reverse_in=f"{output_dir}" + "fqreads/{sample}/{sample}_trimmed.R2.fq",
     output:
-        scaffolds = f"{output_dir}" + "{sample}/sparseassembler/SuperContigs.txt",
-        link_assembly = f"{output_dir}" + "assemblies/{sample}/{sample}_sparseassembler.fa"
+        scaffolds=f"{output_dir}" + "{sample}/sparseassembler/SuperContigs.txt",
+        link_assembly=f"{output_dir}"
+        + "assemblies/{sample}/{sample}_sparseassembler.fa",
     params:
-        result_dir = lambda wildcards, output: os.path.dirname(output.scaffolds),
-        k = config["sparseassembler"]["k"],
-        GS = config["sparseassembler"]["GS"],
-        Scaffold = config["sparseassembler"]["Scaffold"],
-        ExpCov = config["sparseassembler"]["ExpCov"],
-        optional_params = " ".join(
-            k for k, v in config["sparseassembler"]["optional_params"].items() if v is True
+        result_dir=lambda wildcards, output: os.path.dirname(output.scaffolds),
+        k=config["sparseassembler"]["k"],
+        GS=config["sparseassembler"]["GS"],
+        Scaffold=config["sparseassembler"]["Scaffold"],
+        ExpCov=config["sparseassembler"]["ExpCov"],
+        optional_params=" ".join(
+            k
+            for k, v in config["sparseassembler"]["optional_params"].items()
+            if v is True
         ),
-    threads: config["threads"],  # access threads from config
+    threads: config["threads"]  # access threads from config
     log:
         "logs/{sample}/sparseassembler.log",
     resources:

@@ -3,11 +3,11 @@ mem_mb: 16000
 # Set number of threads for rules
 threads: 8
 
-# Set the path to the input directory (this directory must contain 
+# Set the path to the input directory (this directory must contain
 # one subdirectory for each sample, and the subdirectories must be named after the sample))
 input_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/clean_data/00_test/" # use absoolute path and add trailing slash
 
-# Customise the results directory 
+# Customise the results directory
 output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results_full/" # use absolute path and add trailing slash
 
 # Customise spades parameters
@@ -53,11 +53,11 @@ minia:
 
 # Customise masurca parameters
 masurca:
-  fragment_mean: 500         # mean insert size for your PE library (adjust to your data)
-  fragment_stdev: 50         # stdev for your PE library (adjust to your data)
-  kmer: auto               # values between 25 and 127 are supported, auto will compute the optimal size based on the read data and GC content
-  jf_size: 100000000       # this is mandatory jellyfish hash size -- a safe value is estimated_genome_size*20
-  ca_parameters: cgwErrorRate=0.15  # set cgwErrorRate=0.25 for bacteria and 0.1<=cgwErrorRate<=0.15 for other organisms.
+  fragment_mean: 500 # mean insert size for your PE library (adjust to your data)
+  fragment_stdev: 50 # stdev for your PE library (adjust to your data)
+  kmer: auto # values between 25 and 127 are supported, auto will compute the optimal size based on the read data and GC content
+  jf_size: 100000000 # this is mandatory jellyfish hash size -- a safe value is estimated_genome_size*20
+  ca_parameters: cgwErrorRate=0.15 # set cgwErrorRate=0.25 for bacteria and 0.1<=cgwErrorRate<=0.15 for other organisms.
 # Note that the following parameters are always set as follows:
 # USE_GRID=0
 # CLOSE_GAPS=1
@@ -68,8 +68,8 @@ masurca:
 # Customise busco parameters
 busco:
   lineage: "fungi_odb12" # or "fungi_odb10", "eukaryota_odb10", etc.
-  optional_params:  # if you do not want to use any optional parameters, add `{}` here
-    "--mode": "genome" 
+  optional_params: # if you do not want to use any optional parameters, add `{}` here
+    "--mode": "genome"
     "--metaeuk": True
 
 # Customise quast parameters

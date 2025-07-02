@@ -5,17 +5,17 @@ import os
 
 rule minia:
     input:
-        merged_in= f"{input_dir}" + "/{sample}/{sample}_merge.fq.gz",
+        merged_in=f"{input_dir}" + "/{sample}/{sample}_merge.fq.gz",
     output:
-        scaffolds = f"{output_dir}" + "/{sample}/minia/{sample}.contigs.fa",
-        link_assembly = f"{output_dir}" + "/assemblies/{sample}/{sample}_minia.fa"
+        scaffolds=f"{output_dir}" + "/{sample}/minia/{sample}.contigs.fa",
+        link_assembly=f"{output_dir}" + "/assemblies/{sample}/{sample}_minia.fa",
     params:
-        k = config["minia"]["k"],
-        result_prefix = f"{output_dir}" + "/{sample}/minia/{sample}",
-        optional_params = " ".join(
+        k=config["minia"]["k"],
+        result_prefix=f"{output_dir}" + "/{sample}/minia/{sample}",
+        optional_params=" ".join(
             k for k, v in config["minia"]["optional_params"].items() if v is True
         ),
-    threads: config["threads"],  # access threads from config
+    threads: config["threads"]  # access threads from config
     log:
         "logs/{sample}/minia.log",
     resources:

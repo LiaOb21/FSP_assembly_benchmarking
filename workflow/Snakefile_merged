@@ -6,7 +6,9 @@
 import glob
 import os
 
+
 configfile: "config/config.yml"
+
 
 input_dir = config["input_dir"]
 output_dir = config["output_dir"]
@@ -15,21 +17,26 @@ output_dir = config["output_dir"]
 SAMPLES = [os.path.basename(d) for d in glob.glob(f"{input_dir}/*") if os.path.isdir(d)]
 
 # Define assembler names
-ASSEMBLERS = ["spades", "megahit", "abyss", "sparseassembler", "minia", "masurca"
-]
+ASSEMBLERS = ["spades", "megahit", "abyss", "sparseassembler", "minia", "masurca"]
+
 
 rule all:
     input:
-#        expand(f"{output_dir}" + "/{sample}/spades/scaffolds.fasta", sample=SAMPLES),
-#        expand(f"{output_dir}" + "/{sample}/megahit/", sample=SAMPLES),
-#        expand(f"{output_dir}" + "/{sample}/abyss/abyss-scaffolds.fa", sample=SAMPLES),
-#        expand(f"{output_dir}" + "/{sample}/sparseassembler/SuperContigs.txt", sample=SAMPLES),
-#        expand(f"{output_dir}" + "/{sample}/minia/{sample}.contigs.fa", sample=SAMPLES),
-#        expand(f"{output_dir}" + "/{sample}/masurca/masurca_config.txt", sample=SAMPLES),
-#        expand(f"{output_dir}" + "/{sample}/masurca/CA/primary.genome.scf.fasta", sample=SAMPLES),
-#        # busco output
-        expand(f"{output_dir}" + "/{sample}/busco/{assembler}", sample=SAMPLES, assembler=ASSEMBLERS),
+        #        expand(f"{output_dir}" + "/{sample}/spades/scaffolds.fasta", sample=SAMPLES),
+        #        expand(f"{output_dir}" + "/{sample}/megahit/", sample=SAMPLES),
+        #        expand(f"{output_dir}" + "/{sample}/abyss/abyss-scaffolds.fa", sample=SAMPLES),
+        #        expand(f"{output_dir}" + "/{sample}/sparseassembler/SuperContigs.txt", sample=SAMPLES),
+        #        expand(f"{output_dir}" + "/{sample}/minia/{sample}.contigs.fa", sample=SAMPLES),
+        #        expand(f"{output_dir}" + "/{sample}/masurca/masurca_config.txt", sample=SAMPLES),
+        #        expand(f"{output_dir}" + "/{sample}/masurca/CA/primary.genome.scf.fasta", sample=SAMPLES),
+        #        # busco output
+        expand(
+            f"{output_dir}" + "/{sample}/busco/{assembler}",
+            sample=SAMPLES,
+            assembler=ASSEMBLERS,
+        ),
         expand(f"{output_dir}" + "/{sample}/quast", sample=SAMPLES),
+
 
 # include spades rules
 include: "rules/spades_merged.smk"
@@ -52,4 +59,5 @@ include: "rules/busco_merged.smk"
 # include quast rule
 include: "rules/quast_merged.smk"
 
-#print("SAMPLES:", SAMPLES)
+
+# print("SAMPLES:", SAMPLES)

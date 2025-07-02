@@ -1,19 +1,20 @@
 rule busco:
     input:
-        assembly = f"{output_dir}" + "assemblies/{sample}/{sample}_{assembler}.fa"
+        assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{assembler}.fa",
     output:
-        dir = directory(f"{output_dir}" + "{sample}/busco/{assembler}"),
+        dir=directory(f"{output_dir}" + "{sample}/busco/{assembler}"),
     params:
-        lineage = config["busco"]["lineage"],
-        optional_params = " ".join(
+        lineage=config["busco"]["lineage"],
+        optional_params=" ".join(
             f"{k}" if v is True else f"{k} {v}"
-            for k, v in config["busco"]["optional_params"].items() if v
+            for k, v in config["busco"]["optional_params"].items()
+            if v
         ),
-    threads: config["threads"],
+    threads: config["threads"]
     log:
-        "logs/{sample}/busco_{sample}_{assembler}.log"
+        "logs/{sample}/busco_{sample}_{assembler}.log",
     resources:
-        mem_mb = config["mem_mb"],
+        mem_mb=config["mem_mb"],
     conda:
         "../envs/busco.yaml"
     shell:
