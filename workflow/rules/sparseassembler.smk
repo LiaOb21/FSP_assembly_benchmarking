@@ -5,13 +5,13 @@ import os
 
 rule sparseassembler:
     input:
-        forward_in = f"{output_dir}" + "/fqreads/{sample}/{sample}_trimmed.R1.fq",
-        reverse_in = f"{output_dir}" + "/fqreads/{sample}/{sample}_trimmed.R2.fq",
+        forward_in = f"{output_dir}" + "fqreads/{sample}/{sample}_trimmed.R1.fq",
+        reverse_in = f"{output_dir}" + "fqreads/{sample}/{sample}_trimmed.R2.fq",
     output:
-        scaffolds = f"{output_dir}" + "/{sample}/sparseassembler/SuperContigs.txt",
-        link_assembly = f"{output_dir}" + "/assemblies/{sample}/{sample}_sparseassembler.fa"
+        scaffolds = f"{output_dir}" + "{sample}/sparseassembler/SuperContigs.txt",
+        link_assembly = f"{output_dir}" + "assemblies/{sample}/{sample}_sparseassembler.fa"
     params:
-        result_dir = directory(f"{output_dir}" + "/{sample}/sparseassembler"),
+        result_dir = lambda wildcards, output: os.path.dirname(output.scaffolds),
         k = config["sparseassembler"]["k"],
         GS = config["sparseassembler"]["GS"],
         Scaffold = config["sparseassembler"]["Scaffold"],

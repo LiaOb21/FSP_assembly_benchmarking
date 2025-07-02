@@ -4,13 +4,13 @@ import os
 
 rule masurca:
     input:
-        masurca_config= f"{output_dir}" + "/{sample}/masurca/masurca_config.txt",
+        masurca_config= f"{output_dir}" + "{sample}/masurca/masurca_config.txt",
     output:
-        scaffolds = f"{output_dir}" + "/{sample}/masurca/CA/primary.genome.scf.fasta",
-        link_assembly = f"{output_dir}" + "/assemblies/{sample}/{sample}_masurca.fa"
+        scaffolds = f"{output_dir}" + "{sample}/masurca/CA/primary.genome.scf.fasta",
+        link_assembly = f"{output_dir}" + "assemblies/{sample}/{sample}_masurca.fa"
     threads: config["threads"],  # access threads from config
     params:
-        config_dir = f"{output_dir}" + "/{sample}/masurca",
+        config_dir = lambda wildcards, input: os.path.dirname(input.masurca_config),
     log:
         "logs/{sample}/masurca.log",
     resources:

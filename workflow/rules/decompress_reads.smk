@@ -5,10 +5,16 @@
 
 rule decompress_reads:
     input:
-        gz = f"{input_dir}" + "/{sample}/{sample}_trimmed.{read}.fq.gz"
+        gz = f"{input_dir}" + "{sample}/{sample}_trimmed.{read}.fq.gz"
     output:
-        fq = temp(f"{output_dir}" + "/fqreads/{sample}/{sample}_trimmed.{read}.fq")
+        fq = temp(f"{output_dir}" + "fqreads/{sample}/{sample}_trimmed.{read}.fq")
+    conda:
+        "../envs/basic.yaml"
+    log:
+        "logs/{sample}/{read}_decompress.log",
     shell:
         """
+        echo "Decompressing {input.gz} to {output.fq}" >> {log} 2>&1
         zcat {input.gz} > {output.fq}
+        echo "Done!" >> {log} 2>&1
         """

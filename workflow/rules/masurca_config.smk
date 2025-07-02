@@ -1,10 +1,10 @@
 rule masurca_config:
     input:
-        r1 = f"{input_dir}" + "/{sample}/{sample}_trimmed.R1.fq.gz",
-        r2 = f"{input_dir}" + "/{sample}/{sample}_trimmed.R2.fq.gz",
+        r1 = f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
+        r2 = f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
         template = "workflow/scripts/masurca_config_template.txt"
     output:
-        cfg = protected(f"{output_dir}" + "/{sample}/masurca/masurca_config.txt")
+        cfg = protected(f"{output_dir}" + "{sample}/masurca/masurca_config.txt")
     params:
         fragment_mean = config["masurca"].get("fragment_mean", 500),
         fragment_stdev = config["masurca"].get("fragment_stdev", 50),
@@ -12,8 +12,13 @@ rule masurca_config:
         threads = config["threads"],
         jf_size = config["masurca"].get("jf_size", 10000000000),
         ca_parameters = config["masurca"].get("ca_parameters", "cgwErrorRate=0.15"),
+    log:
+        "logs/{sample}/masurca_config.log"
+    conda:
+        "../envs/basic.yaml"   
     shell:
         """
+        echo "Processing sample: {wildcards.sample}" >> {log} 2>&1
         python3 <<EOF
 with open("{input.template}") as t, open("{output.cfg}", "w") as out:
     template = t.read()
@@ -28,4 +33,5 @@ with open("{input.template}") as t, open("{output.cfg}", "w") as out:
         ca_parameters="{params.ca_parameters}"
     ))
 EOF
+        echo "Config generated for sample {wildcards.sample}" >> {log} 2>&1
         """

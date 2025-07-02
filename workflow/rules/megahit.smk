@@ -5,13 +5,13 @@ import os
 
 rule megahit:
     input:
-        forward_in= f"{input_dir}" + "/{sample}/{sample}_trimmed.R1.fq.gz",
-        reverse_in= f"{input_dir}" + "/{sample}/{sample}_trimmed.R2.fq.gz",
+        forward_in= f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
+        reverse_in= f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
     output:
-        result_dir = directory(f"{output_dir}" + "/{sample}/megahit"),
-        link_assembly = f"{output_dir}" + "/assemblies/{sample}/{sample}_megahit.fa"
+        result_dir = directory(f"{output_dir}" + "{sample}/megahit"),
+        link_assembly = f"{output_dir}" + "assemblies/{sample}/{sample}_megahit.fa"
     params:
-        scaffolds = f"{output_dir}" + "/{sample}/megahit/final.contigs.fa",
+        scaffolds = f"{output_dir}" + "{sample}/megahit/final.contigs.fa",
         optional_params = " ".join(
             k for k, v in config["megahit"]["optional_params"].items() if v is True
         ),

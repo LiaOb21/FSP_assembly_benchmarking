@@ -1,8 +1,8 @@
 rule busco:
     input:
-        assembly = f"{output_dir}" + "/assemblies/{sample}/{sample}_{assembler}.fa"
+        assembly = f"{output_dir}" + "assemblies/{sample}/{sample}_{assembler}.fa"
     output:
-        dir = directory(f"{output_dir}" + "/{sample}/busco/{assembler}"),
+        dir = directory(f"{output_dir}" + "{sample}/busco/{assembler}"),
     params:
         lineage = config["busco"]["lineage"],
         optional_params = " ".join(

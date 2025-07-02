@@ -5,12 +5,12 @@ import os
 
 rule spades:
     input:
-        forward_in= f"{input_dir}" + "/{sample}/{sample}_trimmed.R1.fq.gz",
-        reverse_in= f"{input_dir}" + "/{sample}/{sample}_trimmed.R2.fq.gz",
+        forward_in= f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
+        reverse_in= f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
     output:
-        result_dir = directory(f"{output_dir}" + "/{sample}/spades"),
-        scaffolds = f"{output_dir}" + "/{sample}/spades/scaffolds.fasta",
-        link_assembly = f"{output_dir}" + "/assemblies/{sample}/{sample}_spades.fa"
+        result_dir = directory(f"{output_dir}" + "{sample}/spades"),
+        scaffolds = f"{output_dir}" + "{sample}/spades/scaffolds.fasta",
+        link_assembly = f"{output_dir}" + "assemblies/{sample}/{sample}_spades.fa"
     params:
         optional_params = " ".join(
             k for k, v in config["spades"]["optional_params"].items() if v is True

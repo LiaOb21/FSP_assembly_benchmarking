@@ -1,11 +1,11 @@
 rule quast:
     input:
         assemblies=lambda wildcards: [
-            f"{output_dir}/assemblies/{wildcards.sample}/{wildcards.sample}_{assembler}.fa"
+            f"{output_dir}assemblies/{wildcards.sample}/{wildcards.sample}_{assembler}.fa"
             for assembler in ASSEMBLERS
         ]
     output:
-        dir = directory(f"{output_dir}" + "/{sample}/quast"),
+        dir = directory(f"{output_dir}" + "{sample}/quast"),
     params:
         optional_params = " ".join(
             f"{k}" if v is True else f"{k} {v}"
