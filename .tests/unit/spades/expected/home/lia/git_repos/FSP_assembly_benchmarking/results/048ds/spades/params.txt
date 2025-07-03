@@ -1,0 +1,34 @@
+Command line: /home/lia/git_repos/FSP_assembly_benchmarking/.snakemake/conda/4cb5632bbd0b297e85e95fa7b04bc60c_/bin/spades.py	-t	8	-1	/home/lia/git_repos/FSP_assembly_benchmarking/test_data/048ds/048ds_trimmed.R1.fq.gz	-2	/home/lia/git_repos/FSP_assembly_benchmarking/test_data/048ds/048ds_trimmed.R2.fq.gz	-o	/home/lia/git_repos/FSP_assembly_benchmarking/results/048ds/spades	--careful	--only-assembler	
+
+System information:
+  SPAdes version: 4.2.0
+  Python version: 3.13.5
+  OS: Linux-6.12.10-76061203-generic-x86_64-with-glibc2.35
+
+Output dir: /home/lia/git_repos/FSP_assembly_benchmarking/results/048ds/spades
+Mode: ONLY assembling (without read error correction)
+Debug mode is turned OFF
+
+Dataset parameters:
+  Standard mode
+  For multi-cell/isolate data we recommend to use '--isolate' option; for single-cell MDA data use '--sc'; for metagenomic data use '--meta'; for RNA-Seq use '--rna'.
+  Reads:
+    Library number: 1, library type: paired-end
+      orientation: fr
+      left reads: ['/home/lia/git_repos/FSP_assembly_benchmarking/test_data/048ds/048ds_trimmed.R1.fq.gz']
+      right reads: ['/home/lia/git_repos/FSP_assembly_benchmarking/test_data/048ds/048ds_trimmed.R2.fq.gz']
+      interlaced reads: not specified
+      single reads: not specified
+      merged reads: not specified
+Assembly parameters:
+  k: automatic selection based on read length
+  Repeat resolution is enabled
+  Mismatch careful mode is turned ON
+  MismatchCorrector will be used
+  Coverage cutoff is turned OFF
+  Assembly graph output will use GFA v1.2 format
+Other parameters:
+  Dir for temp files: /home/lia/git_repos/FSP_assembly_benchmarking/results/048ds/spades/tmp
+  Threads: 8
+  Memory limit (in Gb): 15
+

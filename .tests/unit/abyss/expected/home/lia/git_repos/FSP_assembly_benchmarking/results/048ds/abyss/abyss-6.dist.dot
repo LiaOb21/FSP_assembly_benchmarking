@@ -1,0 +1,3 @@
+digraph dist {
+graph [k=21 s=100 n=15]
+}
