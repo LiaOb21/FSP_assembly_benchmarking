@@ -40,8 +40,8 @@ cd /home/lobinu/scratch/FSP_assembly_benchmarking
 mkdir resources
 cd resources
 
-wget https://busco-data.ezlab.org/v5/data/lineages/fungi_odb12.2025-04-11.tar.gz
-tar -xzf fungi_odb12.2025-04-11.tar.gz
+wget https://busco-data.ezlab.org/v5/data/lineages/fungi_odb12.2025-07-01.tar.gz
+tar -xzf fungi_odb12.2025-07-01.tar.gz
 
 cd ..
 ```

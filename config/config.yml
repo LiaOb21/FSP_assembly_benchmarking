@@ -5,10 +5,10 @@ threads: 8
 
 # Set the path to the input directory (this directory must contain
 # one subdirectory for each sample, and the subdirectories must be named after the sample))
-input_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/clean_data/00_test/" # use absoolute path and add trailing slash
+input_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/test_data/" # use absolute path and add trailing slash
 
 # Customise the results directory
-output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results_full/" # use absolute path and add trailing slash
+output_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/results/" # use absolute path and add trailing slash
 
 # Customise spades parameters
 spades:
@@ -67,7 +67,7 @@ masurca:
 
 # Customise busco parameters
 busco:
-  lineage: "fungi_odb12" # or "fungi_odb10", "eukaryota_odb10", etc.
+  lineage: "resources/fungi_odb12" # or "fungi_odb10", "eukaryota_odb10", etc.
   optional_params: # if you do not want to use any optional parameters, add `{}` here
     "--mode": "genome"
     "--metaeuk": True
@@ -75,3 +75,15 @@ busco:
 # Customise quast parameters
 quast:
   optional_params: {} # if you do not want to use any optional parameters, add `{}` here
+
+# Customise fastK parameters
+fastk:
+  k: 17 # k-mer size, adjust to your data
+  t: 1 # include kmer frequency >= t in the output
+  optional_params: {} # if you do not want to use any optional parameters, add `{}` here
+
+# Customise merquryfk parameters
+merquryfk:
+  optional_params: # if you do not want to use any optional parameters, add `{}` here
+    "-z": True        # outputs assembly plots in addition to spectra copy number
+    "-pdf": True      # outputs results in PDF format (default is png))
