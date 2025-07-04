@@ -5,13 +5,15 @@ import os
 
 rule minia:
     input:
-        merged_in=f"{input_dir}" + "/{sample}/{sample}_merge.fq.gz",
+        merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
     output:
-        scaffolds=f"{output_dir}" + "/{sample}/minia/{sample}.contigs.fa",
-        link_assembly=f"{output_dir}" + "/assemblies/{sample}/{sample}_minia.fa",
+        scaffolds=f"{output_dir}" + "{sample}/minia/{sample}.contigs.fa",
+        link_assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_minia.fa",
     params:
         k=config["minia"]["k"],
-        result_prefix=f"{output_dir}" + "/{sample}/minia/{sample}",
+        result_prefix=lambda wildcards, output: os.path.splitext(output.scaffolds)[
+            0
+        ].replace(".contigs", ""),
         optional_params=" ".join(
             k for k, v in config["minia"]["optional_params"].items() if v is True
         ),

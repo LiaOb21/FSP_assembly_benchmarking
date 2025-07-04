@@ -1,6 +1,6 @@
 test_data/**
 results/**
-results_full/**
+results_*/**
 resources/**
 logs/**
 .snakemake
