@@ -22,14 +22,14 @@ def test_fastk():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results_onesampleonly/048ds/fastk/fastk_table.ktab /home/lobinu/git_repos/FSP_assembly_benchmarking/results_onesampleonly/048ds/fastk/fastk_table.hist", file=sys.stderr)
+        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/fastk/fastk_table.ktab /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/fastk/fastk_table.hist", file=sys.stderr)
 
         # Run the test job.
         sp.check_output([
             "python",
             "-m",
             "snakemake", 
-            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results_onesampleonly/048ds/fastk/fastk_table.ktab /home/lobinu/git_repos/FSP_assembly_benchmarking/results_onesampleonly/048ds/fastk/fastk_table.hist",
+            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/fastk/fastk_table.ktab /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/fastk/fastk_table.hist",
             "-f", 
             "-j1",
             "--target-files-omit-workdir-adjustment",

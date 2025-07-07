@@ -1,7 +1,0 @@
-"bwa": "/home/lobinu/git_repos/FSP_assembly_benchmarking/.snakemake/conda/c9d8da4aeba45c11e035c12a2dc44715_/bin/spades-bwa"
-"dataset": "/home/lobinu/git_repos/FSP_assembly_benchmarking/results_onesampleonly/048ds/spades/input_dataset.yaml"
-"log_filename": "log.properties"
-"max_nthreads": !!int "8"
-"output_dir": "/home/lobinu/git_repos/FSP_assembly_benchmarking/results_onesampleonly/048ds/spades/mismatch_corrector/scaffolds"
-"strategy": "mapped_squared"
-"work_dir": "/home/lobinu/git_repos/FSP_assembly_benchmarking/results_onesampleonly/048ds/spades/tmp/corrector_0u65bl_c"

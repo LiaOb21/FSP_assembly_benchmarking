@@ -22,14 +22,14 @@ def test_quast():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results_onesampleonly/048ds/quast", file=sys.stderr)
+        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast", file=sys.stderr)
 
         # Run the test job.
         sp.check_output([
             "python",
             "-m",
             "snakemake", 
-            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results_onesampleonly/048ds/quast",
+            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast",
             "-f", 
             "-j1",
             "--target-files-omit-workdir-adjustment",

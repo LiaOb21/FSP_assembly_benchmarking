@@ -1,0 +1,72 @@
+î ---
+max read length: 147
+nomerge max read length: 147
+average read length: 114.518
+average coverage: 1.23965
+libraries:
+  - type:            paired-end
+    number:          1
+    orientation:     fr
+    left reads:
+      - '/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/clean_data/00_test/048ds/048ds_trimmed.R1.fq.gz'
+    right reads:
+      - '/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/clean_data/00_test/048ds/048ds_trimmed.R2.fq.gz'
+    data:
+      unmerged read length: 147
+      merged read length: 0
+      insert size mean: 179.62
+      insert size deviation: 66.2391
+      insert size left quantile: 88
+      insert size right quantile: 264
+      insert size median: 179
+      insert size mad: 65
+      insert size distribution: { 53: 1, 56: 4, 57: 1, 59: 1, 61: 1, 62: 1, 
+                                  65: 1, 69: 1, 72: 4, 74: 2, 75: 1, 76: 1, 
+                                  77: 1, 79: 1, 80: 6, 81: 4, 82: 3, 83: 2, 
+                                  84: 2, 85: 3, 87: 1, 88: 2, 89: 3, 90: 2, 
+                                  91: 2, 94: 2, 95: 2, 96: 2, 97: 1, 99: 4, 
+                                  100: 1, 101: 1, 102: 2, 103: 1, 104: 2, 
+                                  105: 3, 106: 3, 107: 1, 108: 1, 109: 1, 
+                                  110: 3, 111: 2, 112: 2, 114: 1, 115: 4, 
+                                  116: 1, 117: 1, 118: 3, 119: 4, 121: 4, 
+                                  122: 2, 123: 1, 125: 1, 126: 3, 127: 5, 
+                                  128: 4, 129: 2, 130: 3, 131: 3, 132: 3, 
+                                  133: 1, 134: 2, 135: 2, 136: 2, 138: 6, 
+                                  140: 1, 141: 3, 143: 3, 145: 1, 146: 2, 
+                                  147: 2, 150: 1, 151: 6, 152: 1, 153: 4, 
+                                  154: 1, 155: 2, 156: 2, 157: 1, 158: 2, 
+                                  159: 5, 160: 3, 161: 1, 162: 1, 163: 2, 
+                                  164: 2, 165: 1, 167: 3, 169: 3, 170: 1, 
+                                  171: 4, 172: 2, 173: 1, 174: 2, 175: 2, 
+                                  176: 1, 177: 1, 178: 1, 179: 4, 180: 1, 
+                                  182: 2, 183: 2, 184: 1, 185: 1, 186: 2, 
+                                  187: 1, 188: 4, 189: 1, 190: 1, 191: 1, 
+                                  192: 2, 194: 3, 196: 2, 197: 1, 199: 1, 
+                                  200: 2, 201: 3, 202: 4, 203: 2, 204: 3, 
+                                  206: 1, 207: 2, 208: 1, 210: 3, 211: 1, 
+                                  212: 2, 213: 1, 214: 1, 215: 1, 216: 2, 
+                                  217: 3, 218: 3, 219: 1, 220: 4, 221: 1, 
+                                  222: 1, 223: 2, 224: 1, 225: 1, 227: 1, 
+                                  228: 4, 229: 1, 231: 6, 234: 1, 235: 2, 
+                                  236: 2, 239: 1, 240: 3, 241: 5, 242: 4, 
+                                  244: 2, 246: 1, 247: 1, 248: 7, 249: 7, 
+                                  250: 2, 251: 5, 252: 7, 253: 3, 255: 6, 
+                                  256: 2, 257: 2, 258: 3, 260: 2, 261: 3, 
+                                  262: 6, 263: 2, 264: 7, 265: 6, 266: 1, 
+                                  267: 4, 268: 1, 269: 2, 270: 6, 271: 2, 
+                                  272: 2, 273: 2, 275: 1, 278: 1, 279: 4, 
+                                  281: 1, 292: 1, 299: 1, 307: 1, 326: 1, 
+                                  328: 1, 329: 1 }
+      pi threshold:    0
+      binary reads info:
+        binary converted: true
+        bin reads info file: '/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/.bin_reads/INFO_0'
+        paired read prefix: '/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/.bin_reads/paired_0'
+        merged read prefix: '/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/.bin_reads/merged_0'
+        single read prefix: '/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/.bin_reads/single_0'
+        chunk num:       8
+      single reads mapped: false
+      library index:   0
+      number of reads: 13460
+      total nucleotides: 1541407
+...

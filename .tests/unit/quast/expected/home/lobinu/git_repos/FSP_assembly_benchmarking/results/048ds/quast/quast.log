@@ -1,0 +1,78 @@
+/home/lobinu/git_repos/FSP_assembly_benchmarking/.snakemake/conda/9c9134c444f01c47c42457dd1c575216_/bin/quast /home/lobinu/git_repos/FSP_assembly_benchmarking/results/assemblies/048ds/048ds_spades.fa /home/lobinu/git_repos/FSP_assembly_benchmarking/results/assemblies/048ds/048ds_megahit.fa /home/lobinu/git_repos/FSP_assembly_benchmarking/results/assemblies/048ds/048ds_abyss.fa /home/lobinu/git_repos/FSP_assembly_benchmarking/results/assemblies/048ds/048ds_sparseassembler.fa /home/lobinu/git_repos/FSP_assembly_benchmarking/results/assemblies/048ds/048ds_minia.fa /home/lobinu/git_repos/FSP_assembly_benchmarking/results/assemblies/048ds/048ds_masurca.fa -o /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast -t 8
+
+Version: 5.3.0
+
+System information:
+  OS: Linux-5.15.167.4-microsoft-standard-WSL2-x86_64-with-glibc2.39 (linux_64)
+  Python version: 3.13.5
+  CPUs number: 32
+
+Started: 2025-07-07 16:43:15
+
+Logging to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/quast.log
+
+CWD: /home/lobinu/git_repos/FSP_assembly_benchmarking
+Main parameters: 
+  MODE: default, threads: 8, min contig length: 500, min alignment length: 65, min alignment IDY: 95.0, \
+  ambiguity: one, min local misassembly length: 200, min extensive misassembly length: 1000
+
+Contigs:
+  Pre-processing...
+WARNING: Skipping 048ds_abyss because it doesn't contain contigs >= 500 bp.
+WARNING: Skipping 048ds_minia because it doesn't contain contigs >= 500 bp.
+WARNING: Skipping 048ds_masurca because it doesn't contain contigs >= 500 bp.
+WARNING: Skipping 048ds_sparseassembler because it doesn't contain contigs >= 500 bp.
+  1  /home/lobinu/git_repos/FSP_assembly_benchmarking/results/assemblies/048ds/048ds_spades.fa ==> 048ds_spades
+  2  /home/lobinu/git_repos/FSP_assembly_benchmarking/results/assemblies/048ds/048ds_megahit.fa ==> 048ds_megahit
+
+
+
+
+
+2025-07-07 16:43:15
+Running Basic statistics processor...
+  Contig files: 
+    1  048ds_spades
+    2  048ds_megahit
+  Calculating N50 and L50...
+    1  048ds_spades, N50 = 627, L50 = 3, auN = 630.9, Total length = 3661, GC % = 45.70, # N's per 100 kbp =  0.00
+    2  048ds_megahit, N50 = 501, L50 = 1, auN = 501.0, Total length = 501, GC % = 41.72, # N's per 100 kbp =  0.00
+  Drawing Nx plot...
+    saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/basic_stats/Nx_plot.pdf
+  Drawing cumulative plot...
+    saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/basic_stats/cumulative_plot.pdf
+  Drawing GC content plot...
+    saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/basic_stats/GC_content_plot.pdf
+  Drawing 048ds_spades GC content plot...
+    saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/basic_stats/048ds_spades_GC_content_plot.pdf
+  Drawing 048ds_megahit GC content plot...
+    saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/basic_stats/048ds_megahit_GC_content_plot.pdf
+  Drawing Coverage histogram (bin size: 1x)...
+    saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/basic_stats/coverage_histogram.pdf
+  Drawing 048ds_spades coverage histogram (bin size: 1x)...
+    saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/basic_stats/048ds_spades_coverage_histogram.pdf
+Done.
+
+NOTICE: Genes are not predicted by default. Use --gene-finding or --glimmer option to enable it.
+
+2025-07-07 16:43:16
+Creating large visual summaries...
+This may take a while: press Ctrl-C to skip this step..
+  1 of 2: Creating PDF with all tables and plots...
+  2 of 2: Creating Icarus viewers...
+Done
+
+2025-07-07 16:43:16
+RESULTS:
+  Text versions of total report are saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/report.txt, report.tsv, and report.tex
+  Text versions of transposed total report are saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/transposed_report.txt, transposed_report.tsv, and transposed_report.tex
+  HTML version (interactive tables and plots) is saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/report.html
+  PDF version (tables and plots) is saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/report.pdf
+  Icarus (contig browser) is saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/icarus.html
+  Log is saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/quast.log
+
+Finished: 2025-07-07 16:43:16
+Elapsed time: 0:00:01.267752
+NOTICEs: 1; WARNINGs: 1; non-fatal ERRORs: 0
+
+Thank you for using QUAST!
