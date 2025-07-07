@@ -2,9 +2,11 @@ rule busco:
     input:
         assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{assembler}.fa",
     output:
-        dir=directory(f"{output_dir}" + "{sample}/busco/{assembler}"),
+        general_dir=directory(f"{output_dir}" + "{sample}/busco_general/{assembler}"),
+        specific_dir=directory(f"{output_dir}" + "{sample}/busco_specific/{assembler}"),
     params:
-        lineage=config["busco"]["lineage"],
+        lineage_general=config["busco"]["lineage_general"],
+        lineage_specific=config["busco"]["lineage_specific"],
         optional_params=" ".join(
             f"{k}" if v is True else f"{k} {v}"
             for k, v in config["busco"]["optional_params"].items()
@@ -19,5 +21,6 @@ rule busco:
         "../envs/busco.yaml"
     shell:
         """
-        busco -i {input.assembly} --out_path {output.dir} -l {params.lineage} -f -c {threads} {params.optional_params} >> {log} 2>&1
+        busco -i {input.assembly} --out_path {output.general_dir} -l {params.lineage_general} -f -c {threads} {params.optional_params} >> {log} 2>&1
+        busco -i {input.assembly} --out_path {output.specific_dir} -l {params.lineage_specific} -f -c {threads} {params.optional_params} >> {log} 2>&1
         """

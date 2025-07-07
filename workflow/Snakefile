@@ -36,7 +36,12 @@ rule all:
             sample=SAMPLES,
         ),
         expand(
-            f"{output_dir}" + "{sample}/busco/{assembler}",
+            f"{output_dir}" + "{sample}/busco_general/{assembler}",
+            sample=SAMPLES,
+            assembler=ASSEMBLERS,
+        ),
+        expand(
+            f"{output_dir}" + "{sample}/busco_specific/{assembler}",
             sample=SAMPLES,
             assembler=ASSEMBLERS,
         ),

@@ -43,6 +43,9 @@ cd resources
 wget https://busco-data.ezlab.org/v5/data/lineages/fungi_odb12.2025-07-01.tar.gz
 tar -xzf fungi_odb12.2025-07-01.tar.gz
 
+wget https://busco-data.ezlab.org/v5/data/lineages/basidiomycota_odb12.2025-07-01.tar.gz
+tar -xzf basidiomycota_odb12.2025-07-01.tar.gz
+
 cd ..
 ```
 
@@ -53,7 +56,8 @@ nano config/config.yml
 input_dir: "/home/lobinu/test_data/clean_data/00_test" #use absolute paths and do not add `/` at the end
 output_dir: "/home/lobinu/scratch/FSP_assembly_benchmarking/results"  #use absolute paths and do not add `/` at the end
 busco:
-  lineage: "resources/fungi_odb12"
+  lineage1: "resources/fungi_odb12"
+  lineage2: "resources/basidiomycota_odb12"
 ```
 
 Run snakemake:

@@ -22,9 +22,9 @@ ASSEMBLERS = ["spades", "megahit", "abyss", "sparseassembler", "minia", "masurca
 
 rule all:
     input:
-#        expand(f"{output_dir}" + "{sample}/spades/scaffolds.fasta", sample=SAMPLES),
-#        expand(f"{output_dir}" + "{sample}/megahit/", sample=SAMPLES),
-#        expand(f"{output_dir}" + "{sample}/abyss/abyss-scaffolds.fa", sample=SAMPLES),
+        #        expand(f"{output_dir}" + "{sample}/spades/scaffolds.fasta", sample=SAMPLES),
+        #        expand(f"{output_dir}" + "{sample}/megahit/", sample=SAMPLES),
+        #        expand(f"{output_dir}" + "{sample}/abyss/abyss-scaffolds.fa", sample=SAMPLES),
         expand(
             f"{output_dir}" + "{sample}/sparseassembler/SuperContigs.txt",
             sample=SAMPLES,
@@ -35,6 +35,8 @@ rule all:
             f"{output_dir}" + "{sample}/masurca/CA/primary.genome.scf.fasta",
             sample=SAMPLES,
         ),
+
+
 #        expand(
 #            f"{output_dir}" + "{sample}/busco/{assembler}", sample=SAMPLES,
 #            assembler=ASSEMBLERS,
@@ -55,13 +57,13 @@ rule all:
 
 
 # include spades rules
-#include: "rules/spades_merged.smk"
+# include: "rules/spades_merged.smk"
 # include megahit rule
-#include: "rules/megahit_merged.smk"
+# include: "rules/megahit_merged.smk"
 # include abyss rule
-#include: "rules/abyss_merged.smk"
+# include: "rules/abyss_merged.smk"
 # include decompress_reads rule
-#include: "rules/decompress_reads_merged.smk"
+# include: "rules/decompress_reads_merged.smk"
 # include sparseassembler rule
 include: "rules/sparseassembler_merged.smk"
 # include minia rule
@@ -70,14 +72,14 @@ include: "rules/minia_merged.smk"
 include: "rules/masurca_config_merged.smk"
 # include masurca rule
 include: "rules/masurca.smk"
+
+
 # include busco rule
-#include: "rules/busco.smk"
+# include: "rules/busco.smk"
 # include quast rule
-#include: "rules/quast.smk"
+# include: "rules/quast.smk"
 # include fastK rule
-#include: "rules/fastK_merged.smk"
+# include: "rules/fastK_merged.smk"
 # include merquryFK rule
-#include: "rules/merquryFK.smk"
-
-
+# include: "rules/merquryFK.smk"
 # print("SAMPLES:", SAMPLES)

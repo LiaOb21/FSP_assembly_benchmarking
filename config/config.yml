@@ -8,7 +8,7 @@ threads: 8
 input_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/clean_data/00_test/" # use absolute path and add trailing slash
 
 # Customise the results directory
-output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results_merged/" # use absolute path and add trailing slash
+output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results_onesampleonly/" # use absolute path and add trailing slash
 
 # Customise spades parameters
 spades:
@@ -67,7 +67,8 @@ masurca:
 
 # Customise busco parameters
 busco:
-  lineage: "fungi_odb12" # or "fungi_odb10", "eukaryota_odb10", etc.
+  lineage_general: "fungi_odb12" # chose a "general" dataset, in our case "fungi_odb10"
+  lineage_specific: "basidiomycota_odb12" # chose a more specific dataset, for example "basidiomycota_odb12", "ascomycota_odb12", etc.
   optional_params: # if you do not want to use any optional parameters, add `{}` here
     "--mode": "genome"
     "--metaeuk": True
