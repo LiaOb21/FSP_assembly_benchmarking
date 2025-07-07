@@ -67,6 +67,28 @@ conda activate snakemake
 snakemake --profile profile/
 ```
 
+
+## Generate unit tests
+
+After successfully running a workflow using the `--notemp` flag, run the following command:
+```
+snakemake --generate-unit-tests
+```
+
+This will generate the `.tests` directory.
+
+Now, if we look at `.github/workflows/main.yml` we see what the tests do. There is a little error here, make sure that the directory is named correctly: `directory: .tests` (it was named `.test` previously, without s).
+
+To avoid usign large files and switch to GitHub LFS, add the following lines in `.gitignore` (it will ignore large files produced by busco):
+```
+.tests/**/run_fungi_odb12/**
+.tests/**/run_basidiomycota_odb12/**
+```
+
+Copy the file `config/config.yml` into the `.tests` directory.
+
+-----
+
 The usage of this workflow is described in the [Snakemake Workflow Catalog](https://snakemake.github.io/snakemake-workflow-catalog/docs/workflows/<owner>/<repo>).
 
 Detailed information about input data and workflow configuration can also be found in the [`config/README.md`](config/README.md).

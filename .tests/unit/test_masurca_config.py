@@ -22,14 +22,14 @@ def test_masurca_config():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("/home/lia/git_repos/FSP_assembly_benchmarking/results/048ds/masurca/masurca_config.txt", file=sys.stderr)
+        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results_onesampleonly/048ds/masurca/masurca_config.txt", file=sys.stderr)
 
         # Run the test job.
         sp.check_output([
             "python",
             "-m",
             "snakemake", 
-            "/home/lia/git_repos/FSP_assembly_benchmarking/results/048ds/masurca/masurca_config.txt",
+            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results_onesampleonly/048ds/masurca/masurca_config.txt",
             "-f", 
             "-j1",
             "--target-files-omit-workdir-adjustment",

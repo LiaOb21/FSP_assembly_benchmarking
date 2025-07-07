@@ -15,4 +15,5 @@ workflow/notebooks/.ipynb_checkpoints/**
 fungi_*
 busco_*
 .tests/**/run_fungi_odb12/**
+.tests/**/run_basidiomycota_odb12/**
 basidiomycota_*
