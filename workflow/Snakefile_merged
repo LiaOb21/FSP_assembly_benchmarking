@@ -17,14 +17,15 @@ output_dir = config["output_dir"]
 SAMPLES = [os.path.basename(d) for d in glob.glob(f"{input_dir}/*") if os.path.isdir(d)]
 
 # Define assembler names
-ASSEMBLERS = ["spades", "megahit", "abyss", "sparseassembler", "minia", "masurca"]
+ASSEMBLERS = ["spades", "megahit", "abyss", "sparseassembler", "minia", "masurca"
+]
 
 
 rule all:
     input:
-        #        expand(f"{output_dir}" + "{sample}/spades/scaffolds.fasta", sample=SAMPLES),
-        #        expand(f"{output_dir}" + "{sample}/megahit/", sample=SAMPLES),
-        #        expand(f"{output_dir}" + "{sample}/abyss/abyss-scaffolds.fa", sample=SAMPLES),
+        expand(f"{output_dir}" + "{sample}/spades/scaffolds.fasta", sample=SAMPLES),
+        expand(f"{output_dir}" + "{sample}/megahit/", sample=SAMPLES),
+#        expand(f"{output_dir}" + "{sample}/abyss/abyss-scaffolds.fa", sample=SAMPLES),
         expand(
             f"{output_dir}" + "{sample}/sparseassembler/SuperContigs.txt",
             sample=SAMPLES,
@@ -57,11 +58,11 @@ rule all:
 
 
 # include spades rules
-# include: "rules/spades_merged.smk"
+include: "rules/spades_merged.smk"
 # include megahit rule
-# include: "rules/megahit_merged.smk"
+include: "rules/megahit_merged.smk"
 # include abyss rule
-# include: "rules/abyss_merged.smk"
+#include: "rules/abyss_merged.smk"
 # include decompress_reads rule
 # include: "rules/decompress_reads_merged.smk"
 # include sparseassembler rule
