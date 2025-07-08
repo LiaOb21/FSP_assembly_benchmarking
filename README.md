@@ -21,7 +21,8 @@ Running Snakemake locally:
 ```
 conda install snakemake
 conda activate snakemake
-snakemake --configfile config/config.yml --software-deployment-method conda --snakefile workflow/Snakefile --cores 8
+pip install snakemake-logger-plugin-snkmt # used for monitoring resources
+snakemake --logger snkmt --configfile config/config.yml --software-deployment-method conda --snakefile workflow/Snakefile --cores 8
 ```
 
 Setting up and running snakemake in gruffalo:
@@ -85,7 +86,11 @@ To avoid usign large files and switch to GitHub LFS, add the following lines in 
 .tests/**/run_basidiomycota_odb12/**
 ```
 
-Copy the file `config/config.yml` into the `.tests` directory.
+Copy the file `config/config.yml` into the `.tests` directory:
+```
+mkdir .tests/config
+cp config/config.yml .tests/config
+```
 
 -----
 
