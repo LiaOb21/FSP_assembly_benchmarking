@@ -10,21 +10,6 @@ import os
 configfile: "config/config.yml"
 
 
-# resource scaling functions
-
-
-def get_scaled_mem(wildcards, attempt):
-    base_mem = config["mem_mb"]
-    return min(base_mem * attempt, 100000)  # Cap at 100GB
-
-
-def get_scaled_threads(wildcards, attempt):
-    base_threads = config["threads"]
-    return min(
-        base_threads + (attempt - 1) * 4, 64
-    )  # Add 4 threads per retry, cap at 64
-
-
 input_dir = config["input_dir"]
 output_dir = config["output_dir"]
 
@@ -75,6 +60,8 @@ rule all:
         ),
 
 
+# include common rule (where functions are defined)
+include: "rules/common.smk"
 # include spades rules
 include: "rules/spades_merged.smk"
 # include megahit rule
