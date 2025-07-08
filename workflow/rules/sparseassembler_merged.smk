@@ -5,7 +5,7 @@ import os
 
 rule sparseassembler:
     input:
-        merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
+        merged_in=f"{output_dir}" + "fqreads/{sample}/{sample}_merged.fq",
     output:
         scaffolds=f"{output_dir}" + "{sample}/sparseassembler/SuperContigs.txt",
         link_assembly=f"{output_dir}"
@@ -21,11 +21,13 @@ rule sparseassembler:
             for k, v in config["sparseassembler"]["optional_params"].items()
             if v is True
         ),
-    threads: config["threads"]  # access threads from config
+    threads: get_scaled_threads  # Use scaling function
     log:
         "logs/{sample}/sparseassembler.log",
+    benchmark:
+        "benchmark/{sample}/sparseassembler.txt"
     resources:
-        mem_mb=config["mem_mb"],  # access memory from config
+        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/sparseassembler.yaml"
     shell:

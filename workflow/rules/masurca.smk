@@ -14,8 +14,10 @@ rule masurca:
         config_dir=lambda wildcards, input: os.path.dirname(input.masurca_config),
     log:
         "logs/{sample}/masurca.log",
+    benchmark:
+        "benchmark/{sample}/masurca.txt"
     resources:
-        mem_mb=config["mem_mb"],  # access memory from config
+        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/masurca.yaml"
     shell:

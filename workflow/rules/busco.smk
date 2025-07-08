@@ -12,11 +12,13 @@ rule busco:
             for k, v in config["busco"]["optional_params"].items()
             if v
         ),
-    threads: config["threads"]
+    threads: get_scaled_threads  # Use scaling function
     log:
         "logs/{sample}/busco_{sample}_{assembler}.log",
+    benchmark:
+        "benchmark/{sample}/busco_{sample}_{assembler}.txt"
     resources:
-        mem_mb=config["mem_mb"],
+        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/busco.yaml"
     shell:

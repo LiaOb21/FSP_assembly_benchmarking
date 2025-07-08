@@ -21,11 +21,13 @@ rule merquryfk:
             for k, v in config["merquryfk"]["optional_params"].items()
             if v
         ),
-    threads: config["threads"]
+    threads: get_scaled_threads  # Use scaling function
     log:
         "logs/{sample}/merquryfk_{sample}_{assembler}.log",
+    benchmark:
+        "benchmark/{sample}/merquryFK_{sample}_{assembler}.txt"
     resources:
-        mem_mb=config["mem_mb"],
+        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/merquryFK.yaml"
     shell:

@@ -16,11 +16,13 @@ rule spades:
         optional_params=" ".join(
             k for k, v in config["spades"]["optional_params"].items() if v is True
         ),
-    threads: config["threads"]  # access threads from config
+    threads: get_scaled_threads  # Use scaling function
     log:
         "logs/{sample}/spades.log",
+    benchmark:
+        "benchmark/{sample}/spades.txt"
     resources:
-        mem_mb=config["mem_mb"],  # access memory from config
+        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/spades.yaml"
     shell:

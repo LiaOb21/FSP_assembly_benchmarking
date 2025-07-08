@@ -12,11 +12,13 @@ rule quast:
             for k, v in config["quast"]["optional_params"].items()
             if v
         ),
-    threads: config["threads"]
+    threads: get_scaled_threads  # Use scaling function
     log:
         "logs/{sample}/quast.log",
+    benchmark:
+        "benchmark/{sample}/quast.txt"
     resources:
-        mem_mb=config["mem_mb"],
+        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/quast.yaml"
     shell:

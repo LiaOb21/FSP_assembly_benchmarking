@@ -17,14 +17,13 @@ rule fastk:
         temp_dir=lambda wildcards, output: os.path.join(
             os.path.dirname(output.ktab), "temp"
         ),
-        optional_params=" ".join(
-            k for k, v in config["fastk"]["optional_params"].items() if v is True
-        ),
-    threads: config["threads"]  # access threads from config
+    threads: get_scaled_threads  # Use scaling function
     log:
         "logs/{sample}/fastk.log",
+    benchmark:
+        "benchmark/{sample}/fastk.txt"
     resources:
-        mem_mb=config["mem_mb"],  # access memory from config
+        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/merquryFK.yaml"
     shell:
@@ -32,7 +31,7 @@ rule fastk:
         mkdir -p {params.temp_dir}
 
         echo "Running FastK with the following command:" >> {log} 2>&1
-        echo "FastK -v -T{threads} -k{params.k} -M{params.memory_gb} {input.merged_in} -N{params.result_prefix} -t{params.t} -P{params.temp_dir} {params.optional_params}" >> {log} 2>&1
-        FastK -v -T{threads} -k{params.k} -M{params.memory_gb} {input.merged_in} -N{params.result_prefix} -t{params.t} -P{params.temp_dir} {params.optional_params} >> {log} 2>&1
+        echo "FastK -v -T{threads} -k{params.k} -M{params.memory_gb} {input.merged_in} -N{params.result_prefix} -t{params.t} -P{params.temp_dir}" >> {log} 2>&1
+        FastK -v -T{threads} -k{params.k} -M{params.memory_gb} {input.merged_in} -N{params.result_prefix} -t{params.t} -P{params.temp_dir} >> {log} 2>&1
         rm -rf {params.temp_dir}  # clean up temporary directory
         """

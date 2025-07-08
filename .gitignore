@@ -17,3 +17,4 @@ busco_*
 .tests/**/run_fungi_odb12/**
 .tests/**/run_basidiomycota_odb12/**
 basidiomycota_*
+benchmark/**

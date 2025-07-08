@@ -18,11 +18,13 @@ rule abyss:
             for k, v in config["abyss"]["optional_params"].items()
             if v
         ),
-    threads: config["threads"]  # access threads from config
+    threads: get_scaled_threads  # Use scaling function
     log:
         "logs/{sample}/abyss.log",
+    benchmark:
+        "benchmark/{sample}/abyss.txt"
     resources:
-        mem_mb=config["mem_mb"],  # access memory from config
+        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/abyss.yaml"
     shell:

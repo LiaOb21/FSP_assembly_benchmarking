@@ -14,6 +14,8 @@ rule masurca_config:
         ca_parameters=config["masurca"].get("ca_parameters", "cgwErrorRate=0.15"),
     log:
         "logs/{sample}/masurca_config.log",
+    benchmark:
+        "benchmark/{sample}/masurca_config.txt"
     conda:
         "../envs/basic.yaml"
     shell:

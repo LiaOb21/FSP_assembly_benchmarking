@@ -6,13 +6,13 @@
 
 rule decompress_reads:
     input:
-        gz=f"{input_dir}" + "{sample}/{sample}_trimmed.{read}.fq.gz",
+        gz=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
     output:
-        fq=temp(f"{output_dir}" + "fqreads/{sample}/{sample}_trimmed.{read}.fq"),
+        fq=temp(f"{output_dir}" + "fqreads/{sample}/{sample}_merged.fq"),
     conda:
         "../envs/basic.yaml"
     log:
-        "logs/{sample}/{read}_decompress.log",
+        "logs/{sample}/merged_decompress.log",
     benchmark:
         "benchmark/{sample}/decompress_{read}.txt"
     shell:
