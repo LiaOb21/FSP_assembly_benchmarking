@@ -30,8 +30,8 @@ megahit:
 abyss:
   "k": 21
   "B": "16G" # note that this must be lower than "mem_mb", otherwise abyss fails. See docs at https://github.com/bcgsc/abyss?tab=readme-ov-file#bloom-filter-mode
-  optional_params: {} # if you do not want to use any optional parameters, add `{}` here
-#    "--some-flag": True
+  optional_params: # if you do not want to use any optional parameters, add `{}` here
+    "kc": 2
 #    "--another-flag": False
 
 # Customise sparseassembler parameters
@@ -40,16 +40,17 @@ sparseassembler:
   "GS": 50000000 # genome size estimation in bp (used for memory pre-allocation), suggest a large value if possible.(e.g. ~ 3x genome size)
   "Scaffold": 1 # for scaffolding with paired-end reads, set to 1
   "ExpCov": 10 # expected coverage (for scaffolding)
-  optional_params: {} # if you do not want to use any optional parameters, add `{}` here
-#    "g": 10
-#    "LD": 0
-#    "NodeCovTh": 1
-#    "EdgeCovTh": 0
+  optional_params: # if you do not want to use any optional parameters, add `{}` here
+    "g": 10
+    "LD": 0
+    "NodeCovTh": 1
+    "EdgeCovTh": 0
 
 # Customise minia parameters
 minia:
   "k": 21
-  optional_params: {} # if you do not want to use any optional parameters, add `{}` here
+  optional_params: # if you do not want to use any optional parameters, add `{}` here
+    "-histo2D": 1 # enable 2D histogram output
 
 # Customise masurca parameters
 masurca:
@@ -75,13 +76,13 @@ busco:
 
 # Customise quast parameters
 quast:
-  optional_params: {} # if you do not want to use any optional parameters, add `{}` here
+  optional_params: # if you do not want to use any optional parameters, add `{}` here
+    "--circos": True # produces a Circos plot
 
 # Customise fastK parameters
 fastk:
   k: 17 # k-mer size, adjust to your data
   t: 1 # include kmer frequency >= t in the output
-  optional_params: {} # if you do not want to use any optional parameters, add `{}` here
 
 # Customise merquryfk parameters
 merquryfk:
