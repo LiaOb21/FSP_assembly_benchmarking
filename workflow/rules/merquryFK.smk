@@ -31,6 +31,9 @@ rule merquryfk:
     shell:
         """
         mkdir -p {params.temp_dir}
+
+        echo "Running merquryFK with the following command:" >> {log} 2>&1
+        echo "MerquryFK -lfs -v -T{threads} -P{params.temp_dir} {input.ktab} {input.assembly} {params.result_prefix} {params.optional_params}" >> {log} 2>&1
         MerquryFK -lfs -v -T{threads} -P{params.temp_dir} {input.ktab} {input.assembly} {params.result_prefix} {params.optional_params} >> {log} 2>&1
         rm -rf {params.temp_dir}
         """

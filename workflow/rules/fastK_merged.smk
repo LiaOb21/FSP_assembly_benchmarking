@@ -30,6 +30,9 @@ rule fastk:
     shell:
         """
         mkdir -p {params.temp_dir}
+
+        echo "Running FastK with the following command:" >> {log} 2>&1
+        echo "FastK -v -T{threads} -k{params.k} -M{params.memory_gb} {input.merged_in} -N{params.result_prefix} -t{params.t} -P{params.temp_dir} {params.optional_params}" >> {log} 2>&1
         FastK -v -T{threads} -k{params.k} -M{params.memory_gb} {input.merged_in} -N{params.result_prefix} -t{params.t} -P{params.temp_dir} {params.optional_params} >> {log} 2>&1
         rm -rf {params.temp_dir}  # clean up temporary directory
         """

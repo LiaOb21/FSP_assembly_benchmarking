@@ -31,6 +31,8 @@ rule sparseassembler:
     shell:
         """
         cd {params.result_dir}
+        echo "Running SparseAssembler with the following command:" >> sparseassembler.log 2>&1
+        echo "SparseAssembler k {params.k} GS {params.GS} f {input.merged_in} Scaffold {params.Scaffold} ExpCov {params.ExpCov} {params.optional_params}" >> sparseassembler.log 2>&1
         SparseAssembler k {params.k} GS {params.GS} f {input.merged_in} Scaffold {params.Scaffold} ExpCov {params.ExpCov} {params.optional_params} >> sparseassembler.log 2>&1
 
         cd -

@@ -21,6 +21,11 @@ rule busco:
         "../envs/busco.yaml"
     shell:
         """
+        echo "Running busco with the following command:" >> {log} 2>&1
+        echo "busco -i {input.assembly} --out_path {output.general_dir} -l {params.lineage_general} -f -c {threads} {params.optional_params}" >> {log} 2>&1
         busco -i {input.assembly} --out_path {output.general_dir} -l {params.lineage_general} -f -c {threads} {params.optional_params} >> {log} 2>&1
+        
+        echo "Running busco with the following command:" >> {log} 2>&1
+        echo "busco -i {input.assembly} --out_path {output.specific_dir} -l {params.lineage_specific} -f -c {threads} {params.optional_params}" >> {log} 2>&1
         busco -i {input.assembly} --out_path {output.specific_dir} -l {params.lineage_specific} -f -c {threads} {params.optional_params} >> {log} 2>&1
         """

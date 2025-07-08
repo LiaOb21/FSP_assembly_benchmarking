@@ -18,9 +18,6 @@ rule fastk:
         temp_dir=lambda wildcards, output: os.path.join(
             os.path.dirname(output.ktab), "temp"
         ),
-        optional_params=" ".join(
-            k for k, v in config["fastk"]["optional_params"].items() if v is True
-        ),
     threads: config["threads"]  # access threads from config
     log:
         "logs/{sample}/fastk.log",
@@ -31,6 +28,9 @@ rule fastk:
     shell:
         """
         mkdir -p {params.temp_dir}
-        FastK -v -T{threads} -k{params.k} -M{params.memory_gb} {input.forward_in} {input.reverse_in} -N{params.result_prefix} -t{params.t} -P{params.temp_dir} {params.optional_params} >> {log} 2>&1
+
+        echo "Running FastK with the following command:" >> {log} 2>&1
+        echo "FastK -v -T{threads} -k{params.k} -M{params.memory_gb} {input.forward_in} {input.reverse_in} -N{params.result_prefix} -t{params.t} -P{params.temp_dir}" >> {log} 2>&1
+        FastK -v -T{threads} -k{params.k} -M{params.memory_gb} {input.forward_in} {input.reverse_in} -N{params.result_prefix} -t{params.t} -P{params.temp_dir}>> {log} 2>&1
         rm -rf {params.temp_dir}  # clean up temporary directory
         """

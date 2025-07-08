@@ -5,8 +5,9 @@ import os
 
 rule spades:
     input:
-        forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
-        reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
+        merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
+        unmerged_r1=f"{input_dir}" + "{sample}/{sample}_unmerged.R1.fq.gz",
+        unmerged_r2=f"{input_dir}" + "{sample}/{sample}_unmerged.R2.fq.gz",
     output:
         result_dir=directory(f"{output_dir}" + "{sample}/spades"),
         scaffolds=f"{output_dir}" + "{sample}/spades/scaffolds.fasta",
@@ -25,7 +26,7 @@ rule spades:
     shell:
         """
         echo "Running spades with the following command:" >> {log} 2>&1
-        echo "spades.py -t {threads} -1 {input.forward_in} -2 {input.reverse_in} -o {output.result_dir} {params.optional_params}" >> {log} 2>&1
-        spades.py -t {threads} -1 {input.forward_in} -2 {input.reverse_in} -o {output.result_dir} {params.optional_params} >> {log} 2>&1
+        echo "spades.py -t {threads} --merged {input.merged_in} -1 {input.unmerged_r1} -2 {input.unmerged_r2} -o {output.result_dir} {params.optional_params}" >> {log} 2>&1
+        spades.py -t {threads} --merged {input.merged_in} -1 {input.unmerged_r1} -2 {input.unmerged_r2} -o {output.result_dir} {params.optional_params} >> {log} 2>&1
         ln -srn {output.scaffolds} {output.link_assembly}
         """

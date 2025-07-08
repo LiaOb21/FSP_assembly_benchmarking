@@ -21,5 +21,7 @@ rule quast:
         "../envs/quast.yaml"
     shell:
         """
+        echo "Running quast with the following command:" >> {log} 2>&1
+        echo "quast {input.assemblies} -o {output.dir} -t {threads} {params.optional_params}" >> {log} 2>&1
         quast {input.assemblies} -o {output.dir} -t {threads} {params.optional_params} >> {log} 2>&1
         """

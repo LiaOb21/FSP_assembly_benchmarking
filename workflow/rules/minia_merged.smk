@@ -26,6 +26,8 @@ rule minia:
         "../envs/minia.yaml"
     shell:
         """
+        echo "Running minia with the following command:" >> {log} 2>&1
+        echo "minia -in {input.merged_in} -kmer-size {params.k} -out {params.result_prefix} -nb-cores {threads} {params.optional_params}" >> {log} 2>&1
         minia -in {input.merged_in} -kmer-size {params.k} -out {params.result_prefix} -nb-cores {threads} {params.optional_params} >> {log} 2>&1
 
         ln -srn {output.scaffolds} {output.link_assembly}
