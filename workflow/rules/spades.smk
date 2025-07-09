@@ -13,7 +13,9 @@ rule spades:
         link_assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_spades.fa",
     params:
         optional_params=" ".join(
-            k for k, v in config["spades"]["optional_params"].items() if v is True
+            f"{k} {v}" if v is not True else k
+            for k, v in config["spades"]["optional_params"].items()
+            if v  # This includes True, strings, numbers - excludes False, None, empty
         ),
     threads: get_scaled_threads  # Use scaling function
     log:
