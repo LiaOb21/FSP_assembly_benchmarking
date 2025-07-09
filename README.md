@@ -1,29 +1,85 @@
-# Snakemake workflow: `<name>`
+# Snakemake workflow: `FSP_assembly_benchmarking`
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥8.0.0-brightgreen.svg)](https://snakemake.github.io)
 [![GitHub actions status](https://github.com/snakemake-workflows/snakemake-workflow-template/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/snakemake-workflows/snakemake-workflow-template/actions/workflows/main.yml)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
-[![workflow catalog](https://img.shields.io/badge/Snakemake%20workflow%20catalog-darkgreen)](https://snakemake.github.io/snakemake-workflow-catalog/docs/workflows/<owner>/<repo>)
+[![workflow catalog](https://img.shields.io/badge/Snakemake%20workflow%20catalog-darkgreen)](https://snakemake.github.io/snakemake-workflow-catalog/docs/workflows/LiaOb21/FSP_assembly_benchmarking)
 
-A Snakemake workflow for `<description>`
+A Snakemake workflow for *de novo* genome assembly using Illumina reads. 
 
-- [Snakemake workflow: `<name>`](#snakemake-workflow-name)
+This workflow was developed for the Fungarium Sequencing Project (FSP) at Royal Botanic Gardens, Kew. 
+
+- [Snakemake workflow: `FSP_assembly_benchmarking`](#snakemake-workflow-name)
+  - [Overview](#overview)
   - [Usage](#usage)
   - [Deployment options](#deployment-options)
   - [Authors](#authors)
   - [References](#references)
   - [TODO](#todo)
 
+## Overview
+
+![dag](dag_onesampleonly.png)
+
+The workflow was developed to benchmark the performance of different short reads assemblers using aDNA (ancient DNA). 
+
+It may be useful to other projects that deal with difficult samples as the FSP, and need to find the best short reads assembler(s) for their own case.
+
+The workflow was designed to process several samples in parallel. The flow chart above illustrates how the workflow looks like when processing a single sample (example: 048ds).
+
+Each sample is assembled using the following assemblers:
+
+- [SPAdes](https://github.com/ablab/spades)
+- [MEGAHIT](https://github.com/voutcn/megahit)
+- [AbySS](https://github.com/bcgsc/abyss)
+- [SparseAssembler](https://github.com/yechengxi/SparseAssembler)
+- [Minia](https://github.com/GATB/minia?tab=readme-ov-file)
+- [MaSuRCA](https://github.com/alekseyzimin/masurca/tree/master)
+
+
+The assemblies produced by each assembler for each sample are then quality inspected with the following tools
+
+- [BUSCO](https://busco.ezlab.org/busco_userguide.html) - evaluates each produced assembly quality in terms of expected gene content. It is run twice for each sample, once using a general dataset, and once using a more closely related dataset. See `config/README.md` for more details.
+- [QUAST](https://quast.sourceforge.net/docs/manual.html) - computes assembly statistics.
+- [MerquryFK](https://github.com/thegenemyers/MERQURY.FK) - computes k-mer analysis for each assembly and compares its content with the k-mer computed for raw reads by [FastK](https://github.com/thegenemyers/FASTK).
+
 ## Usage
 
-Running Snakemake locally:
+### Download the repo
 
+```
+git clone https://github.com/LiaOb21/FSP_assembly_benchmarking.git
+```
+
+### Prepare the required inputs
+
+1. Your data directory structure
+
+2. Download BUSCO databases
+
+### Running the workflow locally:
+
+**Note: before running the workflow you should set up your `config.yml`. You can find it in `config/config.yml`. The `config/README.md` explains how to set up the `config.yml`.**
+
+First install snakemake using conda:
 ```
 conda install snakemake
 conda activate snakemake
-pip install snakemake-logger-plugin-snkmt # used for monitoring resources
-snakemake --logger snkmt --configfile config/config.yml --software-deployment-method conda --snakefile workflow/Snakefile --cores 8
 ```
+
+If you want to monitor the workflow through a console you can install the `snkmt` plugin (this is not mandatory):
+```
+pip install snakemake-logger-plugin-snkmt # used for monitoring resources
+```
+
+To run the workflow, you can use the following command:
+```
+snakemake --configfile config/config.yml --software-deployment-method conda --snakefile workflow/Snakefile --cores 8
+```
+
+If you want to use `snkmt` add this flag to the previous command: `--logger snkmt`.
+
+### Running the workflow on the cluster
 
 Setting up and running snakemake in gruffalo:
 
@@ -69,32 +125,10 @@ snakemake --profile profile/
 ```
 
 
-## Generate unit tests
-
-After successfully running a workflow using the `--notemp` flag, run the following command:
-```
-snakemake --generate-unit-tests
-```
-
-This will generate the `.tests` directory.
-
-Now, if we look at `.github/workflows/main.yml` we see what the tests do. There is a little error here, make sure that the directory is named correctly: `directory: .tests` (it was named `.test` previously, without s).
-
-To avoid usign large files and switch to GitHub LFS, add the following lines in `.gitignore` (it will ignore large files produced by busco):
-```
-.tests/**/run_fungi_odb12/**
-.tests/**/run_basidiomycota_odb12/**
-```
-
-Copy the file `config/config.yml` into the `.tests` directory:
-```
-mkdir .tests/config
-cp config/config.yml .tests/config
-```
 
 -----
 
-The usage of this workflow is described in the [Snakemake Workflow Catalog](https://snakemake.github.io/snakemake-workflow-catalog/docs/workflows/<owner>/<repo>).
+The usage of this workflow is described in the [Snakemake Workflow Catalog](https://snakemake.github.io/snakemake-workflow-catalog/docs/workflows/LiaOb21/FSP_assembly_benchmarking).
 
 Detailed information about input data and workflow configuration can also be found in the [`config/README.md`](config/README.md).
 
