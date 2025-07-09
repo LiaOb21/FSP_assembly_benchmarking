@@ -4,17 +4,19 @@ mem_mb: 16000
 threads: 8
 
 # Set the path to the input directory (this directory must contain
-# one subdirectory for each sample, and the subdirectories must be named after the sample))
+# one subdirectory for each sample, and the subdirectories must be named after the sample)
 input_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/clean_data/00_test/" # use absolute path and add trailing slash
 
 # Customise the results directory
 output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/" # use absolute path and add trailing slash
 
 # Customise spades parameters
+# please do not use the `-o` option here, it is set into the workflow
 spades:
   optional_params:
     "--careful": True
     "--only-assembler": True
+    "-k": "17,19,21,23" # k-mer sizes to use, adjust to your data
 #   "--disable-gzip-output": true
 #   "--cov-cutoff": "auto"
 #   "--min-contig-length": 500
@@ -88,4 +90,4 @@ fastk:
 merquryfk:
   optional_params: # if you do not want to use any optional parameters, add `{}` here
     "-z": True # outputs assembly plots in addition to spectra copy number
-    "-pdf": True # outputs results in PDF format (default is png))
+    "-pdf": True # outputs results in PDF format (default is png)
