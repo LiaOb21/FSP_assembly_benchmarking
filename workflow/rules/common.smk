@@ -3,7 +3,7 @@
 
 def get_scaled_mem(wildcards, attempt):
     base_mem = config["mem_mb"]
-    return min(base_mem * attempt, 100000)  # Cap at 100GB
+    return min(base_mem * attempt, 250000)  # Cap at 250GB
 
 
 def get_scaled_threads(wildcards, attempt):
