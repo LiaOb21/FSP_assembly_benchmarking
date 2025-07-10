@@ -10,7 +10,7 @@ rule busco:
         optional_params=" ".join(
             f"{k}" if v is True else f"{k} {v}"
             for k, v in config["busco"]["optional_params"].items()
-            if v
+            if v and v is not False and v != ""
         ),
     threads: get_scaled_threads  # Use scaling function
     log:

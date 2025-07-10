@@ -15,9 +15,13 @@ rule abyss:
         k=config["abyss"]["k"],
         B=config["abyss"]["B"],
         optional_params=" ".join(
-            f"{k}={v}" if v is not True else k
-            for k, v in config["abyss"]["optional_params"].items()
-            if v
+            (
+                key
+                if value is True
+                else f"{key} {value}" if key.startswith("-") else f"{key}={value}"
+            )
+            for key, value in config["abyss"]["optional_params"].items()
+            if value and value is not False and value != ""
         ),
     threads: get_scaled_threads  # Use scaling function
     log:

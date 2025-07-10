@@ -17,9 +17,9 @@ rule sparseassembler:
         Scaffold=config["sparseassembler"]["Scaffold"],
         ExpCov=config["sparseassembler"]["ExpCov"],
         optional_params=" ".join(
-            k
+            f"{k}" if v is True else f"{k} {v}"
             for k, v in config["sparseassembler"]["optional_params"].items()
-            if v is True
+            if v and v is not False and v != ""
         ),
     threads: get_scaled_threads  # Use scaling function
     log:

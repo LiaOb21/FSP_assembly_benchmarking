@@ -18,3 +18,4 @@ busco_*
 .tests/**/run_basidiomycota_odb12/**
 basidiomycota_*
 benchmark/**
+benchmark_summary.csv

@@ -17,9 +17,6 @@ spades:
     "--careful": True
     "--only-assembler": True
     "-k": "17,19,21,23" # k-mer sizes to use, adjust to your data
-#   "--disable-gzip-output": true
-#   "--cov-cutoff": "auto"
-#   "--min-contig-length": 500
 
 # Customise megahit parameters
 megahit:
@@ -29,12 +26,12 @@ megahit:
     "--k-list": "31,51,71,91,99"
 
 # Customise abyss parameters
+# please do not use the `-j` and `-C` options here, they are set into the workflow
 abyss:
   "k": 21
   "B": "16G" # note that this must be lower than "mem_mb", otherwise abyss fails. See docs at https://github.com/bcgsc/abyss?tab=readme-ov-file#bloom-filter-mode
   optional_params: # if you do not want to use any optional parameters, add `{}` here
     "kc": 2
-#    "--another-flag": False
 
 # Customise sparseassembler parameters
 sparseassembler:
@@ -90,4 +87,4 @@ fastk:
 merquryfk:
   optional_params: # if you do not want to use any optional parameters, add `{}` here
     "-z": True # outputs assembly plots in addition to spectra copy number
-    "-pdf": True # outputs results in PDF format (default is png)
+#    "-pdf": True # outputs results in PDF format (default is png)

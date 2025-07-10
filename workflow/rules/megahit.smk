@@ -13,7 +13,9 @@ rule megahit:
     params:
         scaffolds=f"{output_dir}" + "{sample}/megahit/final.contigs.fa",
         optional_params=" ".join(
-            k for k, v in config["megahit"]["optional_params"].items() if v is True
+            f"{k}" if v is True else f"{k} {v}"
+            for k, v in config["megahit"]["optional_params"].items()
+            if v and v is not False and v != ""
         ),
     threads: get_scaled_threads  # Use scaling function
     log:

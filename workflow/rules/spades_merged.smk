@@ -16,7 +16,7 @@ rule spades:
         optional_params=" ".join(
             f"{k} {v}" if v is not True else k
             for k, v in config["spades"]["optional_params"].items()
-            if v  # This includes True, strings, numbers - excludes False, None, empty
+            if v and v is not False and v != ""
         ),
     threads: get_scaled_threads  # Use scaling function
     log:
