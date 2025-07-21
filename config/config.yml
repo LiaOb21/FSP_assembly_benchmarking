@@ -72,6 +72,7 @@ busco:
   optional_params: # if you do not want to use any optional parameters, add `{}` here
     "--mode": "genome"
     "--metaeuk": True
+    "--offline": True # use this if you do not want to download the lineage dataset from the web, but use a local copy instead
 
 # Customise quast parameters
 quast:
