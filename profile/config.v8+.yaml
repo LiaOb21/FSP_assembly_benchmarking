@@ -5,7 +5,7 @@
 
 executor: cluster-generic
 cluster-generic-submit-cmd:
-  mkdir -p logs/{rule} &&
+  mkdir -p logs/sbatch/{rule} &&
   sbatch
     --partition={resources.partition}
     --cpus-per-task={threads}
