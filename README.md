@@ -55,6 +55,25 @@ git clone https://github.com/LiaOb21/FSP_assembly_benchmarking.git
 
 1. Your data directory structure
 
+The directory the contains your input samples (e.g. `data`) must be structured in the following way:
+```
+data/
+├── 048ds
+│   ├── 048ds_merge.fq.gz
+│   ├── 048ds_trimmed.R1.fq.gz
+│   ├── 048ds_trimmed.R2.fq.gz
+│   ├── 048ds_unmerged.R1.fq.gz
+│   └── 048ds_unmerged.R2.fq.gz
+└── 048ss
+    ├── 048ss_merge.fq.gz
+    ├── 048ss_trimmed.R1.fq.gz
+    ├── 048ss_trimmed.R2.fq.gz
+    ├── 048ss_unmerged.R1.fq.gz
+    └── 048ss_unmerged.R2.fq.gz
+```
+
+In this example `048ds` and `048ss` are the only two samples present in the input directory. Note how each subdirectory is named after the sample, and the files inside each sample subdirectory have a standardised name. This is crucial for Snakemake to work properly.
+
 2. Download BUSCO databases
 
 ### Running the workflow locally:
