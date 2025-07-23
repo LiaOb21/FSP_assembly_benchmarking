@@ -5,7 +5,7 @@ import os
 
 rule fastk:
     input:
-        merged_in=f"{input_dir}" + "/{sample}/{sample}_merge.fq.gz",
+        merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
     output:
         ktab=f"{output_dir}" + "{sample}/fastk/fastk_table.ktab",
         hist=f"{output_dir}" + "{sample}/fastk/fastk_table.hist",
