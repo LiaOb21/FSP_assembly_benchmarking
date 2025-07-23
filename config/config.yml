@@ -22,7 +22,7 @@ spades:
 megahit:
   optional_params:
     "--no-mercy": True
-    "--min-count": 3 # suggested value for single genome assembly 
+    "--min-count": 3 # suggested value for single genome assembly
     "--k-list": "31,51,71,91,99"
 
 # Customise abyss parameters
