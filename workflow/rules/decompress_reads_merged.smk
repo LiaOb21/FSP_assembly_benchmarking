@@ -14,7 +14,7 @@ rule decompress_reads:
     log:
         "logs/{sample}/merged_decompress.log",
     benchmark:
-        "benchmark/{sample}/decompress_{read}.txt"
+        "benchmark/{sample}/merged_decompress.txt"
     shell:
         """
         echo "Decompressing {input.gz} to {output.fq}" >> {log} 2>&1
