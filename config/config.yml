@@ -14,15 +14,15 @@ output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/" # use ab
 # please do not use the `-o` option here, it is set into the workflow
 spades:
   optional_params:
-    "--careful": True
-    "--only-assembler": True
+    "--careful": True # tries to find and fix mismatches after the initial assembly is finished
+    "--only-assembler": True # use this to skip the read error correction step (reads are already cleaned)
     "-k": "17,19,21,23" # k-mer sizes to use, adjust to your data
 
 # Customise megahit parameters
 megahit:
   optional_params:
     "--no-mercy": True
-    "--min-count": 3
+    "--min-count": 3 # suggested value for single genome assembly 
     "--k-list": "31,51,71,91,99"
 
 # Customise abyss parameters
@@ -67,8 +67,8 @@ masurca:
 
 # Customise busco parameters
 busco:
-  lineage_general: "fungi_odb12" # chose a "general" dataset, in our case "fungi_odb10"
-  lineage_specific: "basidiomycota_odb12" # chose a more specific dataset, for example "basidiomycota_odb12", "ascomycota_odb12", etc.
+  lineage_general: "/home/lobinu/git_repos/FSP_assembly_benchmarking/fungi_odb12" # chose a "general" dataset, in our case "fungi_odb10"
+  lineage_specific: "/home/lobinu/git_repos/FSP_assembly_benchmarking/basidiomycota_odb12" # chose a more specific dataset, for example "basidiomycota_odb12", "ascomycota_odb12", etc.
   optional_params: # if you do not want to use any optional parameters, add `{}` here
     "--mode": "genome"
     "--metaeuk": True
