@@ -48,8 +48,8 @@ sparseassembler:
 # Customise minia parameters
 minia:
   "k": 21
-  optional_params: # if you do not want to use any optional parameters, add `{}` here
-    "-histo2D": 1 # enable 2D histogram output
+  optional_params: {} # if you do not want to use any optional parameters, add `{}` here
+#    "-histo2D": 1 # enable 2D histogram output
 
 # Customise masurca parameters
 masurca:

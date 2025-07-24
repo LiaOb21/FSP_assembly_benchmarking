@@ -39,7 +39,7 @@ Each sample is assembled using the following assemblers:
 
 The assemblies produced by each assembler for each sample are then quality inspected with the following tools
 
-- [BUSCO](https://busco.ezlab.org/busco_userguide.html) - evaluates each produced assembly quality in terms of expected gene content. It is run twice for each sample, once using a general dataset, and once using a more closely related dataset. See `config/README.md` for more details.
+- [BUSCO](https://busco.ezlab.org/busco_userguide.html) - evaluates each produced assembly quality in terms of expected gene content. It is run twice for each sample, once using a general dataset, and once using a more closely related dataset. See [`config/README.md`](config/README.md) for more details.
 - [QUAST](https://quast.sourceforge.net/docs/manual.html) - computes assembly statistics.
 - [MerquryFK](https://github.com/thegenemyers/MERQURY.FK) - computes k-mer analysis for each assembly and compares its content with the k-mer computed for raw reads by [FastK](https://github.com/thegenemyers/FASTK).
 
@@ -55,7 +55,7 @@ git clone https://github.com/LiaOb21/FSP_assembly_benchmarking.git
 
 1. Your data directory structure
 
-The directory the contains your input samples (e.g. `data`) must be structured in the following way:
+The directory that contains your input samples (e.g. `data`) must be structured in the following way:
 ```
 data/
 ├── 048ds
@@ -76,17 +76,37 @@ In this example `048ds` and `048ss` are the only two samples present in the inpu
 
 2. Download BUSCO databases
 
+This workflow runs BUSCO on each produced assembly twice using two different databases. One database should be more "general" and represent an high taxonomic level compared with the organisms analysed (e.g. fungi_odb), the second database should be as closely related as possible to the organisms analysed (e.g. agaricales_odb).
+
+Here is how busco databases can be obtained:
+
+```
+cd FSP_assembly_benchmarking
+mkdir resources
+cd resources
+
+wget https://busco-data.ezlab.org/v5/data/lineages/fungi_odb12.2025-07-01.tar.gz
+tar -xzf fungi_odb12.2025-07-01.tar.gz
+
+wget https://busco-data.ezlab.org/v5/data/lineages/agaricales_odb12.2025-07-01.tar.gz
+tar -xzf agaricales_odb12.2025-07-01.tar.gz
+```
+
+Due to these settings, we advise to process samples in batches, divided by the taxonomic level that you want to assess with BUSCO. For example, first process all the samples belonging to the Boletales order, then all samples belonging to Agaricales, and so on.
+
+If you download dabases before starting the workflow, you should set `"--offline": True` in the `config.yaml` for the BUSCO parameters. For more details, please refer to [`config/README.md`](config/README.md).
+
 ### Running the workflow locally:
 
-**Note: before running the workflow you should set up your `config.yml`. You can find it in `config/config.yml`. The `config/README.md` explains how to set up the `config.yml`.**
+**Note: before running the workflow you should set up your `config.yml`. You can find it in [`config/config.yml`](config/config.yml). The [`config/README.md`](config/README.md) explains how to set up the `config.yml`.**
 
-First install snakemake using conda:
+First install snakemake using conda (be sure to install version 9+):
 ```
-conda install snakemake
+conda create -n snakemake snakemake
 conda activate snakemake
 ```
 
-If you want to monitor the workflow through a console you can install the `snkmt` plugin (this is not mandatory):
+If you want to monitor the workflow through a console you can install the `snkmt` plugin within the snakemake environment (this is not mandatory):
 ```
 pip install snakemake-logger-plugin-snkmt # used for monitoring resources
 ```
@@ -105,8 +125,8 @@ Setting up and running snakemake in gruffalo:
 ```
 conda create -c conda-forge -c bioconda -n snakemake snakemake  #Use the full version of the commands, as otherwise an older version will be downloaded.
 conda activate snakemake
-pip install snakemake-executor-plugin-cluster-generic
-#pip install snakemake-executor-plugin-slurm
+pip install snakemake-executor-plugin-cluster-generic # to handle SLURM job submission
+pip install snakemake-logger-plugin-snkmt # used for monitoring resources (optional)
 ```
 
 Get the busco database that we will need for the QC
@@ -161,7 +181,7 @@ To run the workflow from command line, change the working directory.
 cd path/to/snakemake-workflow-name
 ```
 
-Adjust options in the default config file `config/config.yml`.
+Adjust options in the default config file [`config/config.yml`](config/config.yml).
 Before running the complete workflow, you can perform a dry run using:
 
 ```bash
