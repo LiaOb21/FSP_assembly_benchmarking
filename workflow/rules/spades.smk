@@ -7,11 +7,13 @@ rule spades:
     input:
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
         reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
+        kmergenie_result=get_kmergenie_dependency,
     output:
         result_dir=directory(f"{output_dir}" + "{sample}/spades"),
         scaffolds=f"{output_dir}" + "{sample}/spades/scaffolds.fasta",
         link_assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_spades.fa",
     params:
+        k=lambda wildcards: get_kmer_list(wildcards, "spades", "k"),
         optional_params=" ".join(
             f"{k} {v}" if v is not True else k
             for k, v in config["spades"]["optional_params"].items()
@@ -29,7 +31,7 @@ rule spades:
     shell:
         """
         echo "Running spades with the following command:" >> {log} 2>&1
-        echo "spades.py -t {threads} -1 {input.forward_in} -2 {input.reverse_in} -o {output.result_dir} {params.optional_params}" >> {log} 2>&1
-        spades.py -t {threads} -1 {input.forward_in} -2 {input.reverse_in} -o {output.result_dir} {params.optional_params} >> {log} 2>&1
+        echo "spades.py -t {threads} -1 {input.forward_in} -2 {input.reverse_in} -o {output.result_dir} -k {params.k} {params.optional_params}" >> {log} 2>&1
+        spades.py -t {threads} -1 {input.forward_in} -2 {input.reverse_in} -o {output.result_dir} -k {params.k} {params.optional_params} >> {log} 2>&1
         ln -srn {output.scaffolds} {output.link_assembly}
         """

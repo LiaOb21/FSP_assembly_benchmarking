@@ -5,25 +5,40 @@ threads: 8
 
 # Set the path to the input directory (this directory must contain
 # one subdirectory for each sample, and the subdirectories must be named after the sample)
-input_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/clean_data/00_test/" # use absolute path and add trailing slash
+input_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/test_data/" # use absolute path and add trailing slash
 
 # Customise the results directory
-output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/" # use absolute path and add trailing slash
+output_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/results/" # use absolute path and add trailing slash
+
+# K-mer size determination strategy
+# Note that if you set this to "manual", you must also set the k-mer size for spades, megahit, abyss, sparseassembler, minia, and masurca.
+# If you set this to "auto", kmergenie will be used to determine the optimal k-mer size and the values defined below for each rule will be ignored.
+# For spades and megahit when kmer_strategy is set to "auto" the best k-mer size predicted by kmergenie will be added to this list: 21, 27, 29, 31, 33, 35, 37, 41, 51, 61
+# For the other assemblers only the k-mer predicted by kmergenie will be used when kmer_strategy is set to "auto".
+# Note that spades and masurca have their own auto mode, this must not be confused with the kmer_strategy.
+# If you want to use the built in auto mode for spades or masurca, you must set the k-mer size to "auto" in their respective sections below and set the kmer_strategy to "manual".
+kmer_strategy:
+  mode: "auto"  # "auto" for KmerGenie, "manual" for user-defined k-mer sizes. 
+
+# Customise kmergenie parameters
+kmergenie:
+  "k": 121 # largest k-mer size to consider (default: 121)
+  "l": 15 # smallest k-mer size to consider (default: 15)
+  optional_params: {} # if you do not want to use any optional parameters, add `{}`
 
 # Customise spades parameters
 # please do not use the `-o` option here, it is set into the workflow
 spades:
+  "k": "auto" # list of k-mer sizes (must be odd and less than 128) [default: 'auto']
   optional_params:
-    "--careful": True # tries to find and fix mismatches after the initial assembly is finished
     "--only-assembler": True # use this to skip the read error correction step (reads are already cleaned)
-    "-k": "17,19,21,23" # k-mer sizes to use, adjust to your data
 
 # Customise megahit parameters
 megahit:
+  "k": "31,51,71,91,99" #comma-separated list of kmer size all must be odd, in the range 15-255, increment <= 28) [21,29,39,59,79,99,119,141]
   optional_params:
     "--no-mercy": True
     "--min-count": 3 # suggested value for single genome assembly
-    "--k-list": "31,51,71,91,99"
 
 # Customise abyss parameters
 # please do not use the `-j` and `-C` options here, they are set into the workflow
@@ -55,7 +70,7 @@ minia:
 masurca:
   fragment_mean: 500 # mean insert size for your PE library (adjust to your data)
   fragment_stdev: 50 # stdev for your PE library (adjust to your data)
-  kmer: auto # values between 25 and 127 are supported, auto will compute the optimal size based on the read data and GC content
+  k: auto # values between 25 and 127 are supported, auto will compute the optimal size based on the read data and GC content
   jf_size: 100000000 # this is mandatory jellyfish hash size -- a safe value is estimated_genome_size*20
   ca_parameters: cgwErrorRate=0.15 # set cgwErrorRate=0.25 for bacteria and 0.1<=cgwErrorRate<=0.15 for other organisms.
 # Note that the following parameters are always set as follows:
@@ -67,8 +82,8 @@ masurca:
 
 # Customise busco parameters
 busco:
-  lineage_general: "/home/lobinu/git_repos/FSP_assembly_benchmarking/fungi_odb12" # chose a "general" dataset, in our case "fungi_odb10"
-  lineage_specific: "/home/lobinu/git_repos/FSP_assembly_benchmarking/basidiomycota_odb12" # chose a more specific dataset, for example "basidiomycota_odb12", "ascomycota_odb12", etc.
+  lineage_general: "/home/lia/git_repos/FSP_assembly_benchmarking/resources/fungi_odb12" # chose a "general" dataset, in our case "fungi_odb10"
+  lineage_specific: "/home/lia/git_repos/FSP_assembly_benchmarking/resources/basidiomycota_odb12" # chose a more specific dataset, for example "basidiomycota_odb12", "ascomycota_odb12", etc.
   optional_params: # if you do not want to use any optional parameters, add `{}` here
     "--mode": "genome"
     "--metaeuk": True

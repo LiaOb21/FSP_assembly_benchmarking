@@ -7,12 +7,13 @@ rule abyss:
     input:
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
         reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
+        kmergenie_result=get_kmergenie_dependency,
     output:
         result_dir=directory(f"{output_dir}" + "{sample}/abyss"),
         scaffolds=f"{output_dir}" + "{sample}/abyss/abyss-scaffolds.fa",
         link_assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_abyss.fa",
     params:
-        k=config["abyss"]["k"],
+        k=lambda wildcards: get_single_kmer(wildcards, "abyss", "k"),
         B=config["abyss"]["B"],
         optional_params=" ".join(
             (
