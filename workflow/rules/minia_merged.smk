@@ -6,11 +6,12 @@ import os
 rule minia:
     input:
         merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
+        kmergenie_result=get_kmergenie_dependency,
     output:
         scaffolds=f"{output_dir}" + "{sample}/minia/{sample}.contigs.fa",
         link_assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_minia.fa",
     params:
-        k=config["minia"]["k"],
+        k=lambda wildcards: get_single_kmer(wildcards, "minia", "k"),
         result_prefix=lambda wildcards, output: os.path.splitext(output.scaffolds)[
             0
         ].replace(".contigs", ""),

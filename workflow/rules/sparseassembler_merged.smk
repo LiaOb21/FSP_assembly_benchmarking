@@ -6,13 +6,14 @@ import os
 rule sparseassembler:
     input:
         merged_in=f"{output_dir}" + "fqreads/{sample}/{sample}_merged.fq",
+        kmergenie_result=get_kmergenie_dependency,
     output:
         scaffolds=f"{output_dir}" + "{sample}/sparseassembler/SuperContigs.txt",
         link_assembly=f"{output_dir}"
         + "assemblies/{sample}/{sample}_sparseassembler.fa",
     params:
         result_dir=lambda wildcards, output: os.path.dirname(output.scaffolds),
-        k=config["sparseassembler"]["k"],
+        k=lambda wildcards: get_single_kmer(wildcards, "sparseassembler", "k"),
         GS=config["sparseassembler"]["GS"],
         Scaffold=config["sparseassembler"]["Scaffold"],
         ExpCov=config["sparseassembler"]["ExpCov"],

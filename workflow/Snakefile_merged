@@ -20,48 +20,13 @@ SAMPLES = [os.path.basename(d) for d in glob.glob(f"{input_dir}/*") if os.path.i
 ASSEMBLERS = ["spades", "megahit", "abyss", "sparseassembler", "minia", "masurca"]
 
 
-rule all:
-    input:
-        expand(f"{output_dir}" + "{sample}/spades/scaffolds.fasta", sample=SAMPLES),
-        expand(f"{output_dir}" + "{sample}/megahit/", sample=SAMPLES),
-        expand(f"{output_dir}" + "{sample}/abyss/abyss-scaffolds.fa", sample=SAMPLES),
-        expand(
-            f"{output_dir}" + "{sample}/sparseassembler/SuperContigs.txt",
-            sample=SAMPLES,
-        ),
-        expand(f"{output_dir}" + "{sample}/minia/{sample}.contigs.fa", sample=SAMPLES),
-        expand(f"{output_dir}" + "{sample}/masurca/masurca_config.txt", sample=SAMPLES),
-        expand(
-            f"{output_dir}" + "{sample}/masurca/CA/primary.genome.scf.fasta",
-            sample=SAMPLES,
-        ),
-        expand(
-            f"{output_dir}" + "{sample}/busco_general/{assembler}",
-            sample=SAMPLES,
-            assembler=ASSEMBLERS,
-        ),
-        expand(
-            f"{output_dir}" + "{sample}/busco_specific/{assembler}",
-            sample=SAMPLES,
-            assembler=ASSEMBLERS,
-        ),
-        expand(f"{output_dir}" + "{sample}/quast", sample=SAMPLES),
-        expand(f"{output_dir}" + "{sample}/fastk/fastk_table.ktab", sample=SAMPLES),
-        expand(
-            f"{output_dir}"
-            + "{sample}/merquryfk/{assembler}/merquryfk.completeness.stats",
-            sample=SAMPLES,
-            assembler=ASSEMBLERS,
-        ),
-        expand(
-            f"{output_dir}" + "{sample}/merquryfk/{assembler}/merquryfk.qv",
-            sample=SAMPLES,
-            assembler=ASSEMBLERS,
-        ),
-
-
 # include common rule (where functions are defined)
 include: "rules/common.smk"
+
+# Conditionally include kmergenie rule only if using auto mode
+if config["kmer_strategy"]["mode"] == "auto":
+    include: "rules/kmergenie_merged.smk"
+
 # include spades rules
 include: "rules/spades_merged.smk"
 # include megahit rule
@@ -87,5 +52,9 @@ include: "rules/fastK_merged.smk"
 # include merquryFK rule
 include: "rules/merquryFK.smk"
 
+# input files for rule all are defined in the common.smk file
+rule all:
+    input:
+        get_all_inputs()
 
 # print("SAMPLES:", SAMPLES)
