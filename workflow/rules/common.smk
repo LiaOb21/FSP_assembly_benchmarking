@@ -28,6 +28,8 @@ def get_all_inputs():
         expand(f"{output_dir}" + "{sample}/fastk/fastk_table.ktab", sample=SAMPLES),
         expand(f"{output_dir}" + "{sample}/merquryfk/{assembler}/merquryfk.completeness.stats", sample=SAMPLES, assembler=ASSEMBLERS),
         expand(f"{output_dir}" + "{sample}/merquryfk/{assembler}/merquryfk.qv", sample=SAMPLES, assembler=ASSEMBLERS),
+        expand(f"{output_dir}" + "{sample}/bwa_mem2_samtools/{assembler}/{sample}_{assembler}_sorted.bam", sample=SAMPLES, assembler=ASSEMBLERS),
+        expand(f"{output_dir}" + "{sample}/coverage_viz/{assembler}/{sample}_{assembler}_coverage_plot.png", sample=SAMPLES, assembler=ASSEMBLERS),
     ]
     
     # Add kmergenie outputs only if mode is "auto"

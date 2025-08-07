@@ -52,6 +52,10 @@ include: "rules/quast.smk"
 include: "rules/fastK.smk"
 # include merquryFK rule
 include: "rules/merquryFK.smk"
+# include bwa_mem2 rule
+include: "rules/bwa_mem2_samtools.smk"
+# include coverage visualization rule
+include: "rules/coverage_viz.smk"
 
 # input files for rule all are defined in the common.smk file
 rule all:
