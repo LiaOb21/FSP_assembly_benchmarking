@@ -13,7 +13,7 @@ workflow/notebooks/.ipynb_checkpoints/**
 **/.RData
 **/Rplots.pdf
 fungi_*
-busco_*
+**/busco_*/
 .tests/**/run_fungi_odb12/**
 .tests/**/run_basidiomycota_odb12/**
 basidiomycota_*
