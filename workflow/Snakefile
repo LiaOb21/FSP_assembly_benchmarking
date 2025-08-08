@@ -56,6 +56,20 @@ include: "rules/merquryFK.smk"
 include: "rules/bwa_mem2_samtools.smk"
 # include coverage visualization rule
 include: "rules/coverage_viz.smk"
+# include pilon rule
+include: "rules/pilon.smk"
+# include busco_2 rule (runs after pilon)
+include: "rules/busco_2.smk"
+# include merquryFK_2 rule
+include: "rules/merquryFK_2.smk"
+# include bwa_mem2_samtools_2 rule
+include: "rules/bwa_mem2_samtools_2.smk"
+#include coverage_viz_2 rule
+include: "rules/coverage_viz_2.smk"
+# include mapDamage2 rule
+include: "rules/mapDamage2.smk"
+# include mapDamage2_2 rule
+include: "rules/mapDamage2_2.smk"
 
 # input files for rule all are defined in the common.smk file
 rule all:

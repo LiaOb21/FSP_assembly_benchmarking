@@ -5,10 +5,10 @@ threads: 8
 
 # Set the path to the input directory (this directory must contain
 # one subdirectory for each sample, and the subdirectories must be named after the sample)
-input_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/test_data/" # use absolute path and add trailing slash
+input_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/clean_data/00_test/" # use absolute path and add trailing slash
 
 # Customise the results directory
-output_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/results/" # use absolute path and add trailing slash
+output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/" # use absolute path and add trailing slash
 
 # K-mer size determination strategy
 # Note that if you set this to "manual", you must also set the k-mer size for spades, megahit, abyss, sparseassembler, minia, and masurca.
@@ -82,8 +82,8 @@ masurca:
 
 # Customise busco parameters
 busco:
-  lineage_general: "/home/lia/git_repos/FSP_assembly_benchmarking/resources/fungi_odb12" # chose a "general" dataset, in our case "fungi_odb10"
-  lineage_specific: "/home/lia/git_repos/FSP_assembly_benchmarking/resources/basidiomycota_odb12" # chose a more specific dataset, for example "basidiomycota_odb12", "ascomycota_odb12", etc.
+  lineage_general: "/home/lobinu/git_repos/FSP_assembly_benchmarking/fungi_odb12" # chose a "general" dataset, in our case "fungi_odb10"
+  lineage_specific: "/home/lobinu/git_repos/FSP_assembly_benchmarking/basidiomycota_odb12" # chose a more specific dataset, for example "basidiomycota_odb12", "ascomycota_odb12", etc.
   optional_params: # if you do not want to use any optional parameters, add `{}` here
     "--mode": "genome"
     "--metaeuk": True
@@ -104,3 +104,15 @@ merquryfk:
   optional_params: # if you do not want to use any optional parameters, add `{}` here
     "-z": True # outputs assembly plots in addition to spectra copy number
 #    "-pdf": True # outputs results in PDF format (default is png)
+
+
+# Customise pilon parameters
+pilon:
+  optional_params: # if you do not want to use any optional parameters, add `{}` here
+    "--K": 47 # Kmer size used by internal assembler (default 47).
+    "--fix": "all" # A comma-separated list of categories of issues to try to fix: "all": all of the above (default);
+    "--changes": True # Output a file with the changes made to the assembly.
+
+# Customise mapDamage2 parameters
+mapDamage2:
+  optional_params: {} # if you do not want to use any optional parameters, add `{}`

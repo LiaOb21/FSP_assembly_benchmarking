@@ -4,6 +4,10 @@ rule quast:
             f"{output_dir}assemblies/{wildcards.sample}/{wildcards.sample}_{assembler}.fa"
             for assembler in ASSEMBLERS
         ],
+        assemblies_pilon=lambda wildcards: [
+            f"{output_dir}assemblies/{wildcards.sample}/{wildcards.sample}_{assembler}_pilon.fa"
+            for assembler in ASSEMBLERS
+        ],
     output:
         dir=directory(f"{output_dir}" + "{sample}/quast"),
     params:
@@ -24,6 +28,6 @@ rule quast:
     shell:
         """
         echo "Running quast with the following command:" >> {log} 2>&1
-        echo "quast {input.assemblies} -o {output.dir} -t {threads} {params.optional_params}" >> {log} 2>&1
-        quast {input.assemblies} -o {output.dir} -t {threads} {params.optional_params} >> {log} 2>&1
+        echo "quast {input.assemblies} {input.assemblies_pilon} -o {output.dir} -t {threads} {params.optional_params}" >> {log} 2>&1
+        quast {input.assemblies} {input.assemblies_pilon} -o {output.dir} -t {threads} {params.optional_params} >> {log} 2>&1
         """

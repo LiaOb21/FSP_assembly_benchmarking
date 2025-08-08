@@ -163,7 +163,9 @@ conda activate snakemake
 snakemake --profile profile/
 ```
 
+## Note for kmergenie usage
 
+The first time that the workflow is run using kmergenie, the kmer size for the assemblers will be considered a "to be determined (TBD)" parameter by Snakemake. The second time that exactly the same workflow is executed using kmergenie, the kmer size is changed from TBD to the value estimated by kmergenie. This will cause the trigger of all of the downstream rules, even if only a parameter for let's say QUAST was changed in the second run. In this case, to avoid re-running the whole workflow, please add `--rerun-triggers mtime` to your Snakemake command. This is recommended only if you are sure that no other changes were made to the workflow.
 
 -----
 

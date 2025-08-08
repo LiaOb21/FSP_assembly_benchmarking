@@ -30,6 +30,15 @@ def get_all_inputs():
         expand(f"{output_dir}" + "{sample}/merquryfk/{assembler}/merquryfk.qv", sample=SAMPLES, assembler=ASSEMBLERS),
         expand(f"{output_dir}" + "{sample}/bwa_mem2_samtools/{assembler}/{sample}_{assembler}_sorted.bam", sample=SAMPLES, assembler=ASSEMBLERS),
         expand(f"{output_dir}" + "{sample}/coverage_viz/{assembler}/{sample}_{assembler}_coverage_plot.png", sample=SAMPLES, assembler=ASSEMBLERS),
+        expand(f"{output_dir}" + "{sample}/pilon/{assembler}/{sample}_{assembler}_pilon.fasta", sample=SAMPLES, assembler=ASSEMBLERS),
+        expand(f"{output_dir}" + "{sample}/busco_general_pilon/{assembler}", sample=SAMPLES, assembler=ASSEMBLERS),
+        expand(f"{output_dir}" + "{sample}/busco_specific_pilon/{assembler}", sample=SAMPLES, assembler=ASSEMBLERS),
+        expand(f"{output_dir}" + "{sample}/merquryfk_pilon/{assembler}/merquryfk.completeness.stats", sample=SAMPLES, assembler=ASSEMBLERS),
+        expand(f"{output_dir}" + "{sample}/merquryfk_pilon/{assembler}/merquryfk.qv", sample=SAMPLES, assembler=ASSEMBLERS),
+        expand(f"{output_dir}" + "{sample}/bwa_mem2_samtools_pilon/{assembler}/{sample}_{assembler}_sorted.bam", sample=SAMPLES, assembler=ASSEMBLERS),
+        expand(f"{output_dir}" + "{sample}/coverage_viz_pilon/{assembler}/{sample}_{assembler}_coverage_plot.png", sample=SAMPLES, assembler=ASSEMBLERS),
+        expand(f"{output_dir}" + "{sample}/mapDamage2/{assembler}", sample=SAMPLES, assembler=ASSEMBLERS),
+        expand(f"{output_dir}" + "{sample}/mapDamage2_pilon/{assembler}", sample=SAMPLES, assembler=ASSEMBLERS),
     ]
     
     # Add kmergenie outputs only if mode is "auto"

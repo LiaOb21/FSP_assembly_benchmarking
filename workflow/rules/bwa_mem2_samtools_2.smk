@@ -3,22 +3,22 @@ import glob
 import os
 
 
-rule bwa_mem2_samtools:
+rule bwa_mem2_samtools_2:
     input:
-        assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{assembler}.fa",
+        assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{assembler}_pilon.fa",
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
         reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
     output:
-        sam=f"{output_dir}" + "{sample}/bwa_mem2_samtools/{assembler}/{sample}_{assembler}.sam",
-        bam=f"{output_dir}" + "{sample}/bwa_mem2_samtools/{assembler}/{sample}_{assembler}.bam",
-        sorted_bam=f"{output_dir}" + "{sample}/bwa_mem2_samtools/{assembler}/{sample}_{assembler}_sorted.bam",
-        coverage_stats=f"{output_dir}" + "{sample}/bwa_mem2_samtools/{assembler}/{sample}_{assembler}_coverage_stats.txt",
-        flagstat=f"{output_dir}" + "{sample}/bwa_mem2_samtools/{assembler}/{sample}_{assembler}_flagstat.txt",
+        sam=f"{output_dir}" + "{sample}/bwa_mem2_samtools_pilon/{assembler}/{sample}_{assembler}.sam",
+        bam=f"{output_dir}" + "{sample}/bwa_mem2_samtools_pilon/{assembler}/{sample}_{assembler}.bam",
+        sorted_bam=f"{output_dir}" + "{sample}/bwa_mem2_samtools_pilon/{assembler}/{sample}_{assembler}_sorted.bam",
+        coverage_stats=f"{output_dir}" + "{sample}/bwa_mem2_samtools_pilon/{assembler}/{sample}_{assembler}_coverage_stats.txt",
+        flagstat=f"{output_dir}" + "{sample}/bwa_mem2_samtools_pilon/{assembler}/{sample}_{assembler}_flagstat.txt",
     threads: get_scaled_threads  # Use scaling function
     log:
-        "logs/{sample}/bwa_mem2_{assembler}.log",
+        "logs/{sample}/bwa_mem2_{assembler}_pilon.log",
     benchmark:
-        "benchmark/{sample}/bwa_mem2_{assembler}.txt"
+        "benchmark/{sample}/bwa_mem2_{assembler}_pilon.txt"
     resources:
         mem_mb=get_scaled_mem,  # Use scaling function
     conda:
