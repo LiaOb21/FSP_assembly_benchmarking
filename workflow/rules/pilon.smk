@@ -19,6 +19,7 @@ rule pilon:
             for key, value in config["pilon"]["optional_params"].items()
             if value and value is not False and value != ""
         ),
+        java_heap=lambda wildcards, resources: f"{int(resources.mem_mb * 0.8 // 1024)}G"
     threads: get_scaled_threads  # Use scaling function
     log:
         "logs/{sample}/pilon_{assembler}.log",
@@ -30,8 +31,9 @@ rule pilon:
         "../envs/pilon.yaml"
     shell:
         """
+        PILON=${{CONDA_PREFIX}}/share/pilon-*/pilon*.jar
         echo "Running pilon with the following command:" >> {log} 2>&1
-        echo "pilon --genome {input.assembly} --bam {input.sorted_bam} --output {params.results_prefix} --threads {threads} {params.optional_params} --verbose" >> {log} 2>&1
-        pilon --genome {input.assembly} --bam {input.sorted_bam} --output {params.results_prefix} --threads {threads} {params.optional_params} --verbose >> {log} 2>&1
+        echo "java -Xmx{params.java_heap} -jar ${{PILON}} --genome {input.assembly} --bam {input.sorted_bam} --output {params.results_prefix} --threads {threads} {params.optional_params} --verbose" >> {log} 2>&1
+        java -Xmx{params.java_heap} -jar ${{PILON}} --genome {input.assembly} --bam {input.sorted_bam} --output {params.results_prefix} --threads {threads} {params.optional_params} --verbose >> {log} 2>&1
         ln -srn {output.pilon_fasta} {output.link_pilon_assembly}
         """
