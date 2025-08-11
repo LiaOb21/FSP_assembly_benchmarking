@@ -29,5 +29,5 @@ rule quast:
         """
         echo "Running quast with the following command:" >> {log} 2>&1
         echo "quast {input.assemblies} {input.assemblies_pilon} -o {output.dir} -t {threads} {params.optional_params}" >> {log} 2>&1
-        quast {input.assemblies} {input.assemblies_pilon} -o {output.dir} -t {threads} {params.optional_params} >> {log} 2>&1
+        quast {input.assemblies} {input.assemblies_pilon} -o {output.dir} --min-contig 250 -t {threads} {params.optional_params} >> {log} 2>&1
         """
