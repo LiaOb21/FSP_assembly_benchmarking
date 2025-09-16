@@ -18,13 +18,22 @@ output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/" # use ab
 # Note that spades and masurca have their own auto mode, this must not be confused with the kmer_strategy.
 # If you want to use the built in auto mode for spades or masurca, you must set the k-mer size to "auto" in their respective sections below and set the kmer_strategy to "manual".
 kmer_strategy:
-  mode: "auto"  # "auto" for KmerGenie, "manual" for user-defined k-mer sizes. 
+  mode: "manual"  # "auto" for KmerGenie, "manual" for user-defined k-mer sizes. 
 
 # Customise kmergenie parameters
 kmergenie:
   "k": 121 # largest k-mer size to consider (default: 121)
   "l": 15 # smallest k-mer size to consider (default: 15)
   optional_params: {} # if you do not want to use any optional parameters, add `{}`
+
+# Choose which assemblers to run
+assemblers:
+  spades: True
+  megahit: True
+  abyss: True
+  sparseassembler: False
+  minia: True
+  masurca: True
 
 # Customise spades parameters
 # please do not use the `-o` option here, it is set into the workflow
