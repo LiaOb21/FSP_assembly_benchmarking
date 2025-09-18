@@ -92,6 +92,8 @@ include: "rules/merquryFK.smk"
 #include: "rules/mapDamage2.smk"
 # include mapDamage2_2 rule
 #include: "rules/mapDamage2_2.smk"
+# include select_best_assembly rule
+include: "rules/select_best_assembly.smk"
 
 # input files for rule all are defined in the common.smk file
 rule all:
