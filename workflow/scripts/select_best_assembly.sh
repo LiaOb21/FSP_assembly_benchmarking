@@ -64,9 +64,14 @@ if [[ ! -d "$results_dir" ]]; then
     exit 1
 fi
 
+# Handle existing output directory - overwrite if it exists
+if [[ -d "$output_dir" ]]; then
+    echo "Output directory '$output_dir' already exists. Overwriting..."
+    rm -rf "$output_dir"
+fi
+
 # Create output directory
 mkdir -p "$output_dir"
-mkdir -p "$output_dir/$sample"
 
 echo "processing sample: $sample"
 
@@ -78,18 +83,13 @@ for assembler_dir in "$sample_results_dir"/busco_specific/*/; do
         assembler=$(basename "$assembler_dir")
         for file in "$assembler_dir"/BUSCO_*/short_summary.specific.*.txt; do
             if [[ -f "$file" ]]; then
-                awk -v assembler="$assembler" '/Complete and single-copy/ {print assembler, $1}' "$file" >> "$output_dir/$sample/complete_single_copy_buscos.txt"
+                awk -v assembler="$assembler" '/Complete and single-copy/ {print assembler, $1}' "$file" >> "$output_dir/complete_single_copy_buscos.txt"
             fi
         done
     fi
 done
-    
-# Extract BUSCO complete and single-copy for each assembly
-#for file in "$sample_results_dir"/busco_specific/*/BUSCO_*/short_summary.specific.*.txt; do
-#    awk -v fname="$file" '/Complete and single-copy/ {split(fname, path_parts, "/"); print path_parts[4], $1}' "$file" >> "$output_dir/$sample/complete_single_copy_buscos.txt"
-#done
 
-if [[ ! -f "$output_dir/$sample/complete_single_copy_buscos.txt" ]]; then
+if [[ ! -f "$output_dir/complete_single_copy_buscos.txt" ]]; then
     echo "  No BUSCO data found for sample $sample"
     exit 1
 fi
@@ -97,19 +97,19 @@ fi
 # Sort the results by the number of complete and single-copy BUSCOs in descending order
 # extract max value from the first line
 # print all lines with that max value to best_buscos.txt
-sort -k2,2nr "$output_dir/$sample/complete_single_copy_buscos.txt" | awk 'NR==1{max=$2} $2==max' > "$output_dir/$sample/best_buscos.txt"
+sort -k2,2nr "$output_dir/complete_single_copy_buscos.txt" | awk 'NR==1{max=$2} $2==max' > "$output_dir/best_buscos.txt"
 
 
 # Check if only one assembly has the highest BUSCO score
-best_busco_count=$(wc -l < "$output_dir/$sample/best_buscos.txt")
+best_busco_count=$(wc -l < "$output_dir/best_buscos.txt")
 
 if [[ $best_busco_count -eq 1 ]]; then
     # Single winner - print the assembly name
-    best_assembly=$(cut -d' ' -f1 "$output_dir/$sample/best_buscos.txt")
+    best_assembly=$(cut -d' ' -f1 "$output_dir/best_buscos.txt")
     echo "$best_assembly is the best assembly for sample $sample based on BUSCO score."
-    echo "copying $results_dir/assemblies/$sample/${sample}_${best_assembly}.fa to $output_dir/$sample"
-    echo "$best_assembly" > "$output_dir/$sample/best_assembly.txt"
-    cp $results_dir/assemblies/$sample/${sample}_${best_assembly}.fa $output_dir/$sample/${sample}_${best_assembly}.fa
+    echo "linking $results_dir/$sample/assemblies/${sample}_${best_assembly}.fa to $output_dir"
+    ln -srn $results_dir/$sample/assemblies/${sample}_${best_assembly}.fa $output_dir/${sample}_best_assembly.fa
+    echo "$best_assembly" > "$output_dir/best_assembly.txt"
     exit 0
 fi
 
@@ -120,11 +120,11 @@ quast_file="$sample_results_dir/quast/report.txt"
 if [[ -f "$quast_file" ]]; then
     # Extract Assembly and aUN values from quast report and transpose
     # remove sample name just for consistency with busco output
-    awk '/Assembly/ {for(i=2;i<=NF;i++) a[i-1]=$i} /auN/ {for(i=2;i<=NF;i++) {split(a[i-1], parts, "_"); print parts[2], $i}}' "$quast_file" > "$output_dir/$sample/auN_quast.txt"
+    awk '/Assembly/ {for(i=2;i<=NF;i++) a[i-1]=$i} /auN/ {for(i=2;i<=NF;i++) {split(a[i-1], parts, "_"); print parts[2], $i}}' "$quast_file" > "$output_dir/auN_quast.txt"
 
     # Get auN scores only for the tied BUSCO assemblers
     # Get the list of assemblers with the highest BUSCOs
-    tied_assemblers=$(cut -d' ' -f1 "$output_dir/$sample/best_buscos.txt")
+    tied_assemblers=$(cut -d' ' -f1 "$output_dir/best_buscos.txt")
     # set up variables to track best auN and corresponding assembly
     best_aun=0
     best_assembly=""
@@ -132,7 +132,7 @@ if [[ -f "$quast_file" ]]; then
     # for each assembler in tied_assemblers list, get its auN score and compare
     # if higher than current best_aun, update best_aun and best_assembly
     while read assembler; do
-        aun_score=$(grep "^$assembler " "$output_dir/$sample/auN_quast.txt" | cut -d' ' -f2)
+        aun_score=$(grep "^$assembler " "$output_dir/auN_quast.txt" | cut -d' ' -f2)
         if [[ -n "$aun_score" ]] && awk "BEGIN {exit ($aun_score > $best_aun) ? 0 : 1}"; then
             best_aun=$aun_score
             best_assembly=$assembler
@@ -141,9 +141,9 @@ if [[ -f "$quast_file" ]]; then
         
     if [[ -n "$best_assembly" ]]; then
         echo "$best_assembly is the best assembly for sample $sample based on auN score."
-        echo "copying $results_dir/assemblies/$sample/${sample}_${best_assembly}.fa to $output_dir/$sample"
-        echo "$best_assembly" > "$output_dir/$sample/best_assembly.txt"
-        cp $results_dir/assemblies/$sample/${sample}_${best_assembly}.fa $output_dir/$sample/${sample}_${best_assembly}.fa
+    echo "linking $results_dir/$sample/assemblies/${sample}_${best_assembly}.fa to $output_dir/${sample}_best_assembly.fa"
+    ln -srn $results_dir/$sample/assemblies/${sample}_${best_assembly}.fa $output_dir/${sample}_best_assembly.fa
+        echo "$best_assembly" > "$output_dir/best_assembly.txt"
         exit 0
     fi
 fi

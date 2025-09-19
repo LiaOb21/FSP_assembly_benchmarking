@@ -11,7 +11,7 @@ rule sparseassembler:
     output:
         scaffolds=f"{output_dir}" + "{sample}/sparseassembler/SuperContigs.txt",
         link_assembly=f"{output_dir}"
-        + "assemblies/{sample}/{sample}_sparseassembler.fa",
+        + "{sample}/assemblies/{sample}_sparseassembler.fa",
     params:
         result_dir=lambda wildcards, output: os.path.dirname(output.scaffolds),
         k=lambda wildcards: get_single_kmer(wildcards, "sparseassembler", "k"),

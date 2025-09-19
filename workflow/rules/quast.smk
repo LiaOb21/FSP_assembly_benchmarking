@@ -1,13 +1,9 @@
 rule quast:
     input:
         assemblies=lambda wildcards: [
-            f"{output_dir}assemblies/{wildcards.sample}/{wildcards.sample}_{assembler}.fa"
+            f"{output_dir}{wildcards.sample}/assemblies/{wildcards.sample}_{assembler}.fa"
             for assembler in ASSEMBLERS
         ],
-#        assemblies_pilon=lambda wildcards: [
-#            f"{output_dir}assemblies/{wildcards.sample}/{wildcards.sample}_{assembler}_pilon.fa"
-#            for assembler in ASSEMBLERS
-#        ],
     output:
         dir=directory(f"{output_dir}" + "{sample}/quast"),
     params:

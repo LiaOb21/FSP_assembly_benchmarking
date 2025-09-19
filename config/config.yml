@@ -12,13 +12,13 @@ output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/" # use ab
 
 # K-mer size determination strategy
 # Note that if you set this to "manual", you must also set the k-mer size for spades, megahit, abyss, sparseassembler, minia, and masurca.
-# If you set this to "auto", kmergenie will be used to determine the optimal k-mer size and the values defined below for each rule will be ignored.
-# For spades and megahit when kmer_strategy is set to "auto" the best k-mer size predicted by kmergenie will be added to this list: 21, 27, 29, 31, 33, 35, 37, 41, 51, 61
-# For the other assemblers only the k-mer predicted by kmergenie will be used when kmer_strategy is set to "auto".
+# If you set this to "kmergenie", kmergenie will be used to determine the optimal k-mer size and the values defined below for each rule will be ignored.
+# For spades and megahit when kmer_strategy is set to "kmergenie" the best k-mer size predicted by kmergenie will be added to this list: 21, 27, 29, 31, 33, 35, 37, 41, 51, 61
+# For the other assemblers only the k-mer predicted by kmergenie will be used when kmer_strategy is set to "kmergenie".
 # Note that spades and masurca have their own auto mode, this must not be confused with the kmer_strategy.
 # If you want to use the built in auto mode for spades or masurca, you must set the k-mer size to "auto" in their respective sections below and set the kmer_strategy to "manual".
 kmer_strategy:
-  mode: "manual"  # "auto" for KmerGenie, "manual" for user-defined k-mer sizes. 
+  mode: "manual"  # "kmergenie" for KmerGenie, "manual" for user-defined k-mer sizes. 
 
 # Customise kmergenie parameters
 kmergenie:
@@ -31,7 +31,7 @@ assemblers:
   spades: True
   megahit: True
   abyss: True
-  sparseassembler: False
+  sparseassembler: True
   minia: True
   masurca: True
 

@@ -11,7 +11,7 @@ rule spades:
     output:
         result_dir=directory(f"{output_dir}" + "{sample}/spades"),
         scaffolds=f"{output_dir}" + "{sample}/spades/scaffolds.fasta",
-        link_assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_spades.fa",
+        link_assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_spades.fa",
     params:
         k=lambda wildcards: get_kmer_list(wildcards, "spades", "k"),
         optional_params=" ".join(

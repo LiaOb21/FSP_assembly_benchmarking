@@ -5,21 +5,19 @@ import os
 
 rule bwa_mem2_samtools:
     input:
-        assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{assembler}.fa",
+        assembly=f"{output_dir}" + "{sample}/best_assembly/{sample}_best_assembly.fa",
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
         reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
     output:
-        sam=f"{output_dir}" + "{sample}/bwa_mem2_samtools/{assembler}/{sample}_{assembler}.sam",
-        bam=f"{output_dir}" + "{sample}/bwa_mem2_samtools/{assembler}/{sample}_{assembler}.bam",
-        sorted_bam=f"{output_dir}" + "{sample}/bwa_mem2_samtools/{assembler}/{sample}_{assembler}_sorted.bam",
-        bam_index=f"{output_dir}" + "{sample}/bwa_mem2_samtools/{assembler}/{sample}_{assembler}_sorted.bam.bai", 
-        coverage_stats=f"{output_dir}" + "{sample}/bwa_mem2_samtools/{assembler}/{sample}_{assembler}_coverage_stats.txt",
-        flagstat=f"{output_dir}" + "{sample}/bwa_mem2_samtools/{assembler}/{sample}_{assembler}_flagstat.txt",
+        sam=f"{output_dir}" + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly.sam",
+        bam=f"{output_dir}" + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly.bam",
+        sorted_bam=f"{output_dir}" + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly_sorted.bam",
+        bam_index=f"{output_dir}" + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly_sorted.bam.bai", 
     threads: get_scaled_threads  # Use scaling function
     log:
-        "logs/{sample}/bwa_mem2_{assembler}.log",
+        "logs/{sample}/bwa_mem2_best_assembly.log",
     benchmark:
-        "benchmark/{sample}/bwa_mem2_{assembler}.txt"
+        "benchmark/{sample}/bwa_mem2_best_assembly.txt"
     resources:
         mem_mb=get_scaled_mem,  # Use scaling function
     conda:
@@ -43,11 +41,5 @@ rule bwa_mem2_samtools:
         (samtools sort {output.bam} -@ {threads} > {output.sorted_bam}) >> {log} 2>&1
 
         echo "Indexing the sorted bam file with samtools index" >> {log} 2>&1
-        samtools index {output.sorted_bam} 
-
-        echo "Calculating coverage statistics with samtools coverage:" >> {log} 2>&1
-        (samtools coverage {output.sorted_bam} > {output.coverage_stats}) 2>> {log}
-
-        echo "Calculating mapping statistics with samtools flagstats:" >> {log} 2>&1
-        (samtools flagstat {output.sorted_bam} > {output.flagstat}) 2>> {log}        
+        samtools index {output.sorted_bam}      
         """

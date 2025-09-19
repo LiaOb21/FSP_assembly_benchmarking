@@ -1,15 +1,15 @@
-# This rule runs pilon on the draft assemblies
+# This rule runs pilon on the best draft assemblies
 import glob
 import os
 
 
 rule pilon:
     input:
-        assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{assembler}.fa",
-        sorted_bam=f"{output_dir}" + "{sample}/bwa_mem2_samtools/{assembler}/{sample}_{assembler}_sorted.bam",
+        assembly=f"{output_dir}" + "{sample}/best_assembly/{sample}_best_assembly.fa",
+        sorted_bam=f"{output_dir}" + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly_sorted.bam",
     output:
-        pilon_fasta=f"{output_dir}" + "{sample}/pilon/{assembler}/{sample}_{assembler}_pilon.fasta",
-        link_pilon_assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{assembler}_pilon.fa",
+        pilon_fasta=f"{output_dir}" + "{sample}/best_assembly/pilon/{sample}_best_assembly_pilon.fasta",
+        link_pilon_assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_best_assembly_pilon.fa",
     params:
         results_prefix=lambda wildcards, output: os.path.splitext(output.pilon_fasta)[
             0
@@ -22,9 +22,9 @@ rule pilon:
         java_heap=lambda wildcards, resources: f"{int(resources.mem_mb * 0.8 // 1024)}G"
     threads: get_scaled_threads  # Use scaling function
     log:
-        "logs/{sample}/pilon_{assembler}.log",
+        "logs/{sample}/pilon_best_assembly.log",
     benchmark:
-        "benchmark/{sample}/pilon_{assembler}.txt"
+        "benchmark/{sample}/pilon_best_assembly.txt"
     resources:
         mem_mb=get_scaled_mem,  # Use scaling function
     conda:

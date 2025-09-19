@@ -5,20 +5,20 @@ import os
 
 rule bwa_mem2_samtools_2:
     input:
-        assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{assembler}_pilon.fa",
+        assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_best_assembly_pilon.fa",
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
         reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
     output:
-        sam=f"{output_dir}" + "{sample}/bwa_mem2_samtools_pilon/{assembler}/{sample}_{assembler}.sam",
-        bam=f"{output_dir}" + "{sample}/bwa_mem2_samtools_pilon/{assembler}/{sample}_{assembler}.bam",
-        sorted_bam=f"{output_dir}" + "{sample}/bwa_mem2_samtools_pilon/{assembler}/{sample}_{assembler}_sorted.bam",
-        coverage_stats=f"{output_dir}" + "{sample}/bwa_mem2_samtools_pilon/{assembler}/{sample}_{assembler}_coverage_stats.txt",
-        flagstat=f"{output_dir}" + "{sample}/bwa_mem2_samtools_pilon/{assembler}/{sample}_{assembler}_flagstat.txt",
+        sam=f"{output_dir}" + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon.sam",
+        bam=f"{output_dir}" + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon.bam",
+        sorted_bam=f"{output_dir}" + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon_sorted.bam",
+        coverage_stats=f"{output_dir}" + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon_coverage_stats.txt",
+        flagstat=f"{output_dir}" + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon_flagstat.txt",
     threads: get_scaled_threads  # Use scaling function
     log:
-        "logs/{sample}/bwa_mem2_{assembler}_pilon.log",
+        "logs/{sample}/bwa_mem2_best_assembly_pilon.log",
     benchmark:
-        "benchmark/{sample}/bwa_mem2_{assembler}_pilon.txt"
+        "benchmark/{sample}/bwa_mem2_best_assembly_pilon.txt"
     resources:
         mem_mb=get_scaled_mem,  # Use scaling function
     conda:

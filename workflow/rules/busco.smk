@@ -1,6 +1,6 @@
 rule busco:
     input:
-        assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{assembler}.fa",
+        assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_{assembler}.fa",
     output:
         general_dir=directory(f"{output_dir}" + "{sample}/busco_general/{assembler}"),
         specific_dir=directory(f"{output_dir}" + "{sample}/busco_specific/{assembler}"),

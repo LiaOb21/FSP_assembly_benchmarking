@@ -22,28 +22,27 @@ def get_all_inputs():
 #        expand(f"{output_dir}" + "{sample}/minia/{sample}.contigs.fa", sample=SAMPLES),
 #        expand(f"{output_dir}" + "{sample}/masurca/masurca_config.txt", sample=SAMPLES),
 #        expand(f"{output_dir}" + "{sample}/masurca/CA/primary.genome.scf.fasta", sample=SAMPLES),
-        expand(f"{output_dir}" + "{sample}/busco_general/{assembler}", sample=SAMPLES, assembler=ASSEMBLERS),
-        expand(f"{output_dir}" + "{sample}/busco_specific/{assembler}", sample=SAMPLES, assembler=ASSEMBLERS),
-        expand(f"{output_dir}" + "{sample}/quast", sample=SAMPLES),
+#        expand(f"{output_dir}" + "{sample}/busco_general/{assembler}", sample=SAMPLES, assembler=ASSEMBLERS),
+#        expand(f"{output_dir}" + "{sample}/busco_specific/{assembler}", sample=SAMPLES, assembler=ASSEMBLERS),
+#        expand(f"{output_dir}" + "{sample}/quast", sample=SAMPLES),
 #        expand(f"{output_dir}" + "{sample}/fastk/fastk_table.ktab", sample=SAMPLES),
         expand(f"{output_dir}" + "{sample}/merquryfk/{assembler}/merquryfk.completeness.stats", sample=SAMPLES, assembler=ASSEMBLERS),
         expand(f"{output_dir}" + "{sample}/merquryfk/{assembler}/merquryfk.qv", sample=SAMPLES, assembler=ASSEMBLERS),
-        expand(f"{output_dir}" + "best_assemblies/{sample}/best_assembly.txt", sample=SAMPLES),
-#        expand(f"{output_dir}" + "{sample}/bwa_mem2_samtools/{assembler}/{sample}_{assembler}_sorted.bam", sample=SAMPLES, assembler=ASSEMBLERS),
+#        expand(f"{output_dir}" + "{sample}/best_assembly/{sample}_best_assembly.fa", sample=SAMPLES),
+#        expand(f"{output_dir}" + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly_sorted.bam", sample=SAMPLES),
 #        expand(f"{output_dir}" + "{sample}/coverage_viz/{assembler}/{sample}_{assembler}_coverage_plot.png", sample=SAMPLES, assembler=ASSEMBLERS),
-#        expand(f"{output_dir}" + "{sample}/pilon/{assembler}/{sample}_{assembler}_pilon.fasta", sample=SAMPLES, assembler=ASSEMBLERS),
-#        expand(f"{output_dir}" + "{sample}/busco_general_pilon/{assembler}", sample=SAMPLES, assembler=ASSEMBLERS),
-#        expand(f"{output_dir}" + "{sample}/busco_specific_pilon/{assembler}", sample=SAMPLES, assembler=ASSEMBLERS),
-#        expand(f"{output_dir}" + "{sample}/merquryfk_pilon/{assembler}/merquryfk.completeness.stats", sample=SAMPLES, assembler=ASSEMBLERS),
-#        expand(f"{output_dir}" + "{sample}/merquryfk_pilon/{assembler}/merquryfk.qv", sample=SAMPLES, assembler=ASSEMBLERS),
-#        expand(f"{output_dir}" + "{sample}/bwa_mem2_samtools_pilon/{assembler}/{sample}_{assembler}_sorted.bam", sample=SAMPLES, assembler=ASSEMBLERS),
-#        expand(f"{output_dir}" + "{sample}/coverage_viz_pilon/{assembler}/{sample}_{assembler}_coverage_plot.png", sample=SAMPLES, assembler=ASSEMBLERS),
-#        expand(f"{output_dir}" + "{sample}/mapDamage2/{assembler}", sample=SAMPLES, assembler=ASSEMBLERS),
-#        expand(f"{output_dir}" + "{sample}/mapDamage2_pilon/{assembler}", sample=SAMPLES, assembler=ASSEMBLERS),
+#        expand(f"{output_dir}" + "{sample}/best_assembly/pilon/{sample}_best_assembly_pilon.fasta", sample=SAMPLES),
+        expand(f"{output_dir}" + "{sample}/best_assembly_qc/busco_general_pilon", sample=SAMPLES, assembler=ASSEMBLERS),
+        expand(f"{output_dir}" + "{sample}/best_assembly_qc/busco_specific_pilon", sample=SAMPLES, assembler=ASSEMBLERS),
+        expand(f"{output_dir}" + "{sample}/best_assembly_qc/merquryfk_pilon/merquryfk.completeness.stats", sample=SAMPLES, assembler=ASSEMBLERS),
+        expand(f"{output_dir}" + "{sample}/best_assembly_qc/merquryfk_pilon/merquryfk.qv", sample=SAMPLES, assembler=ASSEMBLERS),
+        expand(f"{output_dir}" + "{sample}/best_assembly_qc/quast_pilon", sample=SAMPLES),
+        expand(f"{output_dir}" + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon_sorted.bam", sample=SAMPLES, assembler=ASSEMBLERS),
+        expand(f"{output_dir}" + "{sample}/best_assembly_qc/coverage_viz_pilon/{sample}_best_assembly_pilon_coverage_summary.txt", sample=SAMPLES),
     ]
     
-    # Add kmergenie outputs only if mode is "auto"
-    if config["kmer_strategy"]["mode"] == "auto":
+    # Add kmergenie outputs only if mode is "kmergenie"
+    if config["kmer_strategy"]["mode"] == "kmergenie":
         inputs.extend([
             expand(f"{output_dir}" + "{sample}/kmergenie/{sample}_report.html", sample=SAMPLES),
             expand(f"{output_dir}" + "{sample}/kmergenie/{sample}_best_kmer.txt", sample=SAMPLES),
@@ -53,7 +52,7 @@ def get_all_inputs():
 
 
 # Function to read kmer size for the assemblers dynamic based on config.yml
-# If auto mode, read from kmergenie output.
+# If kmergenie mode, read from kmergenie output.
 # kmer predicted by kmergenie must be a value between 15 and 127
 # If manual mode, use config values.
 
@@ -63,9 +62,9 @@ def get_kmer_list(wildcards, assembler, config_key):
     For spades and megahit.
     """
     # Default k-mer list (same for both spades and megahit)
-    default_k_list = [21, 27, 29, 31, 33, 35, 37, 41, 51, 61]
+    default_k_list = [21, 29, 33, 39, 55, 59, 79, 99, 119, 127]
     
-    if config["kmer_strategy"]["mode"] == "auto":
+    if config["kmer_strategy"]["mode"] == "kmergenie":
         # Read best k-mer from kmergenie output
         best_kmer_file = f"{output_dir}{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
         with open(best_kmer_file, 'r') as f:
@@ -90,7 +89,7 @@ def get_single_kmer(wildcards, assembler, config_key):
     Get single k-mer value for assemblers that use only one k-mer size.
     For abyss, sparseassembler, minia, masurca.
     """
-    if config["kmer_strategy"]["mode"] == "auto":
+    if config["kmer_strategy"]["mode"] == "kmergenie":
         # Read best k-mer from kmergenie output
         best_kmer_file = f"{output_dir}{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
         with open(best_kmer_file, 'r') as f:
@@ -106,10 +105,10 @@ def get_single_kmer(wildcards, assembler, config_key):
         return str(config[assembler][config_key])
 
 
-# This function is used to add kmergenie as dependency when kmer_strategy is auto (i.e. we want to run kmergenie)
+# This function is used to add kmergenie as dependency when kmer_strategy is kmergenie (i.e. we want to run kmergenie)
 def get_kmergenie_dependency(wildcards):
-    """Return kmergenie dependency if in auto mode, empty list otherwise"""
-    if config["kmer_strategy"]["mode"] == "auto":
+    """Return kmergenie dependency if in kmergenie mode, empty list otherwise"""
+    if config["kmer_strategy"]["mode"] == "kmergenie":
         return f"{output_dir}{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
     else:
         return []

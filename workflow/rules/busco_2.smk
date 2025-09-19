@@ -1,9 +1,9 @@
 rule busco_2:
     input:
-        assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{assembler}_pilon.fa",
+        assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_best_assembly_pilon.fa",
     output:
-        general_dir=directory(f"{output_dir}" + "{sample}/busco_general_pilon/{assembler}"),
-        specific_dir=directory(f"{output_dir}" + "{sample}/busco_specific_pilon/{assembler}"),
+        general_dir=directory(f"{output_dir}" + "{sample}/best_assembly_qc/busco_general_pilon"),
+        specific_dir=directory(f"{output_dir}" + "{sample}/best_assembly_qc/busco_specific_pilon"),
     params:
         lineage_general=config["busco"]["lineage_general"],
         lineage_specific=config["busco"]["lineage_specific"],
@@ -14,9 +14,9 @@ rule busco_2:
         ),
     threads: get_scaled_threads  # Use scaling function
     log:
-        "logs/{sample}/busco_{sample}_{assembler}_pilon.log",
+        "logs/{sample}/busco_best_assembly_pilon.log",
     benchmark:
-        "benchmark/{sample}/busco_{sample}_{assembler}_pilon.txt"
+        "benchmark/{sample}/busco_best_assembly_pilon.txt"
     resources:
         mem_mb=get_scaled_mem,  # Use scaling function
     conda:

@@ -6,11 +6,11 @@ import os
 rule merquryfk_2:
     input:
         ktab=f"{output_dir}" + "{sample}/fastk/fastk_table.ktab",
-        assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{assembler}_pilon.fa",
+        assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_best_assembly_pilon.fa",
     output:
         stats=f"{output_dir}"
-        + "{sample}/merquryfk_pilon/{assembler}/merquryfk.completeness.stats",
-        qv=f"{output_dir}" + "{sample}/merquryfk_pilon/{assembler}/merquryfk.qv",
+        + "{sample}/best_assembly_qc/merquryfk_pilon/merquryfk.completeness.stats",
+        qv=f"{output_dir}" + "{sample}/best_assembly_qc/merquryfk_pilon/merquryfk.qv",
     params:
         result_prefix=lambda wildcards, output: os.path.splitext(output.qv)[0],
         temp_dir=lambda wildcards, output: os.path.join(
@@ -23,9 +23,9 @@ rule merquryfk_2:
         ),
     threads: get_scaled_threads  # Use scaling function
     log:
-        "logs/{sample}/merquryfk_{sample}_{assembler}_pilon.log",
+        "logs/{sample}/merquryfk_best_assembly_pilon.log",
     benchmark:
-        "benchmark/{sample}/merquryFK_{sample}_{assembler}_pilon.txt"
+        "benchmark/{sample}/merquryFK_best_assembly_pilon.txt"
     resources:
         mem_mb=get_scaled_mem,  # Use scaling function
     conda:

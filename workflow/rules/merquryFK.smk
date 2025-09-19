@@ -6,7 +6,7 @@ import os
 rule merquryfk:
     input:
         ktab=f"{output_dir}" + "{sample}/fastk/fastk_table.ktab",
-        assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{assembler}.fa",
+        assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_{assembler}.fa",
     output:
         stats=f"{output_dir}"
         + "{sample}/merquryfk/{assembler}/merquryfk.completeness.stats",
