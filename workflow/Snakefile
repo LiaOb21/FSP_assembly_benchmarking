@@ -29,6 +29,10 @@ include: "rules/common.smk"
 if config["kmer_strategy"]["mode"] == "kmergenie":
     include: "rules/kmergenie.smk"
 
+# Conditionally include seqkit rule only if using reads_length mode
+if config["kmer_strategy"]["mode"] == "reads_length":
+    include: "rules/seqkit.smk"
+
 # if spades is in ASSEMBLERS include spades rules
 if "spades" in ASSEMBLERS:
     include: "rules/spades.smk"
