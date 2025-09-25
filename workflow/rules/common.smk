@@ -99,6 +99,27 @@ def get_kmer_list(wildcards, assembler, config_key):
             k_list = validate_megahit_kstep(k_list, asm_config["max_kstep"])
         
         return ",".join(map(str, k_list))
+    
+    elif config["kmer_strategy"]["mode"] == "reads_length":
+        # Read best k-mer from seqkit output
+        kmer_file = f"{output_dir}{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
+        with open(kmer_file, 'r') as f:
+            best_k = int(f.read().strip())
+        
+        # Add best k if not present and within range
+        if best_k not in default_k_list and 15 <= best_k <= max_kmer and best_k % 2 == 1:
+            k_list = default_k_list + [best_k]
+            k_list.sort()
+        else:
+            # If seqkit prediction is outside range, use default list
+            k_list = default_k_list
+
+        # For MEGAHIT, check k-mer step constraint
+        if assembler == "megahit":
+            k_list = validate_megahit_kstep(k_list, asm_config["max_kstep"])
+        
+        return ",".join(map(str, k_list))
+    
     else:
         # Manual mode - use config value (user must set this)
         return config[assembler][config_key]
@@ -143,15 +164,31 @@ def get_single_kmer(wildcards, assembler, config_key):
             return str(best_k)
         else:
             return "25"  # Fallback to 25 if outside range
+
+    elif config["kmer_strategy"]["mode"] == "reads_length":
+        # Read best k-mer from seqkit output
+        kmer_file = f"{output_dir}{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
+        with open(kmer_file, 'r') as f:
+            k_val = int(f.read().strip())
+        
+        # Use kmergenie prediction if within range (15-127), otherwise use 25
+        if 15 <= k_val <= 127 and k_val % 2 == 1:
+            return str(k_val)
+        else:
+            return "25"  # Fallback to 25 if outside range
+
     else:
         # Manual mode - use config value (user must set this)
         return str(config[assembler][config_key])
 
 
 # This function is used to add kmergenie as dependency when kmer_strategy is kmergenie (i.e. we want to run kmergenie)
+# it's also used to add seqkit rule as dependency when kmer_strategy is set to reads_length
 def get_kmergenie_dependency(wildcards):
     """Return kmergenie dependency if in kmergenie mode, empty list otherwise"""
     if config["kmer_strategy"]["mode"] == "kmergenie":
         return f"{output_dir}{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
+    elif config["kmer_strategy"]["mode"] == "reads_length":
+        return f"{output_dir}{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"        
     else:
         return []

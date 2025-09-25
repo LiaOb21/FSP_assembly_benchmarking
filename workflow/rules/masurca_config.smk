@@ -22,6 +22,7 @@ rule masurca_config:
     shell:
         """
         echo "Processing sample: {wildcards.sample}" >> {log} 2>&1
+        echo "Using k-mer size: {params.k}" >> {log} 2>&1 
         python3 <<EOF
 with open("{input.template}") as t, open("{output.cfg}", "w") as out:
     template = t.read()

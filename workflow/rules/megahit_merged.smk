@@ -9,7 +9,7 @@ rule megahit:
         kmergenie_result=get_kmergenie_dependency,
     output:
         result_dir=directory(f"{output_dir}" + "{sample}/megahit"),
-        link_assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_megahit.fa",
+        link_assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_megahit.fa",
     params:
         k=lambda wildcards: get_kmer_list(wildcards, "megahit", "k"),
         scaffolds=f"{output_dir}" + "{sample}/megahit/final.contigs.fa",

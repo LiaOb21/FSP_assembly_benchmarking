@@ -16,33 +16,44 @@ output_dir = config["output_dir"]
 # Collect sample names from test_data directory
 SAMPLES = [os.path.basename(d) for d in glob.glob(f"{input_dir}/*") if os.path.isdir(d)]
 
-# Define assembler names
-ASSEMBLERS = ["spades", "megahit", "abyss", "sparseassembler", "minia", "masurca"]
+# Get assemblers to run from config
+ASSEMBLERS = [
+    assembler for assembler, enabled in config.get("assemblers", {}).items() 
+    if enabled
+]
 
 
 # include common rule (where functions are defined)
 include: "rules/common.smk"
 
-# Conditionally include kmergenie rule only if using auto mode
-if config["kmer_strategy"]["mode"] == "auto":
+# Conditionally include kmergenie rule only if using kmergenie mode
+if config["kmer_strategy"]["mode"] == "kmergenie":
     include: "rules/kmergenie_merged.smk"
 
-# include spades rules
-include: "rules/spades_merged.smk"
+# Conditionally include seqkit rule only if using reads_length mode
+if config["kmer_strategy"]["mode"] == "reads_length":
+    include: "rules/seqkit.smk"
+# if spades is in ASSEMBLERS include spades rules
+if "spades" in ASSEMBLERS:
+    include: "rules/spades_merged.smk"
 # include megahit rule
-include: "rules/megahit_merged.smk"
+if "megahit" in ASSEMBLERS:
+    include: "rules/megahit_merged.smk"
 # include abyss rule
-include: "rules/abyss_merged.smk"
-# include decompress_reads rule
-include: "rules/decompress_reads_merged.smk"
+if "abyss" in ASSEMBLERS:
+    include: "rules/abyss_merged.smk"
 # include sparseassembler rule
-include: "rules/sparseassembler_merged.smk"
+if "sparseassembler" in ASSEMBLERS:
+    include: "rules/decompress_reads_merged.smk"
+    include: "rules/sparseassembler_merged.smk"
 # include minia rule
-include: "rules/minia_merged.smk"
-# include masurca_config rule
-include: "rules/masurca_config_merged.smk"
+if "minia" in ASSEMBLERS:
+    include: "rules/minia_merged.smk"
 # include masurca rule
-include: "rules/masurca.smk"
+if "masurca" in ASSEMBLERS:
+    include: "rules/masurca_config_merged.smk"
+    include: "rules/masurca.smk"
+
 # include busco rule
 include: "rules/busco.smk"
 # include quast rule
@@ -51,10 +62,25 @@ include: "rules/quast.smk"
 include: "rules/fastK_merged.smk"
 # include merquryFK rule
 include: "rules/merquryFK.smk"
+# include select_best_assembly rule
+include: "rules/select_best_assembly.smk"
+# include bwa_mem2 rule
+include: "rules/bwa_mem2_samtools.smk"
+# include pilon rule
+include: "rules/pilon.smk"
+# include busco_2 rule (runs after pilon)
+include: "rules/busco_2.smk"
+# include merquryFK_2 rule (runs after pilon)
+include: "rules/merquryFK_2.smk"
+# include quast_2 rule (runs after pilon)
+include: "rules/quast_2.smk"
+# include bwa_mem2_samtools_2 rule (runs after pilon)
+include: "rules/bwa_mem2_samtools_2.smk"
+#include coverage_viz_2 rule
+include: "rules/coverage_viz.smk"
 
 # input files for rule all are defined in the common.smk file
 rule all:
     input:
         get_all_inputs()
 
-# print("SAMPLES:", SAMPLES)
