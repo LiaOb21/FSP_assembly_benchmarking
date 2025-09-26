@@ -9,11 +9,16 @@ rule bwa_mem2_samtools_2:
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
         reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
     output:
-        sam=f"{output_dir}" + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon.sam",
-        bam=f"{output_dir}" + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon.bam",
-        sorted_bam=f"{output_dir}" + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon_sorted.bam",
-        coverage_stats=f"{output_dir}" + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon_coverage_stats.txt",
-        flagstat=f"{output_dir}" + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon_flagstat.txt",
+        sam=f"{output_dir}"
+        + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon.sam",
+        bam=f"{output_dir}"
+        + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon.bam",
+        sorted_bam=f"{output_dir}"
+        + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon_sorted.bam",
+        coverage_stats=f"{output_dir}"
+        + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon_coverage_stats.txt",
+        flagstat=f"{output_dir}"
+        + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon_flagstat.txt",
     threads: get_scaled_threads  # Use scaling function
     log:
         "logs/{sample}/bwa_mem2_best_assembly_pilon.log",

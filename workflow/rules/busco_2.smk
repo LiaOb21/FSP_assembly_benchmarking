@@ -2,8 +2,12 @@ rule busco_2:
     input:
         assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_best_assembly_pilon.fa",
     output:
-        general_dir=directory(f"{output_dir}" + "{sample}/best_assembly_qc/busco_general_pilon"),
-        specific_dir=directory(f"{output_dir}" + "{sample}/best_assembly_qc/busco_specific_pilon"),
+        general_dir=directory(
+            f"{output_dir}" + "{sample}/best_assembly_qc/busco_general_pilon"
+        ),
+        specific_dir=directory(
+            f"{output_dir}" + "{sample}/best_assembly_qc/busco_specific_pilon"
+        ),
     params:
         lineage_general=config["busco"]["lineage_general"],
         lineage_specific=config["busco"]["lineage_specific"],

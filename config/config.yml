@@ -19,7 +19,7 @@ output_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/results/" # use absol
 # For the other assemblers only the predicted k-mer will be used when kmer_strategy is set to "kmergenie" or "reads_length".
 
 kmer_strategy:
-  mode: "reads_length"  # "kmergenie" for KmerGenie, "reads_length" to calculate the k-mer size based on the median reads length, "manual" for user-defined k-mer sizes. 
+  mode: "reads_length" # "kmergenie" for KmerGenie, "reads_length" to calculate the k-mer size based on the median reads length, "manual" for user-defined k-mer sizes.
 
 # Customise kmergenie parameters
 kmergenie:
@@ -101,7 +101,7 @@ busco:
 
 # Customise quast parameters
 quast:
-  optional_params: {}# if you do not want to use any optional parameters, add `{}` here
+  optional_params: {} # if you do not want to use any optional parameters, add `{}` here
 #    "--circos": True # produces a Circos plot
 
 # Customise fastK parameters
@@ -114,7 +114,6 @@ merquryfk:
   optional_params: # if you do not want to use any optional parameters, add `{}` here
     "-z": True # outputs assembly plots in addition to spectra copy number
 #    "-pdf": True # outputs results in PDF format (default is png)
-
 
 # Customise pilon parameters
 pilon:

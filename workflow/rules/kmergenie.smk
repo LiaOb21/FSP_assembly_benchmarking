@@ -1,4 +1,4 @@
-# This rule runs kmergenie to find the best kmer value for subsequent assembly if the config file specifies kmer_strategy: mode: auto. 
+# This rule runs kmergenie to find the best kmer value for subsequent assembly if the config file specifies kmer_strategy: mode: auto.
 import glob
 import os
 
@@ -13,9 +13,9 @@ rule kmergenie:
     params:
         k=config["kmergenie"]["k"],
         l=config["kmergenie"]["l"],
-        result_prefix=lambda wildcards, output: os.path.splitext(output.kmergenie_report)[
-            0
-        ].replace("_report", ""),
+        result_prefix=lambda wildcards, output: os.path.splitext(
+            output.kmergenie_report
+        )[0].replace("_report", ""),
         file_list=lambda wildcards, output: os.path.join(
             os.path.dirname(output.kmergenie_report), f"{wildcards.sample}_files.txt"
         ),

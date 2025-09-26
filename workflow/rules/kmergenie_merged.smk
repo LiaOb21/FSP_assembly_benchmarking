@@ -12,9 +12,9 @@ rule kmergenie:
     params:
         k=config["kmergenie"]["k"],
         l=config["kmergenie"]["l"],
-        result_prefix=lambda wildcards, output: os.path.splitext(output.kmergenie_report)[
-            0
-        ].replace("_report", ""),
+        result_prefix=lambda wildcards, output: os.path.splitext(
+            output.kmergenie_report
+        )[0].replace("_report", ""),
         optional_params=" ".join(
             f"{k}" if v is True else f"{k} {v}"
             for k, v in config["kmergenie"]["optional_params"].items()

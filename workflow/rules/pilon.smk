@@ -6,10 +6,13 @@ import os
 rule pilon:
     input:
         assembly=f"{output_dir}" + "{sample}/best_assembly/{sample}_best_assembly.fa",
-        sorted_bam=f"{output_dir}" + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly_sorted.bam",
+        sorted_bam=f"{output_dir}"
+        + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly_sorted.bam",
     output:
-        pilon_fasta=f"{output_dir}" + "{sample}/best_assembly/pilon/{sample}_best_assembly_pilon.fasta",
-        link_pilon_assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_best_assembly_pilon.fa",
+        pilon_fasta=f"{output_dir}"
+        + "{sample}/best_assembly/pilon/{sample}_best_assembly_pilon.fasta",
+        link_pilon_assembly=f"{output_dir}"
+        + "{sample}/assemblies/{sample}_best_assembly_pilon.fa",
     params:
         results_prefix=lambda wildcards, output: os.path.splitext(output.pilon_fasta)[
             0
@@ -19,7 +22,7 @@ rule pilon:
             for key, value in config["pilon"]["optional_params"].items()
             if value and value is not False and value != ""
         ),
-        java_heap=lambda wildcards, resources: f"{int(resources.mem_mb * 0.8 // 1024)}G"
+        java_heap=lambda wildcards, resources: f"{int(resources.mem_mb*0.8//1024)}G",
     threads: get_scaled_threads  # Use scaling function
     log:
         "logs/{sample}/pilon_best_assembly.log",

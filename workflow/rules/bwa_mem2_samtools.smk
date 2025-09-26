@@ -9,10 +9,14 @@ rule bwa_mem2_samtools:
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
         reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
     output:
-        sam=f"{output_dir}" + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly.sam",
-        bam=f"{output_dir}" + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly.bam",
-        sorted_bam=f"{output_dir}" + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly_sorted.bam",
-        bam_index=f"{output_dir}" + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly_sorted.bam.bai", 
+        sam=f"{output_dir}"
+        + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly.sam",
+        bam=f"{output_dir}"
+        + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly.bam",
+        sorted_bam=f"{output_dir}"
+        + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly_sorted.bam",
+        bam_index=f"{output_dir}"
+        + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly_sorted.bam.bai",
     threads: get_scaled_threads  # Use scaling function
     log:
         "logs/{sample}/bwa_mem2_best_assembly.log",

@@ -18,41 +18,63 @@ SAMPLES = [os.path.basename(d) for d in glob.glob(f"{input_dir}/*") if os.path.i
 
 # Get assemblers to run from config
 ASSEMBLERS = [
-    assembler for assembler, enabled in config.get("assemblers", {}).items() 
-    if enabled
+    assembler for assembler, enabled in config.get("assemblers", {}).items() if enabled
 ]
 
 
 # include common rule (where functions are defined)
 include: "rules/common.smk"
 
+
 # Conditionally include kmergenie rule only if using kmergenie mode
 if config["kmer_strategy"]["mode"] == "kmergenie":
+
     include: "rules/kmergenie_merged.smk"
+
 
 # Conditionally include seqkit rule only if using reads_length mode
 if config["kmer_strategy"]["mode"] == "reads_length":
+
     include: "rules/seqkit.smk"
+
+
 # if spades is in ASSEMBLERS include spades rules
 if "spades" in ASSEMBLERS:
+
     include: "rules/spades_merged.smk"
+
+
 # include megahit rule
 if "megahit" in ASSEMBLERS:
+
     include: "rules/megahit_merged.smk"
+
+
 # include abyss rule
 if "abyss" in ASSEMBLERS:
+
     include: "rules/abyss_merged.smk"
+
+
 # include sparseassembler rule
 if "sparseassembler" in ASSEMBLERS:
+
     include: "rules/decompress_reads_merged.smk"
     include: "rules/sparseassembler_merged.smk"
+
+
 # include minia rule
 if "minia" in ASSEMBLERS:
+
     include: "rules/minia_merged.smk"
+
+
 # include masurca rule
 if "masurca" in ASSEMBLERS:
+
     include: "rules/masurca_config_merged.smk"
     include: "rules/masurca.smk"
+
 
 # include busco rule
 include: "rules/busco.smk"
@@ -76,11 +98,11 @@ include: "rules/merquryFK_2.smk"
 include: "rules/quast_2.smk"
 # include bwa_mem2_samtools_2 rule (runs after pilon)
 include: "rules/bwa_mem2_samtools_2.smk"
-#include coverage_viz_2 rule
+# include coverage_viz_2 rule
 include: "rules/coverage_viz.smk"
+
 
 # input files for rule all are defined in the common.smk file
 rule all:
     input:
-        get_all_inputs()
-
+        get_all_inputs(),
