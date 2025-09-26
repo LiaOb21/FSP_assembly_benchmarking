@@ -1,0 +1,23 @@
+Assembly	048ds_megahit	048ds_abyss	048ds_minia
+# contigs (>= 0 bp)	3	6	14
+# contigs (>= 1000 bp)	0	0	0
+# contigs (>= 5000 bp)	0	0	0
+# contigs (>= 10000 bp)	0	0	0
+# contigs (>= 25000 bp)	0	0	0
+# contigs (>= 50000 bp)	0	0	0
+Total length (>= 0 bp)	1351	1326	2661
+Total length (>= 1000 bp)	0	0	0
+Total length (>= 5000 bp)	0	0	0
+Total length (>= 10000 bp)	0	0	0
+Total length (>= 25000 bp)	0	0	0
+Total length (>= 50000 bp)	0	0	0
+# contigs	3	1	1
+Largest contig	739	361	260
+Total length	1351	361	260
+GC (%)	44.34	41.83	40.38
+N50	739	361	260
+N90	304	361	260
+auN	542.9	361.0	260.0
+L50	1	1	1
+L90	3	1	1
+# N's per 100 kbp	0.00	0.00	0.00

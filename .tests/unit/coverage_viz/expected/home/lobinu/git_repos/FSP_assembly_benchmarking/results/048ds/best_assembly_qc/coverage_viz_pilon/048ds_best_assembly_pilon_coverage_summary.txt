@@ -1,0 +1,26 @@
+Coverage Analysis Summary - 048ds (Best assembly improved with Pilon)
+============================================================
+
+sample: 048ds
+assembler: Best assembly improved with Pilon
+total_contigs: 3
+contigs_under_250bp: 0
+contigs_under_250bp_percent: 0.00
+total_bases: 1351
+mean_coverage: 13.56
+weighted_mean_coverage: 16.81
+median_coverage: 11.09
+peak_coverage: 23.68
+min_coverage: 5.91
+std_coverage: 9.14
+overall_coverage_pct: 100.00
+n50: 739
+longest_contig: 739
+shortest_contig: 304
+mean_base_quality: 34.13
+mean_mapping_quality: 57.47
+total_reads: 13470
+mapped_reads: 239
+unmapped_reads: 13231
+mapping_rate: 1.77
+properly_paired: 226

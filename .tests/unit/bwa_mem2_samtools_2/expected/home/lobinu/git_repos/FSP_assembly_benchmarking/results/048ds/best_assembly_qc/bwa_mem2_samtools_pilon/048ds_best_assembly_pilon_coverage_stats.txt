@@ -1,0 +1,4 @@
+#rname	startpos	endpos	numreads	covbases	coverage	meandepth	meanbaseq	meanmapq
+k99_1_pilon	1	304	16	304	100	5.90789	34.6	60
+k99_0_pilon	1	308	34	308	100	11.0909	34.1	56.2
+k99_2_pilon	1	739	189	739	100	23.682	33.7	56.2

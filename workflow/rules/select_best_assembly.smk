@@ -10,7 +10,7 @@ rule select_best_assembly:
         assembly=f"{output_dir}" + "{sample}/best_assembly/{sample}_best_assembly.fa",
     params:
         sample="{sample}",
-        results_dir=f"{output_dir}",
+        results_dir=config["output_dir"],
     threads: 1
     log:
         "logs/{sample}/select_best_assembly.log",
