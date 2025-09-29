@@ -96,7 +96,7 @@ busco:
   lineage_specific: "/home/lobinu/git_repos/FSP_assembly_benchmarking/resources/basidiomycota_odb12" # chose a more specific dataset, for example "basidiomycota_odb12", "ascomycota_odb12", etc.
   optional_params: # if you do not want to use any optional parameters, add `{}` here
     "--mode": "genome"
-    "--metaeuk": True
+#    "--metaeuk": True
     "--offline": True # use this if you do not want to download the lineage dataset from the web, but use a local copy instead
 
 # Customise quast parameters
