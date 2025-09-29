@@ -1,7 +1,17 @@
-# Set memory limit for rules
-mem_mb: 16000
-# Set number of threads for rules
-threads: 8
+# Set memory and threads for high demanding rules
+high:
+  mem_mb: 45000 # memory in MB
+  t: 32 # number of threads
+
+# Set memory and threads for medium demanding rules
+medium:
+  mem_mb: 16000 # memory in MB
+  t: 16 # number of threads
+
+# Set memory and threads for low demanding rules
+low:
+  mem_mb: 5000 # memory in MB
+  t: 8 # number of threads
 
 # Set the path to the input directory (this directory must contain
 # one subdirectory for each sample, and the subdirectories must be named after the sample)
@@ -19,7 +29,7 @@ output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/" # use ab
 # For the other assemblers only the predicted k-mer will be used when kmer_strategy is set to "kmergenie" or "reads_length".
 
 kmer_strategy:
-  mode: "reads_length" # "kmergenie" for KmerGenie, "reads_length" to calculate the k-mer size based on the median reads length, "manual" for user-defined k-mer sizes.
+  mode: "manual" # "kmergenie" for KmerGenie, "reads_length" to calculate the k-mer size based on the median reads length, "manual" for user-defined k-mer sizes.
 
 # Customise kmergenie parameters
 kmergenie:
@@ -29,12 +39,12 @@ kmergenie:
 
 # Choose which assemblers to run
 assemblers:
-  spades: False
+  spades: True
   megahit: True
   abyss: True
-  sparseassembler: False
+  sparseassembler: True
   minia: True
-  masurca: False
+  masurca: True
 
 # Customise spades parameters
 # please do not use the `-o` option here, it is set into the workflow
@@ -54,7 +64,7 @@ megahit:
 # please do not use the `-j` and `-C` options here, they are set into the workflow
 abyss:
   "k": 21
-  "B": "16G" # note that this must be lower than "mem_mb", otherwise abyss fails. See docs at https://github.com/bcgsc/abyss?tab=readme-ov-file#bloom-filter-mode
+  "B": "8G" # note that this must be lower than "mem_mb", otherwise abyss fails. See docs at https://github.com/bcgsc/abyss?tab=readme-ov-file#bloom-filter-mode
   optional_params: # if you do not want to use any optional parameters, add `{}` here
     "kc": 2
 
@@ -96,7 +106,7 @@ busco:
   lineage_specific: "/home/lobinu/git_repos/FSP_assembly_benchmarking/resources/basidiomycota_odb12" # chose a more specific dataset, for example "basidiomycota_odb12", "ascomycota_odb12", etc.
   optional_params: # if you do not want to use any optional parameters, add `{}` here
     "--mode": "genome"
-    "--metaeuk": True
+#    "--metaeuk": True
     "--offline": True # use this if you do not want to download the lineage dataset from the web, but use a local copy instead
 
 # Customise quast parameters

@@ -1,0 +1,115 @@
+- STAGE: Before start
+  args: []
+  config_dir: ''
+  del_after: []
+  job_uuid: SPAdes_Before_start_YIAQ4PT0KGI6ACCJL78FTJSS5DRY1OIP
+  mpi_support: false
+  output_files: []
+  path: 'true'
+  short_name: before_start
+- STAGE: Assembling
+  args: []
+  config_dir: ''
+  del_after: []
+  job_uuid: SPAdes_Assembling_EFZ6A4GA8DS4DS2EYBZA4U8HTDK16VWS
+  mpi_support: false
+  output_files: []
+  path: 'true'
+  short_name: as_start
+- STAGE: K21
+  args:
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/K21/configs/config.info
+  config_dir: K21
+  del_after: []
+  job_uuid: hpcSPAdes_K21_H4TKSHJNU5QFOMHM59DSXRRPQ19CSEDQ
+  mpi_support: true
+  output_files: []
+  path: /home/lobinu/git_repos/FSP_assembly_benchmarking/.snakemake/conda/c9d8da4aeba45c11e035c12a2dc44715_/bin/{spades_core}
+  short_name: k21
+- STAGE: K33
+  args:
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/K33/configs/config.info
+  config_dir: K33
+  del_after: []
+  job_uuid: hpcSPAdes_K33_MFQK2EUYY1CNP0SB3TVF2DLC7Q55J427
+  mpi_support: true
+  output_files: []
+  path: /home/lobinu/git_repos/FSP_assembly_benchmarking/.snakemake/conda/c9d8da4aeba45c11e035c12a2dc44715_/bin/{spades_core}
+  short_name: k33
+- STAGE: K55
+  args:
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/K55/configs/config.info
+  config_dir: K55
+  del_after: []
+  job_uuid: hpcSPAdes_K55_LSZA4W90XH1N7507KE1XVGQNQ8MTYFXA
+  mpi_support: true
+  output_files: []
+  path: /home/lobinu/git_repos/FSP_assembly_benchmarking/.snakemake/conda/c9d8da4aeba45c11e035c12a2dc44715_/bin/{spades_core}
+  short_name: k55
+- STAGE: Copy files
+  args:
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/.snakemake/conda/c9d8da4aeba45c11e035c12a2dc44715_/share/spades/spades_pipeline/scripts/copy_files.py
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/K55/before_rr.fasta
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/before_rr.fasta
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/K55/assembly_graph_after_simplification.gfa
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/assembly_graph_after_simplification.gfa
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/K55/final_contigs.fasta
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/contigs.fasta
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/K55/first_pe_contigs.fasta
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/first_pe_contigs.fasta
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/K55/strain_graph.gfa
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/strain_graph.gfa
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/K55/scaffolds.fasta
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/scaffolds.fasta
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/K55/scaffolds.paths
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/scaffolds.paths
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/K55/assembly_graph_with_scaffolds.gfa
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/assembly_graph_with_scaffolds.gfa
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/K55/assembly_graph.fastg
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/assembly_graph.fastg
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/K55/final_contigs.paths
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/contigs.paths
+  config_dir: ''
+  del_after:
+  - .bin_reads
+  - tmp/spades_njiyxkks
+  job_uuid: SPAdes_Copy_files_YV03CZ0B9CFKFECAY65DBXDCVXVEBD9Z
+  mpi_support: false
+  output_files: []
+  path: /home/lobinu/git_repos/FSP_assembly_benchmarking/.snakemake/conda/c9d8da4aeba45c11e035c12a2dc44715_/bin/python3
+  short_name: copy_files
+- STAGE: Assembling
+  args: []
+  config_dir: ''
+  del_after: []
+  job_uuid: SPAdes_Assembling_MK4M02SH96U6BSMKOU815B879ZX7AY7S
+  mpi_support: false
+  output_files: []
+  path: 'true'
+  short_name: as_finish
+- STAGE: Breaking scaffolds
+  args:
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/.snakemake/conda/c9d8da4aeba45c11e035c12a2dc44715_/share/spades/spades_pipeline/scripts/breaking_scaffolds_script.py
+  - --result_scaffolds_filename
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/scaffolds.fasta
+  - --misc_dir
+  - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/misc
+  - --threshold_for_breaking_scaffolds
+  - '3'
+  config_dir: ''
+  del_after: []
+  job_uuid: SPAdes_Breaking_scaffolds_RI2NS90HMX43ZIKBZZZUZBMIW4EIY7JA
+  mpi_support: false
+  output_files: []
+  path: /home/lobinu/git_repos/FSP_assembly_benchmarking/.snakemake/conda/c9d8da4aeba45c11e035c12a2dc44715_/bin/python3
+  short_name: bs
+- STAGE: Terminate
+  args: []
+  config_dir: ''
+  del_after:
+  - configs
+  job_uuid: SPAdes_Terminate_A8J7TWXC6WHHN3CHWYANLEF52U0C3ZP6
+  mpi_support: false
+  output_files: []
+  path: 'true'
+  short_name: terminate

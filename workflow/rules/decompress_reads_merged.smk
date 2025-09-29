@@ -9,6 +9,9 @@ rule decompress_reads:
         gz=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
     output:
         fq=temp(f"{output_dir}" + "fqreads/{sample}/{sample}_merged.fq"),
+    threads: 1
+    resources:
+        mem_mb=get_low_mem,
     conda:
         "../envs/basic.yaml"
     log:

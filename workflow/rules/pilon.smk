@@ -23,7 +23,9 @@ rule pilon:
             if value and value is not False and value != ""
         ),
         java_heap=lambda wildcards, resources: f"{int(resources.mem_mb*0.8//1024)}G",
-    threads: get_scaled_threads  # Use scaling function
+    threads: get_high_threads
+    resources:
+        mem_mb=get_high_mem,
     log:
         "logs/{sample}/pilon_best_assembly.log",
     benchmark:

@@ -23,13 +23,15 @@ rule sparseassembler:
             for k, v in config["sparseassembler"]["optional_params"].items()
             if v and v is not False and v != ""
         ),
-    threads: get_scaled_threads  # Use scaling function
+    threads: 1
+    resources:
+        mem_mb=get_medium_mem,
     log:
         "logs/{sample}/sparseassembler.log",
     benchmark:
         "benchmark/{sample}/sparseassembler.txt"
     resources:
-        mem_mb=get_scaled_mem,  # Use scaling function
+        mem_mb=get_scaled_mem,
     conda:
         "../envs/sparseassembler.yaml"
     shell:

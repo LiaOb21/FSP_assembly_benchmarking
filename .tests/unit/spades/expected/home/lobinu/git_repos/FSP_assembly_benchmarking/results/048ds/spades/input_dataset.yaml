@@ -1,0 +1,7 @@
+- "left reads":
+  - "/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/048ds/048ds_trimmed.R1.fq.gz"
+  "number": !!int "1"
+  "orientation": "fr"
+  "right reads":
+  - "/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/048ds/048ds_trimmed.R2.fq.gz"
+  "type": "paired-end"

@@ -1,25 +1,25 @@
 All statistics are based on contigs of size >= 250 bp, unless otherwise noted (e.g., "# contigs (>= 0 bp)" and "Total length (>= 0 bp)" include all contigs).
 
 Assembly                    048ds_best_assembly_pilon
-# contigs (>= 0 bp)         3                        
+# contigs (>= 0 bp)         2                        
 # contigs (>= 1000 bp)      0                        
 # contigs (>= 5000 bp)      0                        
 # contigs (>= 10000 bp)     0                        
 # contigs (>= 25000 bp)     0                        
 # contigs (>= 50000 bp)     0                        
-Total length (>= 0 bp)      1351                     
+Total length (>= 0 bp)      860                      
 Total length (>= 1000 bp)   0                        
 Total length (>= 5000 bp)   0                        
 Total length (>= 10000 bp)  0                        
 Total length (>= 25000 bp)  0                        
 Total length (>= 50000 bp)  0                        
-# contigs                   3                        
-Largest contig              739                      
-Total length                1351                     
-GC (%)                      44.41                    
-N50                         739                      
-N90                         304                      
-auN                         542.9                    
+# contigs                   2                        
+Largest contig              489                      
+Total length                860                      
+GC (%)                      47.21                    
+N50                         489                      
+N90                         371                      
+auN                         438.1                    
 L50                         1                        
-L90                         3                        
+L90                         2                        
 # N's per 100 kbp           0.00                     

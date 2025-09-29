@@ -10,6 +10,8 @@ rule coverage_viz:
         coverage_summary=f"{output_dir}"
         + "{sample}/best_assembly_qc/coverage_viz_pilon/{sample}_best_assembly_pilon_coverage_summary.txt",
     threads: 1
+    resources:
+        mem_mb=get_low_mem,
     log:
         "logs/{sample}/coverage_viz_best_assembly_pilon.log",
     benchmark:

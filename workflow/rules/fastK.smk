@@ -18,7 +18,9 @@ rule fastk:
         temp_dir=lambda wildcards, output: os.path.join(
             os.path.dirname(output.ktab), "temp"
         ),
-    threads: get_scaled_threads  # Use scaling function
+    threads: get_medium_threads
+    resources:
+        mem_mb=get_medium_mem,
     log:
         "logs/{sample}/fastk.log",
     benchmark:

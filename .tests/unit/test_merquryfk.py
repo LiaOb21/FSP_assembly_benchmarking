@@ -22,14 +22,14 @@ def test_merquryfk():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/merquryfk/megahit/merquryfk.completeness.stats /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/merquryfk/megahit/merquryfk.qv", file=sys.stderr)
+        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/merquryfk/spades/merquryfk.completeness.stats /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/merquryfk/spades/merquryfk.qv", file=sys.stderr)
 
         # Run the test job.
         sp.check_output([
             "python",
             "-m",
             "snakemake", 
-            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/merquryfk/megahit/merquryfk.completeness.stats /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/merquryfk/megahit/merquryfk.qv",
+            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/merquryfk/spades/merquryfk.completeness.stats /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/merquryfk/spades/merquryfk.qv",
             "-f", 
             "-j1",
             "--target-files-omit-workdir-adjustment",

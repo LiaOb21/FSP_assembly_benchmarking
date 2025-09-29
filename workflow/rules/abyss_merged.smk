@@ -25,7 +25,9 @@ rule abyss:
             for key, value in config["abyss"]["optional_params"].items()
             if value and value is not False and value != ""
         ),
-    threads: get_scaled_threads  # Use scaling function
+    threads: get_high_threads
+    resources:
+        mem_mb=get_high_mem,
     log:
         "logs/{sample}/abyss.log",
     benchmark:

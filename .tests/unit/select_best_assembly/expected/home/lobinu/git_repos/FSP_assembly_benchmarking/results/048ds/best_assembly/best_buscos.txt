@@ -1,3 +1,6 @@
 abyss 0
+masurca 0
 megahit 0
 minia 0
+spades 0
+sparseassembler 0

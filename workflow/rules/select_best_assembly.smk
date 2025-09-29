@@ -10,8 +10,12 @@ rule select_best_assembly:
         assembly=f"{output_dir}" + "{sample}/best_assembly/{sample}_best_assembly.fa",
     params:
         sample="{sample}",
-        results_dir=lambda wildcards, input: os.path.dirname(os.path.dirname(input.quast_dir)),
+        results_dir=lambda wildcards, input: os.path.dirname(
+            os.path.dirname(input.quast_dir)
+        ),
     threads: 1
+    resources:
+        mem_mb=get_low_mem,
     log:
         "logs/{sample}/select_best_assembly.log",
     benchmark:

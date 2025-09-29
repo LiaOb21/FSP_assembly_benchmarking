@@ -9,7 +9,9 @@ rule quast_2:
             for k, v in config["quast"]["optional_params"].items()
             if v and v is not False and v != ""
         ),
-    threads: get_scaled_threads  # Use scaling function
+    threads: get_low_threads
+    resources:
+        mem_mb=get_low_mem,
     log:
         "logs/{sample}/quast_best_assembly_pilon.log",
     benchmark:

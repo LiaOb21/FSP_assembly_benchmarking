@@ -9,15 +9,15 @@ rule masurca:
     output:
         scaffolds=f"{output_dir}" + "{sample}/masurca/CA/primary.genome.scf.fasta",
         link_assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_masurca.fa",
-    threads: config["threads"]  # access threads from config
     params:
         config_dir=lambda wildcards, input: os.path.dirname(input.masurca_config),
+    threads: get_high_threads
+    resources:
+        mem_mb=get_high_mem,
     log:
         "logs/{sample}/masurca.log",
     benchmark:
         "benchmark/{sample}/masurca.txt"
-    resources:
-        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/masurca.yaml"
     shell:

@@ -19,7 +19,9 @@ rule bwa_mem2_samtools_2:
         + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon_coverage_stats.txt",
         flagstat=f"{output_dir}"
         + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon_flagstat.txt",
-    threads: get_scaled_threads  # Use scaling function
+    threads: get_high_threads
+    resources:
+        mem_mb=get_high_mem,
     log:
         "logs/{sample}/bwa_mem2_best_assembly_pilon.log",
     benchmark:

@@ -20,7 +20,9 @@ rule minia:
             for k, v in config["minia"]["optional_params"].items()
             if v and v is not False and v != ""
         ),
-    threads: get_scaled_threads  # Use scaling function
+    threads: get_medium_threads
+    resources:
+        mem_mb=get_medium_mem,
     log:
         "logs/{sample}/minia.log",
     benchmark:

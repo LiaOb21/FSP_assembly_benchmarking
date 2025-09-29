@@ -21,7 +21,9 @@ rule merquryfk:
             for k, v in config["merquryfk"]["optional_params"].items()
             if v and v is not False and v != ""
         ),
-    threads: get_scaled_threads  # Use scaling function
+    threads: get_low_threads
+    resources:
+        mem_mb=get_low_mem,
     log:
         "logs/{sample}/merquryfk_{sample}_{assembler}.log",
     benchmark:

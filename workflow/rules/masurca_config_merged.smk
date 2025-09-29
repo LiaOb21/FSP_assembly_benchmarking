@@ -5,11 +5,13 @@ rule masurca_config:
         kmergenie_result=get_kmergenie_dependency,
     output:
         cfg=protected(f"{output_dir}" + "{sample}/masurca/masurca_config.txt"),
+    threads: get_high_threads
+    resources:
+        mem_mb=get_low_mem,
     params:
         fragment_mean=config["masurca"].get("fragment_mean", 500),
         fragment_stdev=config["masurca"].get("fragment_stdev", 50),
         k=lambda wildcards: get_single_kmer(wildcards, "masurca", "k"),
-        threads=config["threads"],
         jf_size=config["masurca"].get("jf_size", 10000000000),
         ca_parameters=config["masurca"].get("ca_parameters", "cgwErrorRate=0.15"),
     log:
@@ -30,7 +32,7 @@ with open("{input.template}") as t, open("{output.cfg}", "w") as out:
         fragment_mean={params.fragment_mean},
         fragment_stdev={params.fragment_stdev},
         kmer="{params.k}",
-        threads={params.threads},
+        threads={threads},
         jf_size={params.jf_size},
         ca_parameters="{params.ca_parameters}"
     ))

@@ -11,7 +11,7 @@ rule spades:
     output:
         result_dir=directory(f"{output_dir}" + "{sample}/spades"),
         scaffolds=f"{output_dir}" + "{sample}/spades/scaffolds.fasta",
-        link_assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_megahit.fa",
+        link_assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_spades.fa",
     params:
         k=lambda wildcards: get_kmer_list(wildcards, "spades", "k"),
         optional_params=" ".join(
@@ -19,13 +19,13 @@ rule spades:
             for k, v in config["spades"]["optional_params"].items()
             if v and v is not False and v != ""
         ),
-    threads: get_scaled_threads  # Use scaling function
+    threads: get_high_threads
+    resources:
+        mem_mb=get_high_mem,
     log:
         "logs/{sample}/spades.log",
     benchmark:
         "benchmark/{sample}/spades.txt"
-    resources:
-        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/spades.yaml"
     shell:

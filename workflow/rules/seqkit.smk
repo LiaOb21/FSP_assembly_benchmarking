@@ -9,7 +9,9 @@ rule seqkit:
     output:
         seqkit_results=f"{output_dir}" + "{sample}/seqkit/{sample}_seqkit.txt",
         kmer=f"{output_dir}" + "{sample}/seqkit/{sample}_kmer_value.txt",
-    threads: get_scaled_threads  # Use scaling function
+    threads: get_medium_threads
+    resources:
+        mem_mb=get_medium_mem,
     log:
         "logs/{sample}/seqkit.log",
     benchmark:

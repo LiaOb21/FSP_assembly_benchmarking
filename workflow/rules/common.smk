@@ -1,16 +1,60 @@
-# resource scaling functions
+# resource scaling functions based on rules resource usage
 
 
-def get_scaled_mem(wildcards, attempt):
-    base_mem = config["mem_mb"]
-    return min(base_mem * attempt, 250000)  # Cap at 250GB
+def get_scaled_mem(wildcards, attempt, tier="medium"):
+    """
+    Get scaled memory based on resource tier and attempt number.
+
+    Args:
+        wildcards: Snakemake wildcards
+        attempt: Retry attempt number (starts at 1)
+        tier: Resource tier ("low", "medium", "high")
+    """
+    base_mem = config[tier]["mem_mb"]
+    return min(base_mem * attempt, 500000)  # Cap at 500GB
 
 
-def get_scaled_threads(wildcards, attempt):
-    base_threads = config["threads"]
+def get_scaled_threads(wildcards, attempt, tier="medium"):
+    """
+    Get scaled threads based on resource tier and attempt number.
+
+    Args:
+        wildcards: Snakemake wildcards
+        attempt: Retry attempt number (starts at 1)
+        tier: Resource tier ("low", "medium", "high")
+    """
+    base_threads = config[tier]["t"]
     return min(
-        base_threads + (attempt - 1) * 4, 64
-    )  # Add 4 threads per retry, cap at 64
+        base_threads + (attempt - 1) * 4, 128
+    )  # Add 4 threads per retry, cap at 128
+
+
+# Convenience functions for each tier
+# low for: coverage_viz, decompress, masurca_config, merquryfk, quast, select_best_assembly
+# medium for: busco, fastk, megahit, minia, sparseassembler (only mem), seqkit, kmergenie
+# high for: abyss, bwa, masurca, pilon, spades
+def get_low_mem(wildcards, attempt):
+    return get_scaled_mem(wildcards, attempt, "low")
+
+
+def get_medium_mem(wildcards, attempt):
+    return get_scaled_mem(wildcards, attempt, "medium")
+
+
+def get_high_mem(wildcards, attempt):
+    return get_scaled_mem(wildcards, attempt, "high")
+
+
+def get_low_threads(wildcards, attempt):
+    return get_scaled_threads(wildcards, attempt, "low")
+
+
+def get_medium_threads(wildcards, attempt):
+    return get_scaled_threads(wildcards, attempt, "medium")
+
+
+def get_high_threads(wildcards, attempt):
+    return get_scaled_threads(wildcards, attempt, "high")
 
 
 # Make inputs for rule all dynamic based on k-mer strategy
@@ -18,17 +62,6 @@ def get_scaled_threads(wildcards, attempt):
 
 def get_all_inputs():
     inputs = [
-        #        expand(f"{output_dir}" + "{sample}/spades/scaffolds.fasta", sample=SAMPLES),
-        #        expand(f"{output_dir}" + "{sample}/megahit/", sample=SAMPLES),
-        #        expand(f"{output_dir}" + "{sample}/abyss/abyss-scaffolds.fa", sample=SAMPLES),
-        #        expand(f"{output_dir}" + "{sample}/sparseassembler/SuperContigs.txt", sample=SAMPLES),
-        #        expand(f"{output_dir}" + "{sample}/minia/{sample}.contigs.fa", sample=SAMPLES),
-        #        expand(f"{output_dir}" + "{sample}/masurca/masurca_config.txt", sample=SAMPLES),
-        #        expand(f"{output_dir}" + "{sample}/masurca/CA/primary.genome.scf.fasta", sample=SAMPLES),
-        #        expand(f"{output_dir}" + "{sample}/busco_general/{assembler}", sample=SAMPLES, assembler=ASSEMBLERS),
-        #        expand(f"{output_dir}" + "{sample}/busco_specific/{assembler}", sample=SAMPLES, assembler=ASSEMBLERS),
-        #        expand(f"{output_dir}" + "{sample}/quast", sample=SAMPLES),
-        #        expand(f"{output_dir}" + "{sample}/fastk/fastk_table.ktab", sample=SAMPLES),
         expand(
             f"{output_dir}"
             + "{sample}/merquryfk/{assembler}/merquryfk.completeness.stats",
@@ -40,10 +73,6 @@ def get_all_inputs():
             sample=SAMPLES,
             assembler=ASSEMBLERS,
         ),
-        #        expand(f"{output_dir}" + "{sample}/best_assembly/{sample}_best_assembly.fa", sample=SAMPLES),
-        #        expand(f"{output_dir}" + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly_sorted.bam", sample=SAMPLES),
-        #        expand(f"{output_dir}" + "{sample}/coverage_viz/{assembler}/{sample}_{assembler}_coverage_plot.png", sample=SAMPLES, assembler=ASSEMBLERS),
-        #        expand(f"{output_dir}" + "{sample}/best_assembly/pilon/{sample}_best_assembly_pilon.fasta", sample=SAMPLES),
         expand(
             f"{output_dir}" + "{sample}/best_assembly_qc/busco_general_pilon",
             sample=SAMPLES,
@@ -74,24 +103,7 @@ def get_all_inputs():
             + "{sample}/best_assembly_qc/coverage_viz_pilon/{sample}_best_assembly_pilon_coverage_summary.txt",
             sample=SAMPLES,
         ),
-        expand(f"{output_dir}" + "{sample}/seqkit/{sample}_seqkit.txt", sample=SAMPLES),
     ]
-
-    # Add kmergenie outputs only if mode is "kmergenie"
-
-    if config["kmer_strategy"]["mode"] == "kmergenie":
-        inputs.extend(
-            [
-                expand(
-                    f"{output_dir}" + "{sample}/kmergenie/{sample}_report.html",
-                    sample=SAMPLES,
-                ),
-                expand(
-                    f"{output_dir}" + "{sample}/kmergenie/{sample}_best_kmer.txt",
-                    sample=SAMPLES,
-                ),
-            ]
-        )
 
     return inputs
 
