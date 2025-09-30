@@ -2,16 +2,19 @@
 high:
   mem_mb: 45000 # memory in MB
   t: 32 # number of threads
+  partition: "himem" # partition to use for high memory jobs
 
 # Set memory and threads for medium demanding rules
 medium:
   mem_mb: 16000 # memory in MB
   t: 16 # number of threads
+  partition: "medium" # partition to use for medium memory jobs
 
 # Set memory and threads for low demanding rules
 low:
   mem_mb: 5000 # memory in MB
   t: 8 # number of threads
+  partition: "short" # partition to use for low memory jobs
 
 # Set the path to the input directory (this directory must contain
 # one subdirectory for each sample, and the subdirectories must be named after the sample)
@@ -29,7 +32,7 @@ output_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/results_2/" # use abs
 # For the other assemblers only the predicted k-mer will be used when kmer_strategy is set to "kmergenie" or "reads_length".
 
 kmer_strategy:
-  mode: "manual" # "kmergenie" for KmerGenie, "reads_length" to calculate the k-mer size based on the median reads length, "manual" for user-defined k-mer sizes.
+  mode: "kmergenie" # "kmergenie" for KmerGenie, "reads_length" to calculate the k-mer size based on the median reads length, "manual" for user-defined k-mer sizes.
 
 # Customise kmergenie parameters
 kmergenie:

@@ -12,6 +12,7 @@ rule decompress_reads:
     threads: 1
     resources:
         mem_mb=get_low_mem,
+        partition=config["low"]["partition"],
     conda:
         "../envs/basic.yaml"
     log:
