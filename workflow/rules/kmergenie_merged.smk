@@ -27,8 +27,6 @@ rule kmergenie:
         "logs/{sample}/kmergenie.log",
     benchmark:
         "benchmark/{sample}/kmergenie.txt"
-    resources:
-        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/kmergenie.yaml"
     shell:

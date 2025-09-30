@@ -19,8 +19,6 @@ rule busco:
         "logs/{sample}/busco_{sample}_{assembler}.log",
     benchmark:
         "benchmark/{sample}/busco_{sample}_{assembler}.txt"
-    resources:
-        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/busco.yaml"
     shell:

@@ -16,8 +16,6 @@ rule seqkit:
         "logs/{sample}/seqkit.log",
     benchmark:
         "benchmark/{sample}/seqkit.txt"
-    resources:
-        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/seqkit.yaml"
     shell:

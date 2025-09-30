@@ -19,8 +19,6 @@ rule quast:
         "logs/{sample}/quast.log",
     benchmark:
         "benchmark/{sample}/quast.txt"
-    resources:
-        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/quast.yaml"
     shell:

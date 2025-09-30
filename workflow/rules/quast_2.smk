@@ -16,8 +16,6 @@ rule quast_2:
         "logs/{sample}/quast_best_assembly_pilon.log",
     benchmark:
         "benchmark/{sample}/quast_best_assembly_pilon.txt"
-    resources:
-        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/quast.yaml"
     shell:

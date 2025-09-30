@@ -25,8 +25,6 @@ rule megahit:
         "logs/{sample}/megahit.log",
     benchmark:
         "benchmark/{sample}/megahit.txt"
-    resources:
-        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/megahit.yaml"
     shell:

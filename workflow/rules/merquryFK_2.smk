@@ -28,8 +28,6 @@ rule merquryfk_2:
         "logs/{sample}/merquryfk_best_assembly_pilon.log",
     benchmark:
         "benchmark/{sample}/merquryFK_best_assembly_pilon.txt"
-    resources:
-        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/merquryFK.yaml"
     shell:

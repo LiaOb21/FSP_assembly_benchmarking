@@ -31,8 +31,6 @@ rule abyss:
         "logs/{sample}/abyss.log",
     benchmark:
         "benchmark/{sample}/abyss.txt"
-    resources:
-        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/abyss.yaml"
     shell:

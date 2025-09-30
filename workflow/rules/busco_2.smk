@@ -23,8 +23,6 @@ rule busco_2:
         "logs/{sample}/busco_best_assembly_pilon.log",
     benchmark:
         "benchmark/{sample}/busco_best_assembly_pilon.txt"
-    resources:
-        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/busco.yaml"
     shell:

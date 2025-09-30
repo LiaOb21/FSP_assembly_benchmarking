@@ -26,8 +26,6 @@ rule bwa_mem2_samtools_2:
         "logs/{sample}/bwa_mem2_best_assembly_pilon.log",
     benchmark:
         "benchmark/{sample}/bwa_mem2_best_assembly_pilon.txt"
-    resources:
-        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/bwa_mem2_samtools.yaml"
     shell:

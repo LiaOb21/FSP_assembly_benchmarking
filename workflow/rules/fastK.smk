@@ -25,8 +25,6 @@ rule fastk:
         "logs/{sample}/fastk.log",
     benchmark:
         "benchmark/{sample}/fastk.txt"
-    resources:
-        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/merquryFK.yaml"
     shell:

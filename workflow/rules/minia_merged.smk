@@ -27,8 +27,6 @@ rule minia:
         "logs/{sample}/minia.log",
     benchmark:
         "benchmark/{sample}/minia.txt"
-    resources:
-        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/minia.yaml"
     shell:

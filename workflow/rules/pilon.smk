@@ -30,8 +30,6 @@ rule pilon:
         "logs/{sample}/pilon_best_assembly.log",
     benchmark:
         "benchmark/{sample}/pilon_best_assembly.txt"
-    resources:
-        mem_mb=get_scaled_mem,  # Use scaling function
     conda:
         "../envs/pilon.yaml"
     shell:

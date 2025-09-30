@@ -23,12 +23,12 @@ rule sparseassembler:
             if v and v is not False and v != ""
         ),
     threads: 1
+    resources:
+        mem_mb=get_medium_mem,
     log:
         "logs/{sample}/sparseassembler.log",
     benchmark:
         "benchmark/{sample}/sparseassembler.txt"
-    resources:
-        mem_mb=get_scaled_mem,
     conda:
         "../envs/sparseassembler.yaml"
     shell:
