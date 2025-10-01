@@ -1,0 +1,136 @@
+# Set memory and threads for high demanding rules
+high:
+  mem_mb: 45000 # memory in MB
+  t: 32 # number of threads
+  partition: "himem"
+
+# Set memory and threads for medium demanding rules
+medium:
+  mem_mb: 16000 # memory in MB
+  t: 16 # number of threads
+  partition: "medium" # partition to use for medium memory jobs
+
+# Set memory and threads for low demanding rules
+low:
+  mem_mb: 5000 # memory in MB
+  t: 8 # number of threads
+  partition: "short" # partition to use for low memory jobs
+
+# Set the path to the input directory (this directory must contain
+# one subdirectory for each sample, and the subdirectories must be named after the sample)
+input_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/" # use absolute path and add trailing slash
+
+# Customise the results directory
+output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/" # use absolute path and add trailing slash
+
+# K-mer size determination strategy
+# Note that if you set this to "manual", you must also set the k-mer size for spades, megahit, abyss, sparseassembler, minia, and masurca.
+# If you set this to "kmergenie", kmergenie will be used to determine the optimal k-mer size and the values defined below for each rule will be ignored.
+# If you set this to "reads_length", seqkit will be used to calculate the median length of the reads, and the kmer will be set to 2/3rds of this value. Note that the k-mer values defined below for each rule will be ignored.
+# For spades when kmer_strategy is set to "kmergenie" or "reads_length" the values found by these two methods will be added to this list: 21, 33, 55,77.
+# For megahit when kmer_strategy is set to "kmergenie" or "reads_length" the values found by these two methods will be added to this list:21, 29, 39, 59, 79, 99, 119, 141
+# For the other assemblers only the predicted k-mer will be used when kmer_strategy is set to "kmergenie" or "reads_length".
+
+kmer_strategy:
+  mode: "manual" # "kmergenie" for KmerGenie, "reads_length" to calculate the k-mer size based on the median reads length, "manual" for user-defined k-mer sizes.
+
+# Customise kmergenie parameters
+kmergenie:
+  "k": 121 # largest k-mer size to consider (default: 121)
+  "l": 15 # smallest k-mer size to consider (default: 15)
+  optional_params: {} # if you do not want to use any optional parameters, add `{}`
+
+# Choose which assemblers to run
+assemblers:
+  spades: True
+  megahit: True
+  abyss: True
+  sparseassembler: True
+  minia: True
+  masurca: True
+
+# Customise spades parameters
+# please do not use the `-o` option here, it is set into the workflow
+spades:
+  "k": "auto" # list of k-mer sizes (must be odd and less than 128) [default: 'auto']
+  optional_params:
+    "--only-assembler": True # use this to skip the read error correction step (reads are already cleaned)
+
+# Customise megahit parameters
+megahit:
+  "k": "31,51,71,91,99" #comma-separated list of kmer size all must be odd, in the range 15-255, increment <= 28) [21,29,39,59,79,99,119,141]
+  optional_params:
+    "--no-mercy": True
+    "--min-count": 3 # suggested value for single genome assembly
+
+# Customise abyss parameters
+# please do not use the `-j` and `-C` options here, they are set into the workflow
+abyss:
+  "k": 21
+  "B": "8G" # note that this must be lower than "mem_mb", otherwise abyss fails. See docs at https://github.com/bcgsc/abyss?tab=readme-ov-file#bloom-filter-mode
+  optional_params: # if you do not want to use any optional parameters, add `{}` here
+    "kc": 2
+
+# Customise sparseassembler parameters
+sparseassembler:
+  "k": 21
+  "GS": 50000000 # genome size estimation in bp (used for memory pre-allocation), suggest a large value if possible.(e.g. ~ 3x genome size)
+  "Scaffold": 1 # for scaffolding with paired-end reads, set to 1
+  "ExpCov": 10 # expected coverage (for scaffolding)
+  optional_params: # if you do not want to use any optional parameters, add `{}` here
+    "g": 10
+    "LD": 0
+    "NodeCovTh": 1
+    "EdgeCovTh": 0
+
+# Customise minia parameters
+minia:
+  "k": 21
+  optional_params: {} # if you do not want to use any optional parameters, add `{}` here
+#    "-histo2D": 1 # enable 2D histogram output
+
+# Customise masurca parameters
+masurca:
+  fragment_mean: 500 # mean insert size for your PE library (adjust to your data)
+  fragment_stdev: 50 # stdev for your PE library (adjust to your data)
+  k: auto # values between 25 and 127 are supported, auto will compute the optimal size based on the read data and GC content
+  jf_size: 100000000 # this is mandatory jellyfish hash size -- a safe value is estimated_genome_size*20
+  ca_parameters: cgwErrorRate=0.15 # set cgwErrorRate=0.25 for bacteria and 0.1<=cgwErrorRate<=0.15 for other organisms.
+# Note that the following parameters are always set as follows:
+# USE_GRID=0
+# CLOSE_GAPS=1
+# SOAP_ASSEMBLY=0
+# MEGA_READS_ONE_PASS=0
+# other parameters for long-reads, jump reads, mate-pairs, and slurm related options (customisable from masurca config) are ignored (for slurm, snakemake will take care of it).
+
+# Customise busco parameters
+busco:
+  lineage_general: "/home/lobinu/git_repos/FSP_assembly_benchmarking/resources/fungi_odb12" # chose a "general" dataset, in our case "fungi_odb10"
+  lineage_specific: "/home/lobinu/git_repos/FSP_assembly_benchmarking/resources/basidiomycota_odb12" # chose a more specific dataset, for example "basidiomycota_odb12", "ascomycota_odb12", etc.
+  optional_params: # if you do not want to use any optional parameters, add `{}` here
+    "--mode": "genome"
+    #    "--metaeuk": True
+    "--offline": True # use this if you do not want to download the lineage dataset from the web, but use a local copy instead
+
+# Customise quast parameters
+quast:
+  optional_params: {} # if you do not want to use any optional parameters, add `{}` here
+#    "--circos": True # produces a Circos plot
+
+# Customise fastK parameters
+fastk:
+  k: 17 # k-mer size, adjust to your data
+  t: 1 # include kmer frequency >= t in the output
+
+# Customise merquryfk parameters
+merquryfk:
+  optional_params: # if you do not want to use any optional parameters, add `{}` here
+    "-z": True # outputs assembly plots in addition to spectra copy number
+#    "-pdf": True # outputs results in PDF format (default is png)
+
+# Customise pilon parameters
+pilon:
+  optional_params: # if you do not want to use any optional parameters, add `{}` here
+    "--K": 47 # Kmer size used by internal assembler (default 47).
+    "--fix": "all" # A comma-separated list of categories of issues to try to fix: "all": all of the above (default);
+    "--changes": True # Output a file with the changes made to the assembly.
