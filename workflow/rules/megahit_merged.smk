@@ -21,6 +21,7 @@ rule megahit:
     threads: get_medium_threads
     resources:
         mem_mb=get_medium_mem,
+        partition=config["medium"]["partition"],
     log:
         "logs/{sample}/megahit.log",
     benchmark:

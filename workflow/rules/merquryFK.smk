@@ -24,6 +24,7 @@ rule merquryfk:
     threads: get_low_threads
     resources:
         mem_mb=get_low_mem,
+        partition=config["low"]["partition"],
     log:
         "logs/{sample}/merquryfk_{sample}_{assembler}.log",
     benchmark:

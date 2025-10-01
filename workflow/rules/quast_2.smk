@@ -12,6 +12,7 @@ rule quast_2:
     threads: get_low_threads
     resources:
         mem_mb=get_low_mem,
+        partition=config["low"]["partition"],
     log:
         "logs/{sample}/quast_best_assembly_pilon.log",
     benchmark:

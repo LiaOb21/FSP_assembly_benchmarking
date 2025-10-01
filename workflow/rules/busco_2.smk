@@ -19,6 +19,7 @@ rule busco_2:
     threads: get_medium_threads
     resources:
         mem_mb=get_medium_mem,
+        partition=config["medium"]["partition"],
     log:
         "logs/{sample}/busco_best_assembly_pilon.log",
     benchmark:

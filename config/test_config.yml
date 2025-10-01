@@ -18,10 +18,10 @@ low:
 
 # Set the path to the input directory (this directory must contain
 # one subdirectory for each sample, and the subdirectories must be named after the sample)
-input_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/test_data/" # use absolute path and add trailing slash
+input_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/" # use absolute path and add trailing slash
 
 # Customise the results directory
-output_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/results_2/" # use absolute path and add trailing slash
+output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results_merged/" # use absolute path and add trailing slash
 
 # K-mer size determination strategy
 # Note that if you set this to "manual", you must also set the k-mer size for spades, megahit, abyss, sparseassembler, minia, and masurca.
@@ -32,7 +32,7 @@ output_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/results_2/" # use abs
 # For the other assemblers only the predicted k-mer will be used when kmer_strategy is set to "kmergenie" or "reads_length".
 
 kmer_strategy:
-  mode: "kmergenie" # "kmergenie" for KmerGenie, "reads_length" to calculate the k-mer size based on the median reads length, "manual" for user-defined k-mer sizes.
+  mode: "manual" # "kmergenie" for KmerGenie, "reads_length" to calculate the k-mer size based on the median reads length, "manual" for user-defined k-mer sizes.
 
 # Customise kmergenie parameters
 kmergenie:
@@ -47,7 +47,7 @@ assemblers:
   abyss: True
   sparseassembler: True
   minia: True
-  masurca: True
+  masurca: False
 
 # Customise spades parameters
 # please do not use the `-o` option here, it is set into the workflow
@@ -105,8 +105,8 @@ masurca:
 
 # Customise busco parameters
 busco:
-  lineage_general: "/home/lia/git_repos/FSP_assembly_benchmarking/resources/fungi_odb12" # chose a "general" dataset, in our case "fungi_odb10"
-  lineage_specific: "/home/lia/git_repos/FSP_assembly_benchmarking/resources/basidiomycota_odb12" # chose a more specific dataset, for example "basidiomycota_odb12", "ascomycota_odb12", etc.
+  lineage_general: "/home/lobinu/git_repos/FSP_assembly_benchmarking/resources/fungi_odb12" # chose a "general" dataset, in our case "fungi_odb10"
+  lineage_specific: "/home/lobinu/git_repos/FSP_assembly_benchmarking/resources/basidiomycota_odb12" # chose a more specific dataset, for example "basidiomycota_odb12", "ascomycota_odb12", etc.
   optional_params: # if you do not want to use any optional parameters, add `{}` here
     "--mode": "genome"
     #    "--metaeuk": True

@@ -20,6 +20,7 @@ rule bwa_mem2_samtools:
     threads: get_high_threads
     resources:
         mem_mb=get_high_mem,
+        partition=config["high"]["partition"],
     log:
         "logs/{sample}/bwa_mem2_best_assembly.log",
     benchmark:

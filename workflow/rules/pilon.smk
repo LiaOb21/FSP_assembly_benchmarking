@@ -26,6 +26,7 @@ rule pilon:
     threads: get_high_threads
     resources:
         mem_mb=get_high_mem,
+        partition=config["high"]["partition"],
     log:
         "logs/{sample}/pilon_best_assembly.log",
     benchmark:

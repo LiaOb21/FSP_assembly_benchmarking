@@ -22,6 +22,7 @@ rule spades:
     threads: get_high_threads
     resources:
         mem_mb=get_high_mem,
+        partition=config["high"]["partition"],
     log:
         "logs/{sample}/spades.log",
     benchmark:

@@ -8,6 +8,7 @@ rule masurca_config:
     threads: get_high_threads
     resources:
         mem_mb=get_low_mem,
+        partition=config["low"]["partition"],
     params:
         fragment_mean=config["masurca"].get("fragment_mean", 500),
         fragment_stdev=config["masurca"].get("fragment_stdev", 50),

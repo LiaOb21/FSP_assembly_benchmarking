@@ -20,6 +20,7 @@ rule fastk:
     threads: get_medium_threads
     resources:
         mem_mb=get_medium_mem,
+        partition=config["medium"]["partition"],
     log:
         "logs/{sample}/fastk.log",
     benchmark:

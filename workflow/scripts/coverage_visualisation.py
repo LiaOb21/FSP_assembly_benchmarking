@@ -104,14 +104,21 @@ def create_coverage_plots(coverage_file, output_file, sample_name, assembler_nam
     covered_bases = (coverage_data['coverage'] * coverage_data['endpos'] / 100).sum()
     overall_coverage_pct = (covered_bases / total_bases) * 100 if total_bases > 0 else 0
     
-    # Assembly quality metrics
-    n50_length = calculate_n50(coverage_data['endpos'].values)
+    # Longest and shortest contigs
     longest_contig = coverage_data['endpos'].max()
     shortest_contig = coverage_data['endpos'].min()
     
     # Count contigs smaller than 250bp
     small_contigs_count = len(coverage_data[coverage_data['endpos'] < 250])
     small_contigs_pct = (small_contigs_count / len(coverage_data)) * 100
+
+    # Count contigs longer than 1kb
+    long_contigs_count = len(coverage_data[coverage_data['endpos'] >= 1000])
+    long_contigs_pct = (long_contigs_count / len(coverage_data)) * 100
+
+    # Count contigs between 250bp and 1kb
+    mid_contigs_count = len(coverage_data[(coverage_data['endpos'] >= 250) & (coverage_data['endpos'] < 1000)])
+    mid_contigs_pct = (mid_contigs_count / len(coverage_data)) * 100
     
     # ==================== PRINT SUMMARY STATISTICS ====================
     
@@ -126,7 +133,6 @@ def create_coverage_plots(coverage_file, output_file, sample_name, assembler_nam
     print(f"Min coverage: {min_coverage:.2f}x")
     print(f"Standard deviation: {std_coverage:.2f}x")
     print(f"Overall coverage: {overall_coverage_pct:.2f}%")
-    print(f"N50: {n50_length:,} bp")
     
     # Print mapping statistics if available
     if mapping_stats:
@@ -150,14 +156,19 @@ def create_coverage_plots(coverage_file, output_file, sample_name, assembler_nam
     # Plot 1: Coverage distribution histogram (top-left)
     ax1 = axes[0, 0]
     n, bins, patches = ax1.hist(coverage_data['meandepth'], bins=50, alpha=0.7, 
-                               color='skyblue', edgecolor='black', density=False)
+                            color='skyblue', edgecolor='black', density=False)
+
+    # Force Y-axis to show integer counts
+    ax1.yaxis.set_major_locator(plt.MaxNLocator(integer=True))  # Force integer ticks
+    ax1.set_ylim(0, max(n) + 1)  # Set Y-axis limit to actual max count + 1
+
     # Add vertical lines for key statistics
     ax1.axvline(avg_coverage, color='red', linestyle='--', linewidth=2, 
-               label=f'Mean: {avg_coverage:.1f}x')
+            label=f'Mean: {avg_coverage:.1f}x')
     ax1.axvline(median_coverage, color='green', linestyle='--', linewidth=2, 
-               label=f'Median: {median_coverage:.1f}x')
+            label=f'Median: {median_coverage:.1f}x')
     ax1.axvline(peak_coverage, color='orange', linestyle='--', linewidth=2, 
-               label=f'Peak: {peak_coverage:.1f}x')
+            label=f'Peak: {peak_coverage:.1f}x')
     ax1.set_xlabel('Coverage Depth (x)')
     ax1.set_ylabel('Number of Contigs')
     ax1.set_title('Coverage Distribution')
@@ -203,9 +214,11 @@ def create_coverage_plots(coverage_file, output_file, sample_name, assembler_nam
     ax4 = axes[1, 0]
     ax4.hist(coverage_data['endpos'], bins=50, alpha=0.7, color='lightgreen', 
             edgecolor='black')
-    # Add vertical line for 250bp threshold
+    # Add vertical lines for thresholds
     ax4.axvline(250, color='red', linestyle='--', linewidth=2, 
-               label=f'250bp threshold\n({small_contigs_count} contigs below)')
+            label=f'250bp threshold\n({small_contigs_count} contigs below)')
+    ax4.axvline(1000, color='blue', linestyle='--', linewidth=2, 
+            label=f'1kb threshold\n({long_contigs_count} contigs above)')
     ax4.set_xlabel('Contig Length (bp)')
     ax4.set_ylabel('Number of Contigs')
     ax4.set_title('Contig Length Distribution')
@@ -231,10 +244,11 @@ Std Deviation: {std_coverage:.2f}x
 Assembly Info:
 Total Contigs: {len(coverage_data):,}
 Contigs < 250bp: {small_contigs_count:,} ({small_contigs_pct:.1f}%)
+Contigs 250bp-1kb: {mid_contigs_count:,} ({mid_contigs_pct:.1f}%)
+Contigs > 1kb: {long_contigs_count:,} ({long_contigs_pct:.1f}%)
 Total Length: {total_bases:,} bp
 Longest Contig: {longest_contig:,} bp
 Shortest Contig: {shortest_contig:,} bp
-N50: {n50_length:,} bp
 Overall Coverage: {overall_coverage_pct:.1f}%
 """
     
@@ -265,7 +279,9 @@ Properly Paired: {mapping_stats.get('properly_paired', 'N/A'):,}
 
 Quality Scores:
 Mean Base Quality: {coverage_data['meanbaseq'].mean():.1f}
+Median Base Quality: {coverage_data['meanbaseq'].median():.1f}
 Mean Mapping Quality: {coverage_data['meanmapq'].mean():.1f}
+Median Mapping Quality: {coverage_data['meanmapq'].median():.1f}
 
 Coverage Info:
 Total Mapped Reads: {coverage_data['numreads'].sum():,}
@@ -277,7 +293,9 @@ Avg Reads per Contig: {coverage_data['numreads'].mean():.1f}
 (No flagstat file provided)
 
 Mean Base Quality: {coverage_data['meanbaseq'].mean():.1f}
+Median Base Quality: {coverage_data['meanbaseq'].median():.1f}
 Mean Mapping Quality: {coverage_data['meanmapq'].mean():.1f}
+Median Mapping Quality: {coverage_data['meanmapq'].median():.1f}
 
 Per-Contig Ranges:
 Base Quality: {coverage_data['meanbaseq'].min():.1f} - {coverage_data['meanbaseq'].max():.1f}
@@ -319,6 +337,10 @@ Max Reads per Contig: {coverage_data['numreads'].max():,}
         'total_contigs': len(coverage_data),
         'contigs_under_250bp': small_contigs_count,
         'contigs_under_250bp_percent': small_contigs_pct,
+        'contigs_250bp_to_1kb': mid_contigs_count,
+        'contigs_250bp_to_1kb_percent': mid_contigs_pct,
+        'contigs_over_1kb': long_contigs_count,
+        'contigs_over_1kb_percent': long_contigs_pct,
         'total_bases': total_bases,
         'mean_coverage': avg_coverage,
         'weighted_mean_coverage': weighted_avg_coverage,
@@ -327,11 +349,12 @@ Max Reads per Contig: {coverage_data['numreads'].max():,}
         'min_coverage': min_coverage,
         'std_coverage': std_coverage,
         'overall_coverage_pct': overall_coverage_pct,
-        'n50': n50_length,
         'longest_contig': longest_contig,
         'shortest_contig': shortest_contig,
         'mean_base_quality': coverage_data['meanbaseq'].mean(),
-        'mean_mapping_quality': coverage_data['meanmapq'].mean()
+        'median_base_quality': coverage_data['meanbaseq'].median(),
+        'mean_mapping_quality': coverage_data['meanmapq'].mean(),
+        'median_mapping_quality': coverage_data['meanmapq'].median(),
     }
     
     # Add mapping statistics if available
@@ -345,29 +368,6 @@ Max Reads per Contig: {coverage_data['numreads'].max():,}
         })
     
     return stats_dict
-
-def calculate_n50(lengths):
-    """
-    Calculate N50 statistic from a list of contig lengths.
-    N50 is the length of the shortest contig at 50% of the total genome length.
-    
-    Args:
-        lengths (array-like): Array of contig lengths
-        
-    Returns:
-        int: N50 length in base pairs
-    """
-    # Sort lengths in descending order (largest first)
-    sorted_lengths = np.sort(lengths)[::-1]
-    total_length = np.sum(sorted_lengths)
-    cumulative_length = 0
-    
-    # Find the contig length at which we reach 50% of total length
-    for length in sorted_lengths:
-        cumulative_length += length
-        if cumulative_length >= total_length * 0.5:
-            return length
-    return 0
 
 def main():
     parser = argparse.ArgumentParser(description='Create coverage visualization plots')

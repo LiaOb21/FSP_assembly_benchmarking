@@ -16,6 +16,7 @@ rule select_best_assembly:
     threads: 1
     resources:
         mem_mb=get_low_mem,
+        partition=config["low"]["partition"],
     log:
         "logs/{sample}/select_best_assembly.log",
     benchmark:

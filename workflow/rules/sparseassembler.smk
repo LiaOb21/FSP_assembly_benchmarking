@@ -26,6 +26,7 @@ rule sparseassembler:
     threads: 1
     resources:
         mem_mb=get_medium_mem,
+        partition=config["medium"]["partition"],
     log:
         "logs/{sample}/sparseassembler.log",
     benchmark:
