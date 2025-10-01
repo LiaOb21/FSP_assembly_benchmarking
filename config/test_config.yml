@@ -21,7 +21,7 @@ low:
 input_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/" # use absolute path and add trailing slash
 
 # Customise the results directory
-output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results_merged/" # use absolute path and add trailing slash
+output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/" # use absolute path and add trailing slash
 
 # K-mer size determination strategy
 # Note that if you set this to "manual", you must also set the k-mer size for spades, megahit, abyss, sparseassembler, minia, and masurca.
@@ -47,7 +47,7 @@ assemblers:
   abyss: True
   sparseassembler: True
   minia: True
-  masurca: False
+  masurca: True
 
 # Customise spades parameters
 # please do not use the `-o` option here, it is set into the workflow

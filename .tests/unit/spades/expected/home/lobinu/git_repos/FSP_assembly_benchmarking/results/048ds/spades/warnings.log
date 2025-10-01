@@ -1,7 +1,7 @@
 
 === Error correction and assembling warnings:
- * 0:00:01.669     4M / 1332M WARN    General                 (kmer_coverage_model.cpp   : 328)   Valley value was estimated improperly, reset to 3
- * 0:00:01.712     3M / 1332M WARN    General                 (simplification.cpp        : 517)   The determined erroneous connection coverage threshold may be determined improperly
- * 0:00:00.632     4M / 1324M WARN    General                 (kmer_coverage_model.cpp   : 328)   Valley value was estimated improperly, reset to 4
- * 0:00:00.632     4M / 1324M WARN    General                 (kmer_coverage_model.cpp   : 367)   Failed to determine erroneous kmer threshold. Threshold set to: 4
+ * 0:00:01.718     4M / 1332M WARN    General                 (kmer_coverage_model.cpp   : 328)   Valley value was estimated improperly, reset to 3
+ * 0:00:01.779     3M / 1332M WARN    General                 (simplification.cpp        : 517)   The determined erroneous connection coverage threshold may be determined improperly
+ * 0:00:00.602     4M / 1324M WARN    General                 (kmer_coverage_model.cpp   : 328)   Valley value was estimated improperly, reset to 4
+ * 0:00:00.602     4M / 1324M WARN    General                 (kmer_coverage_model.cpp   : 367)   Failed to determine erroneous kmer threshold. Threshold set to: 4
 ======= Warnings saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/warnings.log

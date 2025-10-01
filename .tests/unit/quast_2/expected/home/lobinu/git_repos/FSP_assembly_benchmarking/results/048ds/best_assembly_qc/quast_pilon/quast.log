@@ -7,7 +7,7 @@ System information:
   Python version: 3.13.5
   CPUs number: 32
 
-Started: 2025-09-29 15:21:36
+Started: 2025-10-01 17:03:27
 
 Logging to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/quast_pilon/quast.log
 
@@ -20,7 +20,7 @@ Contigs:
   Pre-processing...
   /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/assemblies/048ds_best_assembly_pilon.fa ==> 048ds_best_assembly_pilon
 
-2025-09-29 15:21:36
+2025-10-01 17:03:28
 Running Basic statistics processor...
   Contig files: 
     048ds_best_assembly_pilon
@@ -38,14 +38,14 @@ Done.
 
 NOTICE: Genes are not predicted by default. Use --gene-finding or --glimmer option to enable it.
 
-2025-09-29 15:21:37
+2025-10-01 17:03:28
 Creating large visual summaries...
 This may take a while: press Ctrl-C to skip this step..
   1 of 2: Creating PDF with all tables and plots...
   2 of 2: Creating Icarus viewers...
 Done
 
-2025-09-29 15:21:37
+2025-10-01 17:03:28
 RESULTS:
   Text versions of total report are saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/quast_pilon/report.txt, report.tsv, and report.tex
   Text versions of transposed total report are saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/quast_pilon/transposed_report.txt, transposed_report.tsv, and transposed_report.tex
@@ -54,8 +54,8 @@ RESULTS:
   Icarus (contig browser) is saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/quast_pilon/icarus.html
   Log is saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/quast_pilon/quast.log
 
-Finished: 2025-09-29 15:21:37
-Elapsed time: 0:00:00.750279
+Finished: 2025-10-01 17:03:28
+Elapsed time: 0:00:00.756378
 NOTICEs: 1; WARNINGs: 1; non-fatal ERRORs: 0
 
 Thank you for using QUAST!

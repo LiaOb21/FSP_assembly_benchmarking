@@ -7,7 +7,7 @@ System information:
   Python version: 3.13.5
   CPUs number: 32
 
-Started: 2025-09-29 15:20:57
+Started: 2025-10-01 17:02:33
 
 Logging to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/quast.log
 
@@ -25,7 +25,7 @@ Contigs:
   5  /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/assemblies/048ds_minia.fa ==> 048ds_minia
   6  /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/assemblies/048ds_masurca.fa ==> 048ds_masurca
 
-2025-09-29 15:20:57
+2025-10-01 17:02:34
 Running Basic statistics processor...
   Contig files: 
     1  048ds_spades
@@ -36,7 +36,7 @@ Running Basic statistics processor...
     6  048ds_masurca
   Calculating N50 and L50...
     1  048ds_spades, N50 = 306, L50 = 73, auN = 334.4, Total length = 55473, GC % = 43.14, # N's per 100 kbp =  0.00
-    2  048ds_megahit, N50 = 308, L50 = 2, auN = 410.6, Total length = 1106, GC % = 45.21, # N's per 100 kbp =  0.00
+    2  048ds_megahit, N50 = 308, L50 = 2, auN = 410.6, Total length = 1106, GC % = 45.39, # N's per 100 kbp =  0.00
     3  048ds_abyss, N50 = 338, L50 = 3, auN = 317.6, Total length = 1876, GC % = 42.80, # N's per 100 kbp =  0.00
     4  048ds_sparseassembler, N50 = 303, L50 = 6, auN = 319.4, Total length = 3715, GC % = 43.50, # N's per 100 kbp =  0.00
     5  048ds_minia, N50 = 291, L50 = 4, auN = 302.7, Total length = 2677, GC % = 44.04, # N's per 100 kbp =  0.00
@@ -67,14 +67,14 @@ Done.
 
 NOTICE: Genes are not predicted by default. Use --gene-finding or --glimmer option to enable it.
 
-2025-09-29 15:20:58
+2025-10-01 17:02:35
 Creating large visual summaries...
 This may take a while: press Ctrl-C to skip this step..
   1 of 2: Creating PDF with all tables and plots...
   2 of 2: Creating Icarus viewers...
 Done
 
-2025-09-29 15:20:58
+2025-10-01 17:02:35
 RESULTS:
   Text versions of total report are saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/report.txt, report.tsv, and report.tex
   Text versions of transposed total report are saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/transposed_report.txt, transposed_report.tsv, and transposed_report.tex
@@ -83,8 +83,8 @@ RESULTS:
   Icarus (contig browser) is saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/icarus.html
   Log is saved to /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/quast/quast.log
 
-Finished: 2025-09-29 15:20:58
-Elapsed time: 0:00:01.762732
+Finished: 2025-10-01 17:02:35
+Elapsed time: 0:00:01.746153
 NOTICEs: 1; WARNINGs: 1; non-fatal ERRORs: 0
 
 Thank you for using QUAST!
