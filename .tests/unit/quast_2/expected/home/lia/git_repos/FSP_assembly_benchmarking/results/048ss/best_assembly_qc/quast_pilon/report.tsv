@@ -1,0 +1,23 @@
+Assembly	048ss_best_assembly_pilon
+# contigs (>= 0 bp)	7
+# contigs (>= 1000 bp)	1
+# contigs (>= 5000 bp)	0
+# contigs (>= 10000 bp)	0
+# contigs (>= 25000 bp)	0
+# contigs (>= 50000 bp)	0
+Total length (>= 0 bp)	3182
+Total length (>= 1000 bp)	1004
+Total length (>= 5000 bp)	0
+Total length (>= 10000 bp)	0
+Total length (>= 25000 bp)	0
+Total length (>= 50000 bp)	0
+# contigs	7
+Largest contig	1004
+Total length	3182
+GC (%)	41.33
+N50	372
+N90	355
+auN	566.5
+L50	3
+L90	6
+# N's per 100 kbp	0.00

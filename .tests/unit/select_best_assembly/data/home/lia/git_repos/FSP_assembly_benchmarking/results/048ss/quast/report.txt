@@ -1,0 +1,25 @@
+All statistics are based on contigs of size >= 250 bp, unless otherwise noted (e.g., "# contigs (>= 0 bp)" and "Total length (>= 0 bp)" include all contigs).
+
+Assembly                    048ss_spades  048ss_megahit  048ss_abyss  048ss_sparseassembler  048ss_minia  048ss_masurca
+# contigs (>= 0 bp)         1046          12             248          8313                   704          7            
+# contigs (>= 1000 bp)      1             0              0            0                      0            1            
+# contigs (>= 5000 bp)      0             0              0            0                      0            0            
+# contigs (>= 10000 bp)     0             0              0            0                      0            0            
+# contigs (>= 25000 bp)     0             0              0            0                      0            0            
+# contigs (>= 50000 bp)     0             0              0            0                      0            0            
+Total length (>= 0 bp)      286922        5981           34799        550980                 85131        3182         
+Total length (>= 1000 bp)   1275          0              0            0                      0            1004         
+Total length (>= 5000 bp)   0             0              0            0                      0            0            
+Total length (>= 10000 bp)  0             0              0            0                      0            0            
+Total length (>= 25000 bp)  0             0              0            0                      0            0            
+Total length (>= 50000 bp)  0             0              0            0                      0            0            
+# contigs                   474           12             33           45                     39           7            
+Largest contig              1275          976            561          486                    434          1004         
+Total length                160192        5981           10591        14419                  11903        3182         
+GC (%)                      37.59         37.89          34.94        36.82                  35.69        41.33        
+N50                         328           506            311          312                    296          372          
+N90                         258           327            265          261                    255          355          
+auN                         372.0         566.4          334.0        331.7                  313.6        566.5        
+L50                         186           5              15           20                     17           3            
+L90                         411           11             29           40                     35           6            
+# N's per 100 kbp           0.00          0.00           0.00         6.94                   0.00         0.00         

@@ -1,0 +1,88 @@
+‡*---
+max read length: 147
+nomerge max read length: 147
+average read length: 121.871
+average coverage: 1.36708
+libraries:
+  - type:            paired-end
+    number:          1
+    orientation:     fr
+    left reads:
+      - '/home/lia/git_repos/FSP_assembly_benchmarking/test_data/048ss/048ss_trimmed.R1.fq.gz'
+    right reads:
+      - '/home/lia/git_repos/FSP_assembly_benchmarking/test_data/048ss/048ss_trimmed.R2.fq.gz'
+    data:
+      unmerged read length: 147
+      merged read length: 0
+      insert size mean: 174.326
+      insert size deviation: 71.432
+      insert size left quantile: 88
+      insert size right quantile: 268
+      insert size median: 166
+      insert size mad: 59
+      insert size distribution: { 16: 1, 53: 1, 55: 1, 56: 3, 58: 1, 59: 2, 
+                                  60: 3, 61: 2, 62: 4, 63: 1, 64: 4, 65: 1, 
+                                  66: 1, 67: 2, 68: 3, 69: 1, 71: 1, 72: 5, 
+                                  73: 2, 74: 4, 75: 2, 76: 2, 77: 8, 78: 6, 
+                                  79: 5, 80: 3, 81: 7, 82: 8, 83: 4, 84: 8, 
+                                  85: 5, 86: 4, 87: 4, 88: 9, 89: 6, 90: 8, 
+                                  91: 8, 92: 3, 93: 6, 94: 3, 95: 6, 96: 6, 
+                                  97: 9, 98: 11, 99: 5, 100: 6, 101: 6, 
+                                  102: 7, 103: 10, 104: 9, 105: 9, 106: 5, 
+                                  107: 3, 108: 3, 109: 5, 110: 5, 111: 2, 
+                                  112: 5, 113: 5, 114: 7, 115: 5, 116: 7, 
+                                  117: 4, 118: 8, 119: 9, 120: 9, 121: 6, 
+                                  122: 6, 123: 1, 124: 4, 125: 10, 126: 3, 
+                                  127: 4, 129: 5, 130: 5, 131: 9, 132: 3, 
+                                  133: 4, 134: 5, 135: 12, 136: 10, 137: 1, 
+                                  138: 8, 139: 7, 140: 9, 141: 5, 142: 9, 
+                                  143: 1, 144: 4, 145: 10, 146: 5, 147: 5, 
+                                  148: 6, 149: 4, 150: 4, 151: 7, 152: 8, 
+                                  153: 4, 154: 4, 155: 6, 156: 4, 157: 4, 
+                                  158: 8, 159: 6, 160: 3, 161: 7, 162: 3, 
+                                  163: 2, 164: 7, 165: 4, 166: 4, 167: 4, 
+                                  168: 5, 169: 6, 170: 3, 171: 2, 172: 5, 
+                                  173: 8, 174: 4, 175: 3, 176: 1, 177: 8, 
+                                  178: 5, 179: 4, 180: 5, 181: 2, 182: 2, 
+                                  184: 7, 185: 4, 186: 3, 187: 2, 188: 5, 
+                                  189: 6, 190: 4, 191: 10, 192: 3, 193: 5, 
+                                  194: 9, 195: 5, 196: 2, 197: 8, 198: 6, 
+                                  199: 11, 200: 7, 201: 4, 202: 5, 203: 3, 
+                                  204: 4, 205: 9, 206: 8, 207: 9, 208: 3, 
+                                  209: 5, 210: 2, 211: 7, 212: 2, 213: 7, 
+                                  214: 8, 215: 6, 216: 7, 217: 2, 219: 6, 
+                                  220: 6, 221: 5, 222: 3, 223: 4, 224: 3, 
+                                  225: 3, 226: 6, 227: 5, 228: 4, 229: 7, 
+                                  230: 3, 231: 7, 232: 1, 233: 2, 234: 4, 
+                                  235: 7, 236: 2, 237: 1, 238: 2, 239: 2, 
+                                  240: 2, 242: 9, 243: 5, 244: 4, 245: 6, 
+                                  246: 1, 247: 4, 248: 4, 249: 4, 250: 5, 
+                                  251: 2, 252: 2, 253: 3, 254: 3, 256: 3, 
+                                  257: 5, 258: 4, 259: 6, 260: 5, 261: 2, 
+                                  262: 8, 263: 8, 265: 4, 266: 7, 267: 4, 
+                                  268: 4, 269: 4, 270: 6, 271: 4, 272: 2, 
+                                  273: 2, 274: 5, 275: 2, 276: 3, 277: 3, 
+                                  280: 1, 281: 3, 282: 4, 283: 4, 284: 1, 
+                                  285: 1, 287: 1, 289: 1, 290: 1, 291: 2, 
+                                  293: 1, 295: 2, 296: 1, 297: 3, 300: 1, 
+                                  301: 1, 309: 1, 310: 1, 312: 2, 313: 1, 
+                                  316: 4, 317: 2, 318: 1, 320: 1, 321: 3, 
+                                  323: 1, 324: 1, 326: 1, 327: 1, 328: 1, 
+                                  329: 1, 331: 1, 332: 1, 336: 1, 337: 2, 
+                                  339: 1, 340: 1, 343: 1, 345: 1, 346: 2, 
+                                  352: 1, 353: 1, 354: 1, 358: 1, 362: 1, 
+                                  363: 1, 371: 3, 373: 1, 377: 1, 384: 1, 
+                                  411: 1, 414: 1, 420: 1, 424: 1, 434: 1 }
+      pi threshold:    0
+      binary reads info:
+        binary converted: true
+        bin reads info file: '/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/spades/.bin_reads/INFO_0'
+        paired read prefix: '/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/spades/.bin_reads/paired_0'
+        merged read prefix: '/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/spades/.bin_reads/merged_0'
+        single read prefix: '/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/spades/.bin_reads/single_0'
+        chunk num:       8
+      single reads mapped: false
+      library index:   0
+      number of reads: 21084
+      total nucleotides: 2569528
+...

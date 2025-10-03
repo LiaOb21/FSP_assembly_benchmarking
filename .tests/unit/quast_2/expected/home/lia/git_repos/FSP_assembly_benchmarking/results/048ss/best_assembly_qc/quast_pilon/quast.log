@@ -1,0 +1,61 @@
+/home/lia/git_repos/FSP_assembly_benchmarking/.snakemake/conda/130dac6e2d6acabb8099644d3243b236_/bin/quast /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/assemblies/048ss_best_assembly_pilon.fa -o /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/quast_pilon --min-contig 250 -t 8
+
+Version: 5.3.0
+
+System information:
+  OS: Linux-6.12.10-76061203-generic-x86_64-with-glibc2.35 (linux_64)
+  Python version: 3.13.5
+  CPUs number: 8
+
+Started: 2025-10-03 18:26:40
+
+Logging to /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/quast_pilon/quast.log
+
+CWD: /home/lia/git_repos/FSP_assembly_benchmarking
+Main parameters: 
+  MODE: default, threads: 8, min contig length: 250, min alignment length: 65, min alignment IDY: 95.0, \
+  ambiguity: one, min local misassembly length: 200, min extensive misassembly length: 1000
+
+Contigs:
+  Pre-processing...
+  /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/assemblies/048ss_best_assembly_pilon.fa ==> 048ss_best_assembly_pilon
+
+2025-10-03 18:26:41
+Running Basic statistics processor...
+  Contig files: 
+    048ss_best_assembly_pilon
+  Calculating N50 and L50...
+    048ss_best_assembly_pilon, N50 = 372, L50 = 3, auN = 566.5, Total length = 3182, GC % = 41.33, # N's per 100 kbp =  0.00
+  Drawing Nx plot...
+    saved to /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/quast_pilon/basic_stats/Nx_plot.pdf
+  Drawing cumulative plot...
+    saved to /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/quast_pilon/basic_stats/cumulative_plot.pdf
+  Drawing GC content plot...
+    saved to /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/quast_pilon/basic_stats/GC_content_plot.pdf
+  Drawing 048ss_best_assembly_pilon GC content plot...
+    saved to /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/quast_pilon/basic_stats/048ss_best_assembly_pilon_GC_content_plot.pdf
+Done.
+
+NOTICE: Genes are not predicted by default. Use --gene-finding or --glimmer option to enable it.
+
+2025-10-03 18:26:41
+Creating large visual summaries...
+This may take a while: press Ctrl-C to skip this step..
+  1 of 2: Creating PDF with all tables and plots...
+  2 of 2: Creating Icarus viewers...
+Done
+
+2025-10-03 18:26:42
+RESULTS:
+  Text versions of total report are saved to /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/quast_pilon/report.txt, report.tsv, and report.tex
+  Text versions of transposed total report are saved to /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/quast_pilon/transposed_report.txt, transposed_report.tsv, and transposed_report.tex
+  HTML version (interactive tables and plots) is saved to /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/quast_pilon/report.html
+  PDF version (tables and plots) is saved to /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/quast_pilon/report.pdf
+  Icarus (contig browser) is saved to /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/quast_pilon/icarus.html
+  Log is saved to /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/quast_pilon/quast.log
+
+Finished: 2025-10-03 18:26:42
+Elapsed time: 0:00:01.142244
+NOTICEs: 1; WARNINGs: 0; non-fatal ERRORs: 0
+
+Thank you for using QUAST!

@@ -9,9 +9,16 @@ A Snakemake workflow for *de novo* genome assembly using Illumina reads.
 
 This workflow was developed for the Fungarium Sequencing Project (FSP) at Royal Botanic Gardens, Kew. 
 
-- [Snakemake workflow: `FSP_assembly_benchmarking`](#snakemake-workflow-name)
+- [Snakemake workflow: `FSP_assembly_benchmarking`](#snakemake-workflow-fsp_assembly_benchmarking)
   - [Overview](#overview)
   - [Usage](#usage)
+    - [Download the repo](#download-the-repo)
+    - [Prepare the required inputs](#prepare-the-required-inputs)
+    - [Running the workflow locally:](#running-the-workflow-locally)
+    - [Running the workflow on the cluster](#running-the-workflow-on-the-cluster)
+  - [Note for kmergenie usage](#note-for-kmergenie-usage)
+  - [Note fro abyss](#note-fro-abyss)
+  - [obtain the list of busco databases](#obtain-the-list-of-busco-databases)
   - [Deployment options](#deployment-options)
   - [Authors](#authors)
   - [References](#references)
@@ -170,6 +177,45 @@ The first time that the workflow is run using kmergenie, the kmer size for the a
 ## Note fro abyss
 
 Pay attention to B parameter, that can trigger OOM errors.
+
+
+## obtain the list of busco databases
+
+This is an attempt to process samples with different taxonomy together, rather than processing them by groups. 
+
+First of all, obtain the full list of busco lineages and use the awk command to extract the lineages of the group of interest (e.g. fungi). The `_odb12` suffix refers to the version of the busco database.
+
+```
+conda activate busco 
+
+busco --list > busco_lineages.txt
+
+awk '/fungi_odb12/{flag=1; indent=length($0)-length(ltrim($0)); print "fungi_odb12"; next} 
+     flag && /- [a-z_]*_odb12/ {
+         current_indent=length($0)-length(ltrim($0))
+         if(current_indent <= indent) flag=0
+         else print gensub(/.*- ([a-z_]*_odb12).*/, "\\1", "g")
+     }
+     function ltrim(s) { sub(/^[ \t\r\n]+/, "", s); return s }' busco_lineages.txt > fungi_busco_lineages.txt
+```
+
+You will need to download all the database you need for your analysis. You can easily do this in this way:
+
+```
+for i in $(cat fungi_busco_lineages.txt); do
+  echo "downloading $i database"
+  busco --download_path . --download $i
+done
+```
+
+`fungi_busco_lineages.txt` will be the input for this in the config file:
+```
+busco:
+  database_list: path/to/fungi_busco_lineages.txt
+```
+
+To achieve this, we also need a tab separated taxonomy file containing the following columns: 'Sample', 'Family', 'Order', 'Class', 'Phylum'. Name them exactly as shown here (with capital letters).
+
 -----
 
 The usage of this workflow is described in the [Snakemake Workflow Catalog](https://snakemake.github.io/snakemake-workflow-catalog/docs/workflows/LiaOb21/FSP_assembly_benchmarking).

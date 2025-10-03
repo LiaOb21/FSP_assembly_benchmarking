@@ -22,14 +22,14 @@ def test_decompress_reads():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/fqreads/048ds/048ds_trimmed.R1.fq", file=sys.stderr)
+        print("/home/lia/git_repos/FSP_assembly_benchmarking/results/fqreads/048ss/048ss_trimmed.R1.fq", file=sys.stderr)
 
         # Run the test job.
         sp.check_output([
             "python",
             "-m",
             "snakemake", 
-            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/fqreads/048ds/048ds_trimmed.R1.fq",
+            "/home/lia/git_repos/FSP_assembly_benchmarking/results/fqreads/048ss/048ss_trimmed.R1.fq",
             "-f", 
             "-j1",
             "--target-files-omit-workdir-adjustment",

@@ -22,14 +22,14 @@ def test_spades():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/scaffolds.fasta /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/assemblies/048ds_spades.fa", file=sys.stderr)
+        print("/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/spades /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/spades/scaffolds.fasta /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/assemblies/048ss_spades.fa", file=sys.stderr)
 
         # Run the test job.
         sp.check_output([
             "python",
             "-m",
             "snakemake", 
-            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/scaffolds.fasta /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/assemblies/048ds_spades.fa",
+            "/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/spades /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/spades/scaffolds.fasta /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/assemblies/048ss_spades.fa",
             "-f", 
             "-j1",
             "--target-files-omit-workdir-adjustment",

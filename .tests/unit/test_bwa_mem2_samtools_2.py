@@ -22,14 +22,14 @@ def test_bwa_mem2_samtools_2():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/bwa_mem2_samtools_pilon/048ds_best_assembly_pilon.sam /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/bwa_mem2_samtools_pilon/048ds_best_assembly_pilon.bam /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/bwa_mem2_samtools_pilon/048ds_best_assembly_pilon_sorted.bam /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/bwa_mem2_samtools_pilon/048ds_best_assembly_pilon_coverage_stats.txt /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/bwa_mem2_samtools_pilon/048ds_best_assembly_pilon_flagstat.txt", file=sys.stderr)
+        print("/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/bwa_mem2_samtools_pilon/048ss_best_assembly_pilon.sam /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/bwa_mem2_samtools_pilon/048ss_best_assembly_pilon.bam /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/bwa_mem2_samtools_pilon/048ss_best_assembly_pilon_sorted.bam /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/bwa_mem2_samtools_pilon/048ss_best_assembly_pilon_coverage_stats.txt /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/bwa_mem2_samtools_pilon/048ss_best_assembly_pilon_flagstat.txt", file=sys.stderr)
 
         # Run the test job.
         sp.check_output([
             "python",
             "-m",
             "snakemake", 
-            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/bwa_mem2_samtools_pilon/048ds_best_assembly_pilon.sam /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/bwa_mem2_samtools_pilon/048ds_best_assembly_pilon.bam /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/bwa_mem2_samtools_pilon/048ds_best_assembly_pilon_sorted.bam /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/bwa_mem2_samtools_pilon/048ds_best_assembly_pilon_coverage_stats.txt /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/bwa_mem2_samtools_pilon/048ds_best_assembly_pilon_flagstat.txt",
+            "/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/bwa_mem2_samtools_pilon/048ss_best_assembly_pilon.sam /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/bwa_mem2_samtools_pilon/048ss_best_assembly_pilon.bam /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/bwa_mem2_samtools_pilon/048ss_best_assembly_pilon_sorted.bam /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/bwa_mem2_samtools_pilon/048ss_best_assembly_pilon_coverage_stats.txt /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/bwa_mem2_samtools_pilon/048ss_best_assembly_pilon_flagstat.txt",
             "-f", 
             "-j1",
             "--target-files-omit-workdir-adjustment",
