@@ -4,7 +4,7 @@ rule get_busco_db:
         taxonomy=config["busco"]["taxonomy_file"],
         busco_lineages=config["busco"]["database_list"],
     output:
-        specific_db=f"{output_dir}" + "{sample}/busco_specific/busco_db.txt",
+        specific_db=f"{output_dir}" + "{sample}/busco_db/busco_db.txt",
     params:
         fallback=config["busco"]["lineage_general"],
         extension=config["busco"]["extension"],

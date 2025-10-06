@@ -105,7 +105,7 @@ masurca:
 
 # Customise busco parameters
 busco:
-  taxonomy_file: "/home/lia/git_repos/FSP_assembly_benchmarking/resources/taxonomy.csv" # path to the file containing the taxonomy information for the samples to process (see Readme.md for instructions on how to format it)
+  taxonomy_file: "/home/lia/git_repos/FSP_assembly_benchmarking/resources/samples.csv" # path to the file containing the taxonomy information for the samples to process (see Readme.md for instructions on how to format it)
   database_list: "/home/lia/git_repos/FSP_assembly_benchmarking/resources/fungi_busco_lineages.txt" # path to the file containing the list of downloaded busco databases (see Readme.md for instructions on how to create it)
   path_to_busco_bds: "/home/lia/git_repos/FSP_assembly_benchmarking/resources/lineages/" # path to the directory containing the busco databases. Please add trailing slash (see Readme.md for instructions on how to download them)
   lineage_general: "fungi_odb12" # chose a "general" dataset, in our case "fungi_odb10"

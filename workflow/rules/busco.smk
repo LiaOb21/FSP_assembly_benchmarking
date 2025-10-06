@@ -1,7 +1,7 @@
 rule busco:
     input:
         assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_{assembler}.fa",
-        specific_db=f"{output_dir}" + "{sample}/busco_specific/busco_db.txt",
+        specific_db=f"{output_dir}" + "{sample}/busco_db/busco_db.txt",
     output:
         general_dir=directory(f"{output_dir}" + "{sample}/busco_general/{assembler}"),
         specific_dir=directory(f"{output_dir}" + "{sample}/busco_specific/{assembler}"),

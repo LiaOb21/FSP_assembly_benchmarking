@@ -75,7 +75,8 @@ if "masurca" in ASSEMBLERS:
     include: "rules/masurca_config_merged.smk"
     include: "rules/masurca.smk"
 
-
+# include get_busco_db rule
+include: "rules/get_busco_db.smk"
 # include busco rule
 include: "rules/busco.smk"
 # include quast rule

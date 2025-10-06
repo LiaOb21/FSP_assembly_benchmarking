@@ -19,3 +19,4 @@ fungi_*
 basidiomycota_*
 benchmark/**
 benchmark_summary.csv
+samples.csv
