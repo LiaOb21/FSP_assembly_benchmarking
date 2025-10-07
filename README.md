@@ -9,6 +9,8 @@ A Snakemake workflow for *de novo* genome assembly using Illumina reads.
 
 This workflow was developed for the Fungarium Sequencing Project (FSP) at Royal Botanic Gardens, Kew. 
 
+
+
 - [Snakemake workflow: `FSP_assembly_benchmarking`](#snakemake-workflow-fsp_assembly_benchmarking)
   - [Overview](#overview)
   - [Usage](#usage)
@@ -17,7 +19,7 @@ This workflow was developed for the Fungarium Sequencing Project (FSP) at Royal 
     - [Running the workflow locally:](#running-the-workflow-locally)
     - [Running the workflow on the cluster](#running-the-workflow-on-the-cluster)
   - [Note for kmergenie usage](#note-for-kmergenie-usage)
-  - [Note fro abyss](#note-fro-abyss)
+  - [Note for abyss](#note-fro-abyss)
   - [obtain the list of busco databases](#obtain-the-list-of-busco-databases)
   - [Deployment options](#deployment-options)
   - [Authors](#authors)
@@ -26,7 +28,6 @@ This workflow was developed for the Fungarium Sequencing Project (FSP) at Royal 
 
 ## Overview
 
-![dag](dag_onesampleonly.png)
 
 The workflow was developed to benchmark the performance of different short reads assemblers using aDNA (ancient DNA). 
 
@@ -60,7 +61,7 @@ git clone https://github.com/LiaOb21/FSP_assembly_benchmarking.git
 
 ### Prepare the required inputs
 
-1. Your data directory structure
+#### 1. Your data directory structure
 
 The directory that contains your input samples (e.g. `data`) must be structured in the following way:
 ```
@@ -81,31 +82,60 @@ data/
 
 In this example `048ds` and `048ss` are the only two samples present in the input directory. Note how each subdirectory is named after the sample, and the files inside each sample subdirectory have a standardised name. This is crucial for Snakemake to work properly.
 
-2. Download BUSCO databases
+#### 2. Download BUSCO databases
 
-This workflow runs BUSCO on each produced assembly twice using two different databases. One database should be more "general" and represent an high taxonomic level compared with the organisms analysed (e.g. fungi_odb), the second database should be as closely related as possible to the organisms analysed (e.g. agaricales_odb).
+This workflow runs BUSCO on each produced assembly twice using two different databases. One database more "general" (e.g. fungi_odb), and one as closely related as possible to the organisms analysed (e.g. agaricales_odb).
 
-Here is how busco databases can be obtained:
+The reccommendation here is to store all the BUSCO databases in a single directory, to allow the workflow to automatically use the closest database to the organism for the second busco run.
+
+First of all, obtain the full list of busco lineages and use the awk command to extract the lineages of the group of interest (e.g. fungi). The `_odb12` suffix refers to the version of the busco databases. The following commands can be used also with other groups of organisms or database versions, modifying the relevant parts of the code.
 
 ```
-cd FSP_assembly_benchmarking
-mkdir resources
-cd resources
+cd to/where/you/want/to/store/busco/databases
 
-wget https://busco-data.ezlab.org/v5/data/lineages/fungi_odb12.2025-07-01.tar.gz
-tar -xzf fungi_odb12.2025-07-01.tar.gz
+conda activate busco 
 
-wget https://busco-data.ezlab.org/v5/data/lineages/agaricales_odb12.2025-07-01.tar.gz
-tar -xzf agaricales_odb12.2025-07-01.tar.gz
+busco --list > busco_lineages.txt
+
+awk '/fungi_odb12/{flag=1; indent=length($0)-length(ltrim($0)); print "fungi_odb12"; next} 
+     flag && /- [a-z_]*_odb12/ {
+         current_indent=length($0)-length(ltrim($0))
+         if(current_indent <= indent) flag=0
+         else print gensub(/.*- ([a-z_]*_odb12).*/, "\\1", "g")
+     }
+     function ltrim(s) { sub(/^[ \t\r\n]+/, "", s); return s }' busco_lineages.txt > fungi_busco_lineages.txt
 ```
 
-Due to these settings, we advise to process samples in batches, divided by the taxonomic level that you want to assess with BUSCO. For example, first process all the samples belonging to the Boletales order, then all samples belonging to Agaricales, and so on.
+`fungi_busco_lineages.txt` will be the input for this field in the config file:
+```
+busco:
+  database_list: path/to/fungi_busco_lineages.txt
+```
 
-If you download dabases before starting the workflow, you should set `"--offline": True` in the `config.yaml` for the BUSCO parameters. For more details, please refer to [`config/README.md`](config/README.md).
+You will need to download all the databases you need for your analysis before hands. You can easily do this in this way:
+
+```
+for i in $(cat fungi_busco_lineages.txt); do
+  echo "downloading $i database"
+  busco --download_path . --download $i
+done
+```
+
+As you will download dabases before starting the workflow, you should set `"--offline": True` in the `config.yaml` for the BUSCO parameters. For more details, please refer to [`config/README.md`](config/README.md).
+
+#### 3. Prepare the taxonomy file
+
+We need a tab separated taxonomy file containing the following columns: 'Sample', 'Family', 'Order', 'Class', 'Phylum'. Name the columns exactly as shown here (with capital letters).
+
+Example:
+
+
 
 ### Running the workflow locally:
 
 **Note: before running the workflow you should set up your `config.yml`. You can find it in [`config/config.yml`](config/config.yml). The [`config/README.md`](config/README.md) explains how to set up the `config.yml`.**
+
+#### 1. Set up Snakemake environment
 
 First install snakemake using conda (be sure to install version 9+):
 ```
@@ -117,40 +147,46 @@ If you want to monitor the workflow through a console you can install the `snkmt
 ```
 pip install snakemake-logger-plugin-snkmt # used for monitoring resources
 ```
+#### 2. Run the workflow
 
-To run the workflow, you can use the following command:
+To run the workflow, you can use the following command for using the regular inputs reads forward and reverse (R1 and R2):
 ```
 snakemake --configfile config/config.yml --software-deployment-method conda --snakefile workflow/Snakefile --cores 8
 ```
 
 If you want to use `snkmt` add this flag to the previous command: `--logger snkmt`.
 
-### Running the workflow on the cluster
-
-Setting up and running snakemake in gruffalo:
+If you want to use merged reads (that you have to merge previously) you can run the following command:
 
 ```
-conda create -c conda-forge -c bioconda -n snakemake snakemake  #Use the full version of the commands, as otherwise an older version will be downloaded.
+snakemake --configfile config/config.yml --software-deployment-method conda --snakefile workflow/Snakefile_merged --cores 8
+```
+
+Even in this case you can add the `--logger snkmt` flag.
+
+Be sure to always name the files as shown in `1. Your data directory structure` section.
+
+
+### Running the workflow on the cluster
+
+#### 1. Set up Snakemake environment
+
+```
+conda create -c conda-forge -c bioconda -n snakemake snakemake  #Use the full version of the commands, as otherwise an older version may be downloaded.
 conda activate snakemake
 pip install snakemake-executor-plugin-cluster-generic # to handle SLURM job submission
 pip install snakemake-logger-plugin-snkmt # used for monitoring resources (optional)
 ```
 
-Get the busco database that we will need for the QC
+#### 2. Run the workflow
+
+
 ```
-cd /home/lobinu/scratch/FSP_assembly_benchmarking
-
-mkdir resources
-cd resources
-
-wget https://busco-data.ezlab.org/v5/data/lineages/fungi_odb12.2025-07-01.tar.gz
-tar -xzf fungi_odb12.2025-07-01.tar.gz
-
-wget https://busco-data.ezlab.org/v5/data/lineages/basidiomycota_odb12.2025-07-01.tar.gz
-tar -xzf basidiomycota_odb12.2025-07-01.tar.gz
-
-cd ..
+screen -S snakemake_test
+conda activate snakemake
+snakemake --profile profile/
 ```
+
 
 To set up the config file you must at least indicate the following:
 ```
@@ -163,12 +199,7 @@ busco:
   lineage2: "resources/basidiomycota_odb12"
 ```
 
-Run snakemake:
-```
-screen -S snakemake_test
-conda activate snakemake
-snakemake --profile profile/
-```
+
 
 ## Note for kmergenie usage
 
