@@ -14,9 +14,9 @@ This workflow was developed for the Fungarium Sequencing Project (FSP) at Royal 
 - [Snakemake workflow: `FSP_assembly_benchmarking`](#snakemake-workflow-fsp_assembly_benchmarking)
   - [Overview](#overview)
   - [Usage](#usage)
-    - [Download the repo](#download-the-repo)
+    - [Clone the repo](#clone-the-repo)
     - [Prepare the required inputs](#prepare-the-required-inputs)
-    - [Running the workflow locally:](#running-the-workflow-locally)
+    - [Running the workflow locally](#running-the-workflow-locally)
     - [Running the workflow on the cluster](#running-the-workflow-on-the-cluster)
   - [Note for kmergenie usage](#note-for-kmergenie-usage)
   - [Note for abyss](#note-fro-abyss)
@@ -33,7 +33,7 @@ The workflow was developed to benchmark the performance of different short reads
 
 It may be useful to other projects that deal with difficult samples as the FSP, and need to find the best short reads assembler(s) for their own case.
 
-The workflow was designed to process several samples in parallel. The flow chart above illustrates how the workflow looks like when processing a single sample (example: 048ds).
+The workflow was designed to process several samples in parallel. 
 
 Each sample is assembled using the following assemblers:
 
@@ -53,7 +53,7 @@ The assemblies produced by each assembler for each sample are then quality inspe
 
 ## Usage
 
-### Download the repo
+### Clone the repo
 
 ```
 git clone https://github.com/LiaOb21/FSP_assembly_benchmarking.git
@@ -131,7 +131,7 @@ Example:
 
 
 
-### Running the workflow locally:
+### Running the workflow locally
 
 **Note: before running the workflow you should set up your `config.yml`. You can find it in [`config/config.yml`](config/config.yml). The [`config/README.md`](config/README.md) explains how to set up the `config.yml`.**
 
@@ -172,21 +172,58 @@ Be sure to always name the files as shown in `1. Your data directory structure` 
 #### 1. Set up Snakemake environment
 
 ```
-conda create -c conda-forge -c bioconda -n snakemake snakemake  #Use the full version of the commands, as otherwise an older version may be downloaded.
+conda create -c conda-forge -c bioconda -n snakemake snakemake
 conda activate snakemake
 pip install snakemake-executor-plugin-cluster-generic # to handle SLURM job submission
 pip install snakemake-logger-plugin-snkmt # used for monitoring resources (optional)
 ```
 
-#### 2. Run the workflow
+#### 2. Create submission script
 
+Create `run_snakemake.sh`:
 
 ```
-screen -S snakemake_test
+#!/bin/bash
+#SBATCH --job-name=snakemake-fsp
+#SBATCH --partition=medium
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8G
+#SBATCH --time=48:00:00
+#SBATCH --output=snakemake-%j.out
+#SBATCH --error=snakemake-%j.err
+
+# Create logs directory
+mkdir -p logs
+
+# Load conda environment
+source ~/.bashrc
 conda activate snakemake
-snakemake --profile profile/
+
+# Run Snakemake (individual jobs will be distributed to appropriate partitions)
+echo "Starting Snakemake workflow at $(date)"
+snakemake --profile profile/ --logger snkmt
+echo "Workflow completed at $(date)"
 ```
 
+**IMPORTANT**: make sure to set up your sbatch script according to your system settings.
+
+#### 3. Submit and monitor
+
+```
+# Submit the workflow
+sbatch run_snakemake.sh
+
+# Monitor the controller job
+squeue -u $USER
+tail -f snakemake-JOBID.out
+
+# Check individual rule jobs
+squeue -u $USER | grep smk-
+
+# Check from the console
+conda activate snakemake 
+snkmt console
+```
 
 To set up the config file you must at least indicate the following:
 ```
