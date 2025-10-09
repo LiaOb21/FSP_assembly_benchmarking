@@ -16,10 +16,18 @@ This workflow was developed for the Fungarium Sequencing Project (FSP) at Royal 
   - [Usage](#usage)
     - [Clone the repo](#clone-the-repo)
     - [Prepare the required inputs](#prepare-the-required-inputs)
+      - [1. Your data directory structure](#1-your-data-directory-structure)
+      - [2. Download BUSCO databases](#2-download-busco-databases)
+      - [3. Prepare the taxonomy file](#3-prepare-the-taxonomy-file)
     - [Running the workflow locally](#running-the-workflow-locally)
+      - [1. Set up Snakemake environment](#1-set-up-snakemake-environment)
+      - [2. Run the workflow](#2-run-the-workflow)
     - [Running the workflow on the cluster](#running-the-workflow-on-the-cluster)
+      - [1. Set up Snakemake environment](#1-set-up-snakemake-environment-1)
+      - [2. Create submission script](#2-create-submission-script)
+      - [3. Submit and monitor](#3-submit-and-monitor)
   - [Note for kmergenie usage](#note-for-kmergenie-usage)
-  - [Note for abyss](#note-fro-abyss)
+  - [Note fro abyss](#note-fro-abyss)
   - [obtain the list of busco databases](#obtain-the-list-of-busco-databases)
   - [Deployment options](#deployment-options)
   - [Authors](#authors)
@@ -29,7 +37,7 @@ This workflow was developed for the Fungarium Sequencing Project (FSP) at Royal 
 ## Overview
 
 
-The workflow was developed to benchmark the performance of different short reads assemblers using aDNA (ancient DNA). 
+The workflow was developed to benchmark the performance of different short reads assemblers using hDNA (historical DNA).
 
 It may be useful to other projects that deal with difficult samples as the FSP, and need to find the best short reads assembler(s) for their own case.
 
@@ -37,19 +45,32 @@ The workflow was designed to process several samples in parallel.
 
 Each sample is assembled using the following assemblers:
 
-- [SPAdes](https://github.com/ablab/spades)
-- [MEGAHIT](https://github.com/voutcn/megahit)
-- [AbySS](https://github.com/bcgsc/abyss)
-- [SparseAssembler](https://github.com/yechengxi/SparseAssembler)
-- [Minia](https://github.com/GATB/minia?tab=readme-ov-file)
-- [MaSuRCA](https://github.com/alekseyzimin/masurca/tree/master)
+- [SPAdes](https://github.com/ablab/spades) - multi k-mer assembler
+- [MEGAHIT](https://github.com/voutcn/megahit) - multi k-mer assembler
+- [AbySS](https://github.com/bcgsc/abyss) - single k-mer assembler
+- [SparseAssembler](https://github.com/yechengxi/SparseAssembler) - single k-mer assembler
+- [Minia](https://github.com/GATB/minia?tab=readme-ov-file) - single k-mer assembler
+- [MaSuRCA](https://github.com/alekseyzimin/masurca/tree/master) - single k-mer assembler
 
+Note: the workflow was designed to use previously pre-processed reads, although it works also with raw reads (but keep in mind that this doesn't pre-process reads automatically).
 
-The assemblies produced by each assembler for each sample are then quality inspected with the following tools
+The user can choose between three different strategies to set the k-mer size for the genome assembly process:
+1) `manual`: the k-mer size is set manually for each assembler in [`config/README.md`](config/README.md).
+2) `kmergenie`: [KMerGenie](https://github.com/movingpictures83/KMerGenie) is used to estimate the best k-mer size for genome assembly for each library. Note that KMerGenie should be used with haploid or diploid genomes only.
+3) `reads_length`: [SeqKit](https://bioinf.shenwei.me/seqkit/) is used to calculate the median reads length and the k-mer size is set to be 2/3rds of the median.
+
+The assemblies produced by each assembler for each sample are then quality inspected with the following tools:
 
 - [BUSCO](https://busco.ezlab.org/busco_userguide.html) - evaluates each produced assembly quality in terms of expected gene content. It is run twice for each sample, once using a general dataset, and once using a more closely related dataset. See [`config/README.md`](config/README.md) for more details.
 - [QUAST](https://quast.sourceforge.net/docs/manual.html) - computes assembly statistics.
 - [MerquryFK](https://github.com/thegenemyers/MERQURY.FK) - computes k-mer analysis for each assembly and compares its content with the k-mer computed for raw reads by [FastK](https://github.com/thegenemyers/FASTK).
+
+
+The best assembly for each sample is then selected. The selection is based on the highest complete and single BUSCO content (absolute number, not percentage). If more than one assembly have the highest complete and single copy BUSCO score, the assembly with the highest aUN (calculated by QUAST) among those is selected.
+
+The best assembly is then aligned to the reads using [bwa-mem2](https://github.com/bwa-mem2/bwa-mem2) and [samtools](https://www.htslib.org/doc/samtools.html) and handed over to [Pilon](https://github.com/broadinstitute/pilon), to improve the assembly by performing error correction and gap filling.
+
+The improved best assembly is then quality assessed again with BUSCO, QUAST, and MerquryFK, and aligned back to the reads with bwa-mem2 and samtools, which is also used to analyse the genome coverage.
 
 ## Usage
 
@@ -205,7 +226,9 @@ snakemake --profile profile/ --logger snkmt
 echo "Workflow completed at $(date)"
 ```
 
-**IMPORTANT**: make sure to set up your sbatch script according to your system settings.
+**IMPORTANT**: This is an example sbatch script. Make sure to set up your sbatch script according to your system settings.
+
+In alternative, you can launch Snakemake in a `screen` shell using `srun` for an interactive run.
 
 #### 3. Submit and monitor
 
