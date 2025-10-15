@@ -16,7 +16,7 @@ This workflow was developed for the Fungarium Sequencing Project (FSP) at Royal 
   - [Usage](#usage)
     - [Clone the repo](#clone-the-repo)
     - [Prepare the required inputs](#prepare-the-required-inputs)
-      - [1. Your data directory structure](#1-your-data-directory-structure)
+      - [1. Your input data directory structure](#1-your-input-data-directory-structure)
       - [2. Download BUSCO databases](#2-download-busco-databases)
       - [3. Prepare the taxonomy file](#3-prepare-the-taxonomy-file)
     - [Running the workflow locally](#running-the-workflow-locally)
@@ -82,7 +82,7 @@ git clone https://github.com/LiaOb21/FSP_assembly_benchmarking.git
 
 ### Prepare the required inputs
 
-#### 1. Your data directory structure
+#### 1. Your input data directory structure
 
 The directory that contains your input samples (e.g. `data`) must be structured in the following way:
 ```
