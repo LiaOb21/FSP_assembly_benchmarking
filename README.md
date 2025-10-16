@@ -12,6 +12,12 @@ This workflow was developed for the Fungarium Sequencing Project (FSP) at Royal 
 <img width="1841" height="778" alt="FSP_assembly_benchmarking_DAG" src="https://github.com/user-attachments/assets/295bfba0-28a7-4a33-8baa-bc21e8929a49" />
 
 
+The usage of this workflow is described in the [Snakemake Workflow Catalog](https://snakemake.github.io/snakemake-workflow-catalog/docs/workflows/LiaOb21/FSP_assembly_benchmarking).
+
+Detailed information about workflow configuration can also be found in the [`config/README.md`](config/README.md).
+
+If you use this workflow in a paper, don't forget to give credits to the authors by citing the URL of this repository or its DOI.
+
 - [Snakemake workflow: `FSP_assembly_benchmarking`](#snakemake-workflow-fsp_assembly_benchmarking)
   - [Overview](#overview)
   - [Usage](#usage)
@@ -307,14 +313,6 @@ Pay attention to B parameter, that can trigger OOM errors.
 
 
 
------
-
-The usage of this workflow is described in the [Snakemake Workflow Catalog](https://snakemake.github.io/snakemake-workflow-catalog/docs/workflows/LiaOb21/FSP_assembly_benchmarking).
-
-Detailed information about input data and workflow configuration can also be found in the [`config/README.md`](config/README.md).
-
-If you use this workflow in a paper, don't forget to give credits to the authors by citing the URL of this repository or its DOI.
-
 ## Deployment options
 
 To run the workflow from command line, change the working directory.
@@ -349,7 +347,7 @@ snakemake --cores 2 --sdm conda apptainer --directory .test
   - Royal Botanic Gardens, Kew
   - [ORCID profile](https://orcid.org/0000-0002-3208-323X)
 
-The other members of the FSP bioinformatics team, @Hazelhuangup and @NiallG1 also collaborated to this part of the project.
+The other members of the FSP bioinformatics team, [Wu Huang](https://github.com/bcgsc/arcs/issues/19) and [Niall Garvey](https://github.com/NiallG1) also contributed to this part of the workflow (which is only a part of the full pipeline developed for the FSP).
 
 ## References
 
@@ -362,4 +360,4 @@ The other members of the FSP bioinformatics team, @Hazelhuangup and @NiallG1 als
 
 - Update the [deployment](#deployment-options), [authors](#authors) and [references](#references) sections.
 - Update the `README.md` badges. Add or remove badges for `conda`/`singularity`/`apptainer` usage depending on the workflow's [deployment](#deployment-options) options.
-- Do not forget to also adjust the configuration-specific `config/README.md` file.
+
