@@ -147,16 +147,17 @@ As you will download dabases before starting the workflow, you should set `"--of
 
 #### 3. Prepare the taxonomy file
 
-We need a tab separated taxonomy file containing the following columns: 'Sample', 'Family', 'Order', 'Class', 'Phylum'. Name the columns exactly as shown here (with capital letters).
+We need a tab separated taxonomy file containing at least the following columns: 'Sample', 'Family', 'Order', 'Class', 'Phylum'. Name the columns exactly as shown here (with capital letters).
 
 Example:
 
 <img width="901" height="267" alt="image" src="https://github.com/user-attachments/assets/fc163f59-b988-4e30-a0b0-251b8df171ca" />
 
+Here the column 'Genus' will be ignored (as BUSCO databases are available up to family level), but it's okay if it is in the file.
 
 ### Running the workflow locally
 
-**Note: before running the workflow you should set up your `config.yml`. You can find it in [`config/config.yml`](config/config.yml). The [`config/README.md`](config/README.md) explains how to set up the `config.yml`.**
+:mushroom::mushroom::mushroom: **Note: before running the workflow you should set up your `config.yml`. You can find it in [`config/config.yml`](config/config.yml). The [`config/README.md`](config/README.md) explains how to set up the `config.yml`.** :mushroom::mushroom::mushroom:
 
 #### 1. Set up Snakemake environment
 
@@ -166,24 +167,32 @@ conda create -n snakemake snakemake
 conda activate snakemake
 ```
 
-If you want to monitor the workflow through a console you can install the `snkmt` plugin within the snakemake environment (this is not mandatory):
+If you want to monitor the workflow through a console you can install the [`snkmt` plugin](https://github.com/cademirch/snkmt) within the snakemake environment (this is not mandatory):
 ```
 pip install snakemake-logger-plugin-snkmt # used for monitoring resources
 ```
 #### 2. Run the workflow
 
+:mushroom::mushroom::mushroom: **IMPORTANT:** Snakemake workflows must be always run from the cloned directory. :mushroom::mushroom::mushroom:
+
 To run the workflow, you can use the following command for using the regular inputs reads forward and reverse (R1 and R2):
 ```
+cd ~/FSP_assembly_benchmarking
 snakemake --configfile config/config.yml --software-deployment-method conda --snakefile workflow/Snakefile --cores 8
 ```
 
 If you want to use `snkmt` add this flag to the previous command: `--logger snkmt`.
 
+When you use `workflow/Snakefile`, the only files you need in [your input data directory](README.md#1-your-input-data-directory-structure) are `*_trimmed.R1.fq.gz` and `*_trimmed.R2.fq.gz`.
+
 If you want to use merged reads (that you have to merge previously) you can run the following command:
 
 ```
+cd ~/FSP_assembly_benchmarking
 snakemake --configfile config/config.yml --software-deployment-method conda --snakefile workflow/Snakefile_merged --cores 8
 ```
+
+Note that for the workflow to run properly when using `workflow/Snakefile_merged` the input directory must contain all the files showed in [Your input data directory structure](README.md#1-your-input-data-directory-structure), including `*_unmerged.R1.fq.gz`, `*_unmerged.R2.fq.gz`, `*_trimmed.R1.fq.gz`, and `*_trimmed.R2.fq.gz`, as some of the assemblers needs these file in order to run.
 
 Even in this case you can add the `--logger snkmt` flag.
 
@@ -202,6 +211,8 @@ pip install snakemake-logger-plugin-snkmt # used for monitoring resources (optio
 ```
 
 #### 2. Create submission script
+
+:mushroom::mushroom::mushroom: **IMPORTANT:** Snakemake workflows must be always run from the cloned directory (i.e. `FSP_assembly_benchmarking`). Therefore, the following script must be placed in that directory. :mushroom::mushroom::mushroom:
 
 Create `run_snakemake.sh`:
 
@@ -228,86 +239,73 @@ snakemake --profile profile/ --logger snkmt
 echo "Workflow completed at $(date)"
 ```
 
-**IMPORTANT**: This is an example sbatch script. Make sure to set up your sbatch script according to your system settings.
+With this sbatch script example, Snakemake will look for the default snakefil, which is `workflow/Snakefile`, and will run the workflow using that file. The only files you need in [your input data directory](README.md#1-your-input-data-directory-structure) in this case are `*_trimmed.R1.fq.gz` and `*_trimmed.R2.fq.gz`.
+
+
+If you want to use (previously) merged reads, you should modify the above script to use `workflow/Snakefile_merged` instead:
+
+```
+#!/bin/bash
+#SBATCH --job-name=snakemake-fsp
+#SBATCH --partition=medium
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8G
+#SBATCH --time=48:00:00
+#SBATCH --output=snakemake-%j.out
+#SBATCH --error=snakemake-%j.err
+
+# Create logs directory
+mkdir -p logs
+
+# Load conda environment
+source ~/.bashrc
+conda activate snakemake
+
+# Run Snakemake (individual jobs will be distributed to appropriate partitions)
+echo "Starting Snakemake workflow at $(date)"
+snakemake --snakefile workflow/Snakefile_merged --profile profile/ --logger snkmt
+echo "Workflow completed at $(date)"
+```
+
+Note that for the workflow to run properly when using `workflow/Snakefile_merged` the input directory must contain all the files showed in [Your input data directory structure](README.md#1-your-input-data-directory-structure), including `*_unmerged.R1.fq.gz`, `*_unmerged.R2.fq.gz`, `*_trimmed.R1.fq.gz`, and `*_trimmed.R2.fq.gz`, as some of the assemblers needs these file in order to run.
+
+:mushroom::mushroom::mushroom: **IMPORTANT**: These are examples of sbatch script. Make sure to set up your sbatch script according to your system settings. :mushroom::mushroom::mushroom:
 
 In alternative, you can launch Snakemake in a `screen` shell using `srun` for an interactive run.
 
 #### 3. Submit and monitor
 
+Submit the workflow throgh the sbatch script:
+
 ```
-# Submit the workflow
 sbatch run_snakemake.sh
+```
 
-# Monitor the controller job
-squeue -u $USER
-tail -f snakemake-JOBID.out
+Monitor the workflow:
 
-# Check individual rule jobs
-squeue -u $USER | grep smk-
-
-# Check from the console
-conda activate snakemake 
+```
+# Monitor using snkmt console
+conda activate snakemake
 snkmt console
-```
 
-To set up the config file you must at least indicate the following:
-```
-nano config/config.yml
----
-input_dir: "/home/lobinu/test_data/clean_data/00_test" #use absolute paths and do not add `/` at the end
-output_dir: "/home/lobinu/scratch/FSP_assembly_benchmarking/results"  #use absolute paths and do not add `/` at the end
-busco:
-  lineage1: "resources/fungi_odb12"
-  lineage2: "resources/basidiomycota_odb12"
+# Monitor with SLURM
+squeue -u $USER
+squeue -o "%.18i %.100j %.8u %.2t %.10M %.6D %R" -u $USER      # to see full name of jobs including sample name
+
+# Monitor through the logs
+less snakemake-JOBID.err      # to hava a look to the log
+grep -A 20 "Error in rule" snakemake-JOBID.err       # to screen the log for possible errors
 ```
 
 
 
-## Note for kmergenie usage
 
-The first time that the workflow is run using kmergenie, the kmer size for the assemblers will be considered a "to be determined (TBD)" parameter by Snakemake. The second time that exactly the same workflow is executed using kmergenie, the kmer size is changed from TBD to the value estimated by kmergenie. This will cause the trigger of all of the downstream rules, even if only a parameter for let's say QUAST was changed in the second run. In this case, to avoid re-running the whole workflow, please add `--rerun-triggers mtime` to your Snakemake command. This is recommended only if you are sure that no other changes were made to the workflow.
 
 ## Note fro abyss
 
 Pay attention to B parameter, that can trigger OOM errors.
 
 
-## obtain the list of busco databases
-
-This is an attempt to process samples with different taxonomy together, rather than processing them by groups. 
-
-First of all, obtain the full list of busco lineages and use the awk command to extract the lineages of the group of interest (e.g. fungi). The `_odb12` suffix refers to the version of the busco database.
-
-```
-conda activate busco 
-
-busco --list > busco_lineages.txt
-
-awk '/fungi_odb12/{flag=1; indent=length($0)-length(ltrim($0)); print "fungi_odb12"; next} 
-     flag && /- [a-z_]*_odb12/ {
-         current_indent=length($0)-length(ltrim($0))
-         if(current_indent <= indent) flag=0
-         else print gensub(/.*- ([a-z_]*_odb12).*/, "\\1", "g")
-     }
-     function ltrim(s) { sub(/^[ \t\r\n]+/, "", s); return s }' busco_lineages.txt > fungi_busco_lineages.txt
-```
-
-You will need to download all the database you need for your analysis. You can easily do this in this way:
-
-```
-for i in $(cat fungi_busco_lineages.txt); do
-  echo "downloading $i database"
-  busco --download_path . --download $i
-done
-```
-
-`fungi_busco_lineages.txt` will be the input for this in the config file:
-```
-busco:
-  database_list: path/to/fungi_busco_lineages.txt
-```
-
-To achieve this, we also need a tab separated taxonomy file containing the following columns: 'Sample', 'Family', 'Order', 'Class', 'Phylum'. Name them exactly as shown here (with capital letters).
 
 -----
 
@@ -347,10 +345,11 @@ snakemake --cores 2 --sdm conda apptainer --directory .test
 
 ## Authors
 
-- Firstname Lastname
-  - Affiliation
-  - ORCID profile
-  - home page
+- Lia Obinu
+  - Royal Botanic Gardens, Kew
+  - [ORCID profile](https://orcid.org/0000-0002-3208-323X)
+
+The other members of the FSP bioinformatics team, @Hazelhuangup and @NiallG1 also collaborated to this part of the project.
 
 ## References
 
@@ -358,9 +357,9 @@ snakemake --cores 2 --sdm conda apptainer --directory .test
 
 ## TODO
 
-- Replace `<owner>` and `<repo>` everywhere in the template with the correct user name/organization, and the repository name. The workflow will be automatically added to the [snakemake workflow catalog](https://snakemake.github.io/snakemake-workflow-catalog/index.html) once it is publicly available on Github.
-- Replace `<name>` with the workflow name (can be the same as `<repo>`).
-- Replace `<description>` with a description of what the workflow does.
+
+
+
 - Update the [deployment](#deployment-options), [authors](#authors) and [references](#references) sections.
 - Update the `README.md` badges. Add or remove badges for `conda`/`singularity`/`apptainer` usage depending on the workflow's [deployment](#deployment-options) options.
 - Do not forget to also adjust the configuration-specific `config/README.md` file.
