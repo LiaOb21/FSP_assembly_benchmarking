@@ -9,6 +9,7 @@ A Snakemake workflow for *de novo* genome assembly using Illumina reads.
 
 This workflow was developed for the Fungarium Sequencing Project (FSP) at Royal Botanic Gardens, Kew. 
 
+<img width="1841" height="778" alt="FSP_assembly_benchmarking_DAG" src="https://github.com/user-attachments/assets/295bfba0-28a7-4a33-8baa-bc21e8929a49" />
 
 
 - [Snakemake workflow: `FSP_assembly_benchmarking`](#snakemake-workflow-fsp_assembly_benchmarking)
@@ -150,6 +151,7 @@ We need a tab separated taxonomy file containing the following columns: 'Sample'
 
 Example:
 
+<img width="901" height="267" alt="image" src="https://github.com/user-attachments/assets/fc163f59-b988-4e30-a0b0-251b8df171ca" />
 
 
 ### Running the workflow locally
