@@ -53,13 +53,13 @@ assemblers:
 # please do not use the `-o` option here, it is set into the workflow
 spades:
   "k": "auto" # list of k-mer sizes (must be odd and less than 128) [default: 'auto']
-  optional_params:
+  optional_params: # if you do not want to use any optional parameters, add `{}` here
     "--only-assembler": True # use this to skip the read error correction step (reads are already cleaned)
 
 # Customise megahit parameters
 megahit:
   "k": "31,51,71,91,99" #comma-separated list of kmer size all must be odd, in the range 15-255, increment <= 28) [21,29,39,59,79,99,119,141]
-  optional_params:
+  optional_params: # if you do not want to use any optional parameters, add `{}` here
     "--no-mercy": True
     "--min-count": 3 # suggested value for single genome assembly
 
@@ -110,10 +110,10 @@ busco:
   path_to_busco_bds: "/home/lia/git_repos/FSP_assembly_benchmarking/resources/lineages/" # path to the directory containing the busco databases. Please add trailing slash (see Readme.md for instructions on how to download them)
   lineage_general: "fungi_odb12" # chose a "general" dataset, in our case "fungi_odb10"
   extension: "_odb12" # extension of the busco datasets, in our case "_odb12"
-  optional_params: # if you do not want to use any optional parameters, add `{}` here
-    "--mode": "genome"
+  optional_params:
+    "--mode": "genome" # always keep this flag
     #    "--metaeuk": True
-    "--offline": True # use this if you do not want to download the lineage dataset from the web, but use a local copy instead
+    "--offline": True # always keep this flag
 
 # Customise quast parameters
 quast:

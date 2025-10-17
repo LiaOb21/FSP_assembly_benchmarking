@@ -7,7 +7,7 @@
 
 A Snakemake workflow for *de novo* genome assembly using Illumina reads. 
 
-This workflow was developed for the Fungarium Sequencing Project (FSP) at Royal Botanic Gardens, Kew. 
+This workflow was developed for the [Fungarium Sequencing Project (FSP)](https://www.kew.org/science/our-science/projects/sequencing-kews-fungarium) at Royal Botanic Gardens, Kew. 
 
 <img width="1841" height="778" alt="FSP_assembly_benchmarking_DAG" src="https://github.com/user-attachments/assets/295bfba0-28a7-4a33-8baa-bc21e8929a49" />
 
@@ -33,12 +33,9 @@ If you use this workflow in a paper, don't forget to give credits to the authors
       - [1. Set up Snakemake environment](#1-set-up-snakemake-environment-1)
       - [2. Create submission script](#2-create-submission-script)
       - [3. Submit and monitor](#3-submit-and-monitor)
-  - [Note for kmergenie usage](#note-for-kmergenie-usage)
-  - [Note fro abyss](#note-fro-abyss)
-  - [obtain the list of busco databases](#obtain-the-list-of-busco-databases)
-  - [Deployment options](#deployment-options)
+  - [Deployment options (needs update)](#deployment-options-needs-update)
   - [Authors](#authors)
-  - [References](#references)
+  - [References (needs update)](#references-needs-update)
   - [TODO](#todo)
 
 ## Overview
@@ -114,7 +111,7 @@ In this example `048ds` and `048ss` are the only two samples present in the inpu
 
 This workflow runs BUSCO on each produced assembly twice using two different databases. One database more "general" (e.g. fungi_odb), and one as closely related as possible to the organisms analysed (e.g. agaricales_odb).
 
-The reccommendation here is to store all the BUSCO databases in a single directory, to allow the workflow to automatically use the closest database to the organism for the second busco run.
+The recommendation here is to store all the BUSCO databases in a single directory, to allow the workflow to automatically use the closest database to the organism for the second busco run.
 
 First of all, obtain the full list of busco lineages and use the awk command to extract the lineages of the group of interest (e.g. fungi). The `_odb12` suffix refers to the version of the busco databases. The following commands can be used also with other groups of organisms or database versions, modifying the relevant parts of the code.
 
@@ -137,7 +134,7 @@ awk '/fungi_odb12/{flag=1; indent=length($0)-length(ltrim($0)); print "fungi_odb
 `fungi_busco_lineages.txt` will be the input for this field in the config file:
 ```
 busco:
-  database_list: path/to/fungi_busco_lineages.txt
+  database_list: "to/where/you/want/to/store/busco/databases/fungi_busco_lineages.txt"
 ```
 
 You will need to download all the databases you need for your analysis before hands. You can easily do this in this way:
@@ -299,21 +296,11 @@ squeue -u $USER
 squeue -o "%.18i %.100j %.8u %.2t %.10M %.6D %R" -u $USER      # to see full name of jobs including sample name
 
 # Monitor through the logs
-less snakemake-JOBID.err      # to hava a look to the log
+less snakemake-JOBID.err      # to have a look to the log
 grep -A 20 "Error in rule" snakemake-JOBID.err       # to screen the log for possible errors
 ```
 
-
-
-
-
-## Note fro abyss
-
-Pay attention to B parameter, that can trigger OOM errors.
-
-
-
-## Deployment options
+## Deployment options (needs update)
 
 To run the workflow from command line, change the working directory.
 
@@ -347,9 +334,9 @@ snakemake --cores 2 --sdm conda apptainer --directory .test
   - Royal Botanic Gardens, Kew
   - [ORCID profile](https://orcid.org/0000-0002-3208-323X)
 
-The other members of the FSP bioinformatics team, [Wu Huang](https://github.com/bcgsc/arcs/issues/19) and [Niall Garvey](https://github.com/NiallG1) also contributed to this part of the workflow (which is only a part of the full pipeline developed for the FSP).
+The other members of the FSP bioinformatics team, [Wu Huang](https://github.com/bcgsc/arcs/issues/19) and [Niall Garvey](https://github.com/NiallG1), and [George Mears]() also contributed to the development and testing of this part of the workflow (which is only a part of the full pipeline developed for the FSP).
 
-## References
+## References (needs update)
 
 > Köster, J., Mölder, F., Jablonski, K. P., Letcher, B., Hall, M. B., Tomkins-Tinch, C. H., Sochat, V., Forster, J., Lee, S., Twardziok, S. O., Kanitz, A., Wilm, A., Holtgrewe, M., Rahmann, S., & Nahnsen, S. _Sustainable data analysis with Snakemake_. F1000Research, 10:33, 10, 33, **2021**. https://doi.org/10.12688/f1000research.29032.2.
 
@@ -358,6 +345,6 @@ The other members of the FSP bioinformatics team, [Wu Huang](https://github.com/
 
 
 
-- Update the [deployment](#deployment-options), [authors](#authors) and [references](#references) sections.
+- Update the [deployment](#deployment-options) and [references](#references) sections.
 - Update the `README.md` badges. Add or remove badges for `conda`/`singularity`/`apptainer` usage depending on the workflow's [deployment](#deployment-options) options.
 
