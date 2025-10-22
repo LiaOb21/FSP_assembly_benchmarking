@@ -188,7 +188,7 @@ def create_coverage_plots(coverage_file, output_file, sample_name, assembler_nam
     ax2.set_xlabel('Contig Length (bp)')
     ax2.set_ylabel('Coverage Depth (x)')
     ax2.set_title('Coverage vs Contig Length')
-    ax2.set_xscale('log')  # Log scale for better visualization of length distribution
+#    ax2.set_xscale('log')  # Log scale for better visualization of length distribution
     ax2.legend()
     ax2.grid(True, alpha=0.3)
     plt.colorbar(scatter, ax=ax2, label='Coverage %')
@@ -210,28 +210,110 @@ def create_coverage_plots(coverage_file, output_file, sample_name, assembler_nam
     ax3.legend()
     ax3.grid(True, alpha=0.3)
     
-    # Plot 4: Contig length distribution (bottom-left)
+    # Plot 4: Four-panel contig length distribution (bottom-left AND bottom-middle) - LINEAR ONLY
+    # This will span across both bottom-left and bottom-middle positions
     ax4 = axes[1, 0]
-    ax4.hist(coverage_data['endpos'], bins=50, alpha=0.7, color='lightgreen', 
-            edgecolor='black')
-    # Add vertical lines for thresholds
-    ax4.axvline(250, color='red', linestyle='--', linewidth=2, 
-            label=f'250bp threshold\n({small_contigs_count} contigs below)')
-    ax4.axvline(1000, color='blue', linestyle='--', linewidth=2, 
-            label=f'1kb threshold\n({long_contigs_count} contigs above)')
-    ax4.set_xlabel('Contig Length (bp)')
-    ax4.set_ylabel('Number of Contigs')
-    ax4.set_title('Contig Length Distribution')
-    ax4.set_xscale('log')  # Log scale for better visualization
-    ax4.legend()
-    ax4.grid(True, alpha=0.3)
+    ax5 = axes[1, 1]  # We'll use this space too
+
+    # Turn off both axes
+    ax4.axis('off')
+    ax5.axis('off')
+
+    # Create a combined title spanning both quadrants
+    fig.text(0.35, 0.45, 'Contig Length Distribution by Size Class', 
+            fontsize=12, ha='center')
+
+    # Data preparation
+    small_contigs = coverage_data[coverage_data['endpos'] < 250]['endpos']
+    mid_contigs = coverage_data[(coverage_data['endpos'] >= 250) & (coverage_data['endpos'] < 1000)]['endpos']
+    large_contigs = coverage_data[coverage_data['endpos'] >= 1000]['endpos']
+    above_250 = coverage_data[coverage_data['endpos'] >= 250]['endpos']
+
+    # Get positions of both quadrants to create a larger plotting area
+    pos4 = ax4.get_position()
+    pos5 = ax5.get_position()
+
+    # Create a combined plotting area spanning both quadrants
+    combined_width = pos5.x1 - pos4.x0
+    combined_height = pos4.height
+
+    # Add spacing between subplots
+    horizontal_spacing = 0.05  # 3% horizontal spacing between left and right columns
+    vertical_spacing = 0.05    # 4% vertical spacing between top and bottom rows
+#    downward_shift = 0.02
+
+    # Calculate subplot dimensions accounting for spacing
+    subplot_width = (combined_width - horizontal_spacing) / 2
+    subplot_height = (combined_height - vertical_spacing - 0.03) / 2
+
+    # Calculate positions for the 4 subplots with spacing
+    x1 = pos4.x0
+    x2 = pos4.x0 + subplot_width + horizontal_spacing
+    y1 = pos4.y0 + subplot_height + vertical_spacing - 0.02 # Top row (with spacing below)
+    y2 = pos4.y0 - 0.03 # Bottom row
+
+    # Subplot 1: Small contigs < 250bp (top-left)
+    ax4_1 = fig.add_axes([x1, y1, subplot_width, subplot_height])
+    if len(small_contigs) > 0:
+        n1, bins1, patches1 = ax4_1.hist(small_contigs, bins=20, alpha=0.7, color='lightcoral', edgecolor='black')
+        ax4_1.set_xlim(0, 250)
+        ax4_1.set_ylim(0, max(n1) * 1.1)
+    else:
+        ax4_1.text(0.5, 0.5, 'No contigs\n< 250bp', ha='center', va='center', transform=ax4_1.transAxes)
+    ax4_1.set_title(f'< 250bp: {len(small_contigs):,} ({small_contigs_pct:.1f}%)', fontsize=10)
+    ax4_1.set_ylabel('Count', fontsize=10)
+    ax4_1.set_xlabel('Length (bp)', fontsize=10)
+    ax4_1.tick_params(labelsize=9)
+    ax4_1.grid(True, alpha=0.3)
+
+    # Subplot 2: Medium contigs 250-1000bp (top-right)
+    ax4_2 = fig.add_axes([x2, y1, subplot_width, subplot_height])
+    if len(mid_contigs) > 0:
+        n2, bins2, patches2 = ax4_2.hist(mid_contigs, bins=20, alpha=0.7, color='lightblue', edgecolor='black')
+        ax4_2.set_xlim(250, 1000)
+        ax4_2.set_ylim(0, max(n2) * 1.1)
+    else:
+        ax4_2.text(0.5, 0.5, 'No contigs\n250-1000bp', ha='center', va='center', transform=ax4_2.transAxes)
+    ax4_2.set_title(f'250bp-1kb: {len(mid_contigs):,} ({mid_contigs_pct:.1f}%)', fontsize=10)
+    ax4_2.set_xlabel('Length (bp)', fontsize=10)
+    ax4_2.tick_params(labelsize=9)
+    ax4_2.grid(True, alpha=0.3)
+
+    # Subplot 3: Large contigs > 1000bp (bottom-left) - FORCED LINEAR
+    ax4_3 = fig.add_axes([x1, y2, subplot_width, subplot_height])
+    if len(large_contigs) > 0:
+        n3, bins3, patches3 = ax4_3.hist(large_contigs, bins=20, alpha=0.7, color='lightgreen', edgecolor='black')
+        # ALWAYS LINEAR - no log scaling
+        ax4_3.set_xlabel('Length (bp)', fontsize=10)
+        ax4_3.set_ylim(0, max(n3) * 1.1)
+    else:
+        ax4_3.text(0.5, 0.5, 'No contigs\n> 1kb', ha='center', va='center', transform=ax4_3.transAxes)
+    ax4_3.set_title(f'> 1kb: {len(large_contigs):,} ({long_contigs_pct:.1f}%)', fontsize=10)
+    ax4_3.set_ylabel('Count', fontsize=10)
+    ax4_3.tick_params(labelsize=9)
+    ax4_3.grid(True, alpha=0.3)
+
+    # Subplot 4: All contigs >= 250bp (bottom-right) - FORCED LINEAR
+    ax4_4 = fig.add_axes([x2, y2, subplot_width, subplot_height])
+    if len(above_250) > 0:
+        n4, bins4, patches4 = ax4_4.hist(above_250, bins=25, alpha=0.7, color='mediumpurple', edgecolor='black')
+        ax4_4.axvline(1000, color='red', linestyle='--', linewidth=2, label='1kb threshold')
+        # ALWAYS LINEAR - no log scaling
+        ax4_4.set_xlabel('Length (bp)', fontsize=10)
+        ax4_4.set_ylim(0, max(n4) * 1.1)
+        ax4_4.legend(fontsize=9)
+    else:
+        ax4_4.text(0.5, 0.5, 'No contigs\n≥ 250bp', ha='center', va='center', transform=ax4_4.transAxes)
+    ax4_4.set_title(f'≥ 250bp: {len(above_250):,} ({100-small_contigs_pct:.1f}%)', fontsize=10)
+    ax4_4.tick_params(labelsize=9)
+    ax4_4.grid(True, alpha=0.3)
     
 
-    # Plot 5: Coverage Statistics text box (bottom-middle) - CENTERED VERSION
-    ax5 = axes[1, 1]
-    ax5.axis('off')  # Turn off axes for text display
-    
-    # Prepare comprehensive coverage statistics text
+    # Plot 6: Combined Coverage Statistics and Quality Metrics (bottom-right quadrant)
+    ax6 = axes[1, 2]
+    ax6.axis('off')
+
+    # Prepare combined statistics text
     coverage_stats_text = f"""Coverage Statistics:
 
 Mean Coverage: {avg_coverage:.2f}x
@@ -251,22 +333,8 @@ Longest Contig: {longest_contig:,} bp
 Shortest Contig: {shortest_contig:,} bp
 Overall Coverage: {overall_coverage_pct:.1f}%
 """
-    
-    # Display coverage statistics CENTERED in the quadrant
-    ax5.text(0.5, 0.5, coverage_stats_text, transform=ax5.transAxes, 
-            fontsize=12,  # Increased from 11
-            verticalalignment='center',  # Changed from 'top' to 'center'
-            horizontalalignment='center',  # Added horizontal centering
-            fontfamily='monospace',
-            bbox=dict(boxstyle='round,pad=0.8', facecolor='lightblue', alpha=0.9, 
-                        edgecolor='darkblue', linewidth=1.5))  # Enhanced styling
-    ax5.set_title('Coverage Statistics', fontweight='bold', fontsize=14)  # Increased title size
-    
-    # Plot 6: Quality & Mapping Metrics text box (bottom-right) - CENTERED VERSION
-    ax6 = axes[1, 2]
-    ax6.axis('off')  # Turn off axes for text display
-    
-    # Prepare quality and mapping metrics text (conditional on flagstat availability)
+
+    # Prepare quality metrics text
     if mapping_stats:
         quality_metrics_text = f"""Quality & Mapping Metrics:
 
@@ -288,39 +356,64 @@ Total Mapped Reads: {coverage_data['numreads'].sum():,}
 Avg Reads per Contig: {coverage_data['numreads'].mean():.1f}
 """
     else:
-        # Fallback text when no flagstat file is provided
         quality_metrics_text = f"""Quality Metrics:
-(No flagstat file provided)
 
 Mean Base Quality: {coverage_data['meanbaseq'].mean():.1f}
 Median Base Quality: {coverage_data['meanbaseq'].median():.1f}
 Mean Mapping Quality: {coverage_data['meanmapq'].mean():.1f}
 Median Mapping Quality: {coverage_data['meanmapq'].median():.1f}
 
-Per-Contig Ranges:
-Base Quality: {coverage_data['meanbaseq'].min():.1f} - {coverage_data['meanbaseq'].max():.1f}
-Mapping Quality: {coverage_data['meanmapq'].min():.1f} - {coverage_data['meanmapq'].max():.1f}
-
 Read Mapping:
 Total Mapped Reads: {coverage_data['numreads'].sum():,}
 Avg Reads per Contig: {coverage_data['numreads'].mean():.1f}
 Max Reads per Contig: {coverage_data['numreads'].max():,}
+
+(No flagstat file provided for mapping stats)
 """
+
+    # Get position of ax6 for creating two side-by-side text boxes
+    pos6 = ax6.get_position()
+
+    # Calculate centered positioning
+    total_width = pos6.width * 0.9  # Use 90% of available width
+    box_spacing = 0.05              # 5% spacing between boxes
+    box_width = (total_width - box_spacing) / 2
+    box_height = pos6.height * 0.85 # Use 85% of available height
     
-    # Display quality metrics CENTERED in the quadrant
-    ax6.text(0.5, 0.5, quality_metrics_text, transform=ax6.transAxes, 
-            fontsize=12,  # Increased from 10
-            verticalalignment='center',  # Changed from 'top' to 'center'
-            horizontalalignment='center',  # Added horizontal centering
-            fontfamily='monospace',
-            bbox=dict(boxstyle='round,pad=0.8', facecolor='lightcoral', alpha=0.9,
-                        edgecolor='darkred', linewidth=1.5))  # Enhanced styling
-    ax6.set_title('Quality & Mapping Metrics', fontweight='bold', fontsize=14)  # Increased title size
+    # Center the entire layout in the quadrant
+    left_margin = 0.05  # 5% left margin
+    start_x = pos6.x0 + left_margin
+    start_y = pos6.y0 + (pos6.height - box_height) / 2
+    
+    # Calculate positions for both boxes
+    left_x = start_x
+    right_x = start_x + box_width + box_spacing
+
+    # Coverage Statistics box (left half)
+    ax6_left = fig.add_axes([left_x, start_y, box_width, box_height])
+    ax6_left.axis('off')
+    ax6_left.text(0.5, 0.5, coverage_stats_text, transform=ax6_left.transAxes, 
+                fontsize=8, verticalalignment='center', horizontalalignment='center',
+                fontfamily='monospace',
+                bbox=dict(boxstyle='round,pad=0.4', facecolor='lightblue', alpha=0.9, 
+                        edgecolor='darkblue', linewidth=1))
+#    ax6_left.set_title('Coverage Statistics', fontweight='bold', fontsize=10)
+
+    # Quality Metrics box (right half)
+    ax6_right = fig.add_axes([right_x, start_y, box_width, box_height])
+    ax6_right.axis('off')
+    ax6_right.text(0.5, 0.5, quality_metrics_text, transform=ax6_right.transAxes, 
+                fontsize=8, verticalalignment='center', horizontalalignment='center',
+                fontfamily='monospace',
+                bbox=dict(boxstyle='round,pad=0.4', facecolor='lightcoral', alpha=0.9,
+                            edgecolor='darkred', linewidth=1))
+#    ax6_right.set_title('Quality & Mapping Metrics', fontweight='bold', fontsize=10)
     
     # ==================== FINALIZE AND SAVE ====================
     
     # Adjust layout to prevent overlapping
     plt.tight_layout()
+    plt.subplots_adjust(bottom=0.03)
     
     # Save the plot with high resolution
     plt.savefig(output_file, dpi=300, bbox_inches='tight', facecolor='white')

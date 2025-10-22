@@ -6,7 +6,7 @@
 # Function to show help
 show_help() {
     cat << EOF
-Usage: $0 -i <path_to_workflow_dir> -r <results_directory_name> -w <where_to_save> -b <batch_number> -t <reads_type> -k <kmer_strategy>
+Usage: $0 -i <path_to_workflow_dir> -r <results_directory_name> -w <where_to_save> -b <batch_number> -t <reads_type> -k <kmer_strategy> -n <run_id>
 
 This script saves the output of the FSP assembly benchmarking pipeline.
 
@@ -17,16 +17,17 @@ Options:
   -b <batch>  Batch number (e.g., EG1, batch2, B01, etc.). If you used multiple batches, use all the identifiers (e.g., EG1_EG2). If you don't have batches, use whatever you like in this field.
   -t <type>   Reads used: R1R2 or merged
   -k <kmer>   Kmer strategy: manual, kmergenie, or reads_length
+  -n <run_id> Run identifier (e.g., run1, subset_A, test, trial1, etc.). This should be something that describes your run, for example number of samples + kmer distribution (e.g., 13samples_SP, 34samples_DD, etc. SP = single peak, DD = double diploid peak). Allows to distinguish between multiple runs with the same batch, reads type, and kmer strategy.
   -h          Show this help message
 
-The run name will be automatically generated as: <batch>_<reads_type>_<kmer_strategy>
+The run name will be automatically generated as: <batch>_<reads_type>_<kmer_strategy>_<run_id>
 
 Examples:
-  $0 -i /path/to/FSP_assembly_benchmarking -r results -w /storage/final -b batch1 -t R1R2 -k manual
-  → Creates: batch1_R1R2_manual
+  $0 -i /path/to/FSP_assembly_benchmarking -r results -w /storage/final -b batch1 -t R1R2 -k manual -n run1
+  → Creates: batch1_R1R2_manual_run1
 
-  $0 -i . -r results -w ./saved_output -b B02 -t merged -k kmergenie  
-  → Creates: B02_merged_kmergenie
+  $0 -i . -r results -w ./saved_output -b B02 -t merged -k kmergenie -n subset_A
+  → Creates: B02_merged_kmergenie_subset_A
 
 EOF
 }
@@ -38,9 +39,10 @@ where_to_save=""
 batch_number=""
 reads_type=""
 kmer_strategy=""
+run_id=""
 
 # getopts to set user-defined variables
-while getopts "i:r:w:b:t:k:h" opt; do
+while getopts "i:r:w:b:t:k:n:h" opt; do
   case $opt in
     i) workflow_path="$OPTARG"
        echo "The path to the workflow root directory: $OPTARG"
@@ -70,6 +72,9 @@ while getopts "i:r:w:b:t:k:h" opt; do
        fi
        echo "Kmer strategy: $OPTARG"
     ;;
+    n) run_id="$OPTARG"
+       echo "Run identifier: $OPTARG"
+    ;;
     h) show_help
        exit 0
     ;;
@@ -81,7 +86,7 @@ while getopts "i:r:w:b:t:k:h" opt; do
 done
 
 # Check that all required parameters are provided
-if [[ -z "$workflow_path" || -z "$results_directory_name" || -z "$where_to_save" || -z "$batch_number" || -z "$reads_type" || -z "$kmer_strategy" ]]; then
+if [[ -z "$workflow_path" || -z "$results_directory_name" || -z "$where_to_save" || -z "$batch_number" || -z "$reads_type" || -z "$kmer_strategy" || -z "$run_id" ]]; then
     echo "Error: All parameters are required!" >&2
     echo ""
     show_help
@@ -89,7 +94,7 @@ if [[ -z "$workflow_path" || -z "$results_directory_name" || -z "$where_to_save"
 fi
 
 # Generate the run name automatically
-name="${batch_number}_${reads_type}_${kmer_strategy}"
+name="${batch_number}_${reads_type}_${kmer_strategy}_${run_id}"
 echo ""
 echo "Generated run name: $name"
 echo ""
@@ -97,7 +102,7 @@ echo ""
 # Produce a simple text file containing the list of the samples used in the run
 echo "Saving sample list..."
 mkdir -p "$where_to_save/$name"
-ls "$workflow_path/$results_directory_name" > "$where_to_save/$name/${name}_sample_list.txt"
+ls "$workflow_path/$results_directory_name" | grep -v "fqreads" > "$where_to_save/$name/${name}_sample_list.txt"
 
 # save fasta files. All the fasta files are located in $results_directory_name/$sample_name/assemblies (including the best assembly improved with pilon)
 mkdir -p "$where_to_save/$name"
@@ -335,7 +340,8 @@ for sample_dir in "$workflow_path/$results_directory_name"/*/best_assembly_qc/bw
 
         echo "  Copying $sample_name bwa_mem2_samtools_pilon results to $target_dir"
         mkdir -p "$target_dir"
-        cp -r "$sample_dir"/* "$target_dir/"
+        cp -r "$sample_dir"/*sorted.bam* "$target_dir/"
+        cp -r "$sample_dir"/*.txt "$target_dir/"
     fi
 done
 
