@@ -93,20 +93,51 @@ if [[ -z "$workflow_path" || -z "$results_directory_name" || -z "$where_to_save"
     exit 1
 fi
 
+# Check if the workflow path exists
+if [[ ! -d "$workflow_path" ]]; then
+    echo "Error: Workflow path '$workflow_path' does not exist!" >&2
+    exit 1
+fi
+
+# Check if the results directory exists
+if [[ ! -d "$workflow_path/$results_directory_name" ]]; then
+    echo "Error: Results directory '$workflow_path/$results_directory_name' does not exist!" >&2
+    exit 1
+fi
+
+# Check if the results directory exists
+if [[ ! -d "$workflow_path/$results_directory_name" ]]; then
+    echo "Error: Results directory '$workflow_path/$results_directory_name' does not exist!" >&2
+    exit 1
+fi
+
 # Generate the run name automatically
 name="${batch_number}_${reads_type}_${kmer_strategy}_${run_id}"
 echo ""
 echo "Generated run name: $name"
 echo ""
 
+# Check if a directory with the same name as the target directory already exists to avoid accidental overwriting
+if [[ -d "$where_to_save/$name" ]]; then
+    echo "WARNING: Directory '$where_to_save/$name' already exists!"
+    echo "This will overwrite existing files. Continue? (y/N)"
+    read -r response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+        echo "Operation cancelled."
+        exit 1
+    fi
+fi
+
+# Create the target directory
+echo "Creating target directory..."
+mkdir -p "$where_to_save/$name"
+
 # Produce a simple text file containing the list of the samples used in the run
 echo "Saving sample list..."
-mkdir -p "$where_to_save/$name"
 ls "$workflow_path/$results_directory_name" | grep -v "fqreads" > "$where_to_save/$name/${name}_sample_list.txt"
 
-# save fasta files. All the fasta files are located in $results_directory_name/$sample_name/assemblies (including the best assembly improved with pilon)
-mkdir -p "$where_to_save/$name"
-
+# save fasta files. All the fasta files produced by the workflow are located in $results_directory_name/$sample_name/assemblies (including the best assembly improved with pilon)
+echo "Saving fasta files..."
 for sample_dir in "$workflow_path/$results_directory_name"/*/assemblies; do
     if [[ -d "$sample_dir" ]]; then
         # Extract sample name from path (e.g., results/048ds/assemblies -> 048ds)
@@ -115,9 +146,9 @@ for sample_dir in "$workflow_path/$results_directory_name"/*/assemblies; do
         # Create target directory maintaining sample structure
         target_dir="$where_to_save/$name/$sample_name/assemblies"
         
-        echo "  Copying $sample_name assemblies to $target_dir"
+        echo "Copying $sample_name assemblies to $target_dir"
         mkdir -p "$target_dir"
-        cp -rL "$sample_dir"/*fa "$target_dir/"
+        cp -rL "$sample_dir"/*.fa "$target_dir/"
     fi
 done
 
