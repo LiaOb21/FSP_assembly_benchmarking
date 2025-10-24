@@ -32,6 +32,196 @@ Examples:
 EOF
 }
 
+# Function to validate expected file structures
+validate_sample_structure() {
+    local workflow_path="$1"
+    local results_dir="$2"
+    local validation_errors=0
+
+    echo "Validating sample directory structures..."
+
+    # Get sample list (excluding fqreads)
+    local sample_count=0
+    for sample_path in "$workflow_path/$results_dir"/*/; do
+        if [[ -d "$sample_path" && "$(basename "$sample_path")" != "fqreads" ]]; then
+            local sample_name=$(basename "$sample_path")
+            ((sample_count++))
+            
+            echo "  Validating sample directory structure: $sample_name"
+            
+            # Check required directories
+            local required_dirs=(
+                "assemblies"
+                "quast" 
+                "busco_general"
+                "busco_specific"
+                "merquryfk"
+                "best_assembly"
+                "best_assembly_qc"
+            )
+            
+            for dir in "${required_dirs[@]}"; do
+                if [[ ! -d "$sample_path/$dir" ]]; then
+                    echo "    🍄 Missing required directory: $dir"
+                    ((validation_errors++))
+                else
+                    echo "    ✓ Found directory: $dir"
+                fi
+            done
+            
+            # Check for assembly files
+            if [[ -d "$sample_path/assemblies" ]]; then
+                if ls "$sample_path/assemblies"/*.fa 1> /dev/null 2>&1; then
+                    local fa_count=$(ls "$sample_path/assemblies"/*.fa | wc -l)
+                    echo "    ✓ Found $fa_count assembly files (including best assembly improved with Pilon)"
+                else
+                    echo "    🍄 No .fa files found in assemblies directory"
+                    ((validation_errors++))
+                fi
+            fi
+            
+            # Check for QUAST reports
+            if [[ -d "$sample_path/quast" ]]; then
+                if ls "$sample_path/quast"/*report* 1> /dev/null 2>&1; then
+                    echo "    ✓ Found QUAST reports"
+                else
+                    echo "    🍄 Warning: No QUAST reports found"
+                    ((validation_errors++))
+                fi
+            fi
+            
+            # Check for BUSCO results
+            for busco_type in "busco_general" "busco_specific"; do
+                if [[ -d "$sample_path/$busco_type" ]]; then
+                    if find "$sample_path/$busco_type" -name "short_summary.*.txt" | grep -q .; then
+                        echo "    ✓ Found $busco_type results"
+                    else
+                        echo "    🍄 Warning: No BUSCO summaries found in $busco_type"
+                        ((validation_errors++))
+                    fi
+                fi
+            done
+
+            # Check for merquryfk results
+            if [[ -d "$sample_path/merquryfk" ]]; then
+                if ls "$sample_path/merquryfk"/*/*{qv,stats,bed,png} 1> /dev/null 2>&1; then
+                    echo "    ✓ Found MerquryFK results"
+                else
+                    echo "    🍄 Warning: No MerquryFK results found"
+                    ((validation_errors++))
+                fi
+            fi
+
+            # Check for best assembly info
+            if [[ -d "$sample_path/best_assembly" ]]; then
+                if ls "$sample_path/best_assembly"/*.txt 1> /dev/null 2>&1; then
+                    echo "    ✓ Found best assembly info"
+                else
+                    echo "    🍄 Warning: No best assembly info found"
+                    ((validation_errors++))
+                fi
+            fi            
+            
+            # Check for Pilon changes file
+            if [[ -d "$sample_path/best_assembly" ]]; then
+                if ls "$sample_path/best_assembly"/pilon/*.changes 1> /dev/null 2>&1; then
+                    echo "    ✓ Found Pilon changes file"
+                else
+                    echo "    🍄 Warning: No Pilon changes file found"
+                    ((validation_errors++))
+                fi
+            fi  
+
+            # Check for best assembly QUAST reports
+            if [[ -d "$sample_path/best_assembly_qc/quast_pilon" ]]; then
+                if ls "$sample_path/best_assembly_qc/quast_pilon"/*report* 1> /dev/null 2>&1; then
+                    echo "    ✓ Found best assembly QUAST reports"
+                else
+                    echo "    🍄 Warning: No best assembly QUAST reports found"
+                    ((validation_errors++))
+                fi
+            else
+                echo "    🍄 Warning: Best assembly QUAST directory not found"
+                ((validation_errors++))
+            fi
+
+            # Check for best assembly BUSCO results
+            for busco_type in "busco_general_pilon" "busco_specific_pilon"; do
+                if [[ -d "$sample_path/best_assembly_qc/$busco_type" ]]; then
+                    if find "$sample_path/best_assembly_qc/$busco_type" -name "short_summary.*.txt" | grep -q .; then
+                        echo "    ✓ Found best assembly $busco_type results"
+                    else
+                        echo "    🍄 Warning: No best assembly BUSCO summaries found in $busco_type"
+                        ((validation_errors++))
+                    fi
+                else
+                    echo "    🍄 Warning: Best assembly BUSCO directory $busco_type not found"
+                    ((validation_errors++))
+                fi
+            done
+            
+            # Check for best assembly merquryfk results
+            if [[ -d "$sample_path/best_assembly_qc/merquryfk_pilon" ]]; then
+                if ls "$sample_path/best_assembly_qc/merquryfk_pilon"/*{qv,stats,bed,png} 1> /dev/null 2>&1; then
+                    echo "    ✓ Found best assembly MerquryFK results"
+                else
+                    echo "    🍄 Warning: No best assembly MerquryFK results found"
+                    ((validation_errors++))
+                fi
+            else
+                echo "    🍄 Warning: Best assembly MerquryFK directory not found"
+                ((validation_errors++))
+            fi
+
+            # Check for best assembly alignments results
+            if [[ -d "$sample_path/best_assembly_qc/bwa_mem2_samtools_pilon" ]]; then
+                if ls "$sample_path/best_assembly_qc/bwa_mem2_samtools_pilon"/*{sorted.bam,.txt} 1> /dev/null 2>&1; then
+                    echo "    ✓ Found best assembly alignments results"
+                else
+                    echo "    🍄 Warning: No best assembly alignments results found"
+                    ((validation_errors++))
+                fi
+            else
+                echo "    🍄 Warning: Best assembly bwa_mem2_samtools_pilon directory not found"
+                ((validation_errors++))
+            fi
+            # Check for best assembly coverage_viz results
+            if [[ -d "$sample_path/best_assembly_qc/coverage_viz_pilon" ]]; then
+                if ls "$sample_path/best_assembly_qc/coverage_viz_pilon"/*{.png,.txt} 1> /dev/null 2>&1; then
+                    echo "    ✓ Found best assembly coverage_viz results"
+                else
+                    echo "    🍄 Warning: No best assembly coverage_viz results found"
+                    ((validation_errors++))
+                fi
+            else
+                echo "    🍄 Warning: Best assembly coverage_viz_pilon directory not found"
+                ((validation_errors++))
+            fi
+        fi
+    done
+    
+    # Final validation summary
+    if [[ $sample_count -eq 0 ]]; then
+        echo "🍄 ERROR: No sample directories found!" >&2
+        return 1
+    fi
+    
+    if [[ $validation_errors -gt 0 ]]; then
+        echo "🍄 ERROR: Found $validation_errors validation errors across samples!" >&2
+        echo "Some expected files/directories are missing. Continue anyway? (y/N)"
+        read -r response
+        if [[ ! "$response" =~ ^[Yy]$ ]]; then
+            echo "Operation cancelled."
+            return 1
+        fi
+    else
+        echo "✓ All validation checks passed for $sample_count samples!"
+        echo "--------------------------------------------------------------"
+    fi
+    
+    return 0
+}
+
 # Initialise variables
 workflow_path=""
 results_directory_name=""
@@ -95,20 +285,47 @@ fi
 
 # Check if the workflow path exists
 if [[ ! -d "$workflow_path" ]]; then
-    echo "Error: Workflow path '$workflow_path' does not exist!" >&2
+    echo "🍄 Error: Workflow path '$workflow_path' does not exist!" >&2
     exit 1
 fi
 
 # Check if the results directory exists
 if [[ ! -d "$workflow_path/$results_directory_name" ]]; then
-    echo "Error: Results directory '$workflow_path/$results_directory_name' does not exist!" >&2
+    echo "🍄 Error: Results directory '$workflow_path/$results_directory_name' does not exist!" >&2
     exit 1
 fi
 
-# Check if the results directory exists
-if [[ ! -d "$workflow_path/$results_directory_name" ]]; then
-    echo "Error: Results directory '$workflow_path/$results_directory_name' does not exist!" >&2
-    exit 1
+#Check if the benchmark directory exists if not, warn the user and ask for confirmation to continue
+if [[ ! -d "$workflow_path/benchmark" ]]; then
+    echo "🍄 Warning: Benchmark directory '$workflow_path/benchmark' does not exist!" >&2
+    echo "Continue without saving benchmark results? (y/N)"
+    read -r response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+        echo "Operation cancelled."
+        exit 1
+    fi
+fi
+
+#Check if the logs directory exists if not, warn the user and ask for confirmation to continue
+if [[ ! -d "$workflow_path/logs" ]]; then
+    echo "🍄 Warning: Logs directory '$workflow_path/logs' does not exist!" >&2
+    echo "Continue without saving log files? (y/N)"
+    read -r response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+        echo "Operation cancelled."
+        exit 1
+    fi
+fi
+
+# Check if the config file exists if not, warn the user and ask for confirmation to continue
+if [[ ! -f "$workflow_path/config/config.yml" ]]; then
+    echo "🍄 Warning: Config file '$workflow_path/config/config.yml' does not exist!" >&2
+    echo "Continue without saving config file? (y/N)"
+    read -r response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+        echo "Operation cancelled."
+        exit 1
+    fi
 fi
 
 # Generate the run name automatically
@@ -119,13 +336,18 @@ echo ""
 
 # Check if a directory with the same name as the target directory already exists to avoid accidental overwriting
 if [[ -d "$where_to_save/$name" ]]; then
-    echo "WARNING: Directory '$where_to_save/$name' already exists!"
+    echo "🍄 WARNING: Directory '$where_to_save/$name' already exists!"
     echo "This will overwrite existing files. Continue? (y/N)"
     read -r response
     if [[ ! "$response" =~ ^[Yy]$ ]]; then
         echo "Operation cancelled."
         exit 1
     fi
+fi
+
+# Validate sample structures before starting
+if ! validate_sample_structure "$workflow_path" "$results_directory_name"; then
+    exit 1
 fi
 
 # Create the target directory
@@ -182,7 +404,7 @@ done
 
 # Save BUSCO results - only short_summary.txt files and full_table.tsv for downstream analysis
 echo "Saving BUSCO summary files..."
-for busco_dir in "$workflow_path/$results_directory_name"/*/busco_*; do
+for busco_dir in "$workflow_path/$results_directory_name"/*/busco_{general,specific}; do
     if [[ -d "$busco_dir" ]]; then
         # Extract sample name and busco type
         sample_name=$(basename "$(dirname "$busco_dir")")
@@ -196,7 +418,7 @@ for busco_dir in "$workflow_path/$results_directory_name"/*/busco_*; do
         # Process each assembler subdirectory individually to avoid duplicates
         for assembler_subdir in "$busco_dir"/*/*/; do
             if [[ -d "$assembler_subdir" ]]; then
-                assembler_name=$(basename "$assembler_subdir")
+                assembler_name=$(basename "$assembler_subdir" .fa)
                 
                 # Create target directory
                 target_dir="$where_to_save/$name/${sample_name}/QC_all_drafts/${busco_type}/${assembler_name}"
@@ -352,9 +574,6 @@ for merqury_dir in "$workflow_path/$results_directory_name"/*/best_assembly_qc/m
         # Copy BED files (optional - remove if too large)
         find "$merqury_dir" -maxdepth 1 -name "*.bed" -exec cp {} "$target_dir/" \;
         
-        # Copy any summary files
-        find "$merqury_dir" -maxdepth 1 -name "*.summary" -exec cp {} "$target_dir/" \;
-        
         echo "    Copied best assembly MerquryFK files"
     fi
 done
@@ -389,6 +608,7 @@ for sample_dir in "$workflow_path/$results_directory_name"/*/best_assembly_qc/co
         echo "  Copying $sample_name coverage_viz_pilon results to $target_dir"
         mkdir -p "$target_dir"
         cp -r "$sample_dir"/*png "$target_dir/"
+        cp -r "$sample_dir"/*.txt "$target_dir/"
     fi
 done
 
