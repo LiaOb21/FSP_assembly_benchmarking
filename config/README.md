@@ -252,6 +252,8 @@ quast:
 
 This section of the `config.yml` allows the user to set the parameters for QUAST. The `-o` flag is set internally in the workflow and the user must not use this in `optional_params`. We do not recommend using a reference genome for QUAST analysis, unless all the samples can be compared with the same reference genome, as the user is only able to set this parameter once from the `config.yml` adding the `-r` flag in the optional parameters.
 
+Note that QUAST in this workflow is always run with the flag `--min-contig 250`, which is set internally. This means that the user should not use this flag, and that the statstics produced by QUAST do not take into account contigs shorter than 250 bp.
+
 For further information about using QUAST parameters, refer to the [official documentation](https://quast.sourceforge.net/docs/manual.html#sec2.3).
 
 ## FastK
