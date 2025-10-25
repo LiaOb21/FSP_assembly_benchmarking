@@ -120,7 +120,7 @@ quast_file="$sample_results_dir/quast/report.txt"
 if [[ -f "$quast_file" ]]; then
     # Extract Assembly and aUN values from quast report and transpose
     # remove sample name just for consistency with busco output
-    awk '/Assembly/ {for(i=2;i<=NF;i++) a[i-1]=$i} /auN/ {for(i=2;i<=NF;i++) {split(a[i-1], parts, "_"); print parts[2], $i}}' "$quast_file" > "$output_dir/auN_quast.txt"
+    awk '/Assembly/ {for(i=2;i<=NF;i++) a[i-1]=$i} /auN/ {for(i=2;i<=NF;i++) {split(a[i-1], parts, "_"); print parts[length(parts)], $i}}' "$quast_file" > "$output_dir/auN_quast.txt"
 
     # Get auN scores only for the tied BUSCO assemblers
     # Get the list of assemblers with the highest BUSCOs
