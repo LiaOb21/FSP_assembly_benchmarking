@@ -149,7 +149,7 @@ reference_samples=("${all_unique_samples[@]}")
 output_dir="$results_directory_name"
 mkdir -p "$output_dir"
 
-echo "🍄 Comparing best assemblies across runs..."
+echo " Comparing best assemblies across runs..."
 echo ""
 
 # Process each sample
@@ -157,7 +157,24 @@ for sample in "${reference_samples[@]}"; do
     echo "Processing sample: $sample"
     
     sample_output_dir="$output_dir/$sample"
-    mkdir -p "$sample_output_dir"
+    # check if output directory for this sample exists, if not create it. If it exists, ask user before overwriting
+    if [[ -d "$sample_output_dir" ]]; then
+        echo "  🍄 Warning: Output directory for sample '$sample' already exists: $sample_output_dir"
+        echo "  Do you want to overwrite it? (y/N)"
+        read -r response
+        if [[ ! "$response" =~ ^[Yy]$ ]]; then
+            echo "  Skipping sample '$sample'."
+            echo ""
+            continue
+        else
+            echo "  Overwriting existing directory..."
+            rm -rf "$sample_output_dir"
+        fi
+    fi
+
+    if [[ ! -d "$sample_output_dir" ]]; then
+        mkdir -p "$sample_output_dir"
+    fi
     
     # Collect best assembly from each run that has this sample
     run_assemblies=()
@@ -187,13 +204,23 @@ for sample in "${reference_samples[@]}"; do
                     run_assemblies+=("$subdir:$best_assembler")
                     run_busco_scores+=("$subdir:$best_assembler:$busco_score")
                 else
-                    echo "    🍄 Warning: No BUSCO file found for best assembly"
+                    echo "    🍄 Warning: No BUSCO file found for best assembly in run '$subdir'"
+                    echo "    Do you want to continue? (y/N)"
+                    read -r response
+                    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+                        echo "Aborting."
+                        exit 1
+                    fi
                 fi
             else
                 echo "  🍄 Warning: No best_assembly.txt found in run '$subdir' for sample '$sample'"
+                echo "  Do you want to continue? (y/N)"
+                read -r response
+                if [[ ! "$response" =~ ^[Yy]$ ]]; then
+                    echo "Aborting."
+                    exit 1
+                fi
             fi
-        else
-            echo "  - Run '$subdir': sample not present"
         fi
     done
     
@@ -222,6 +249,12 @@ for sample in "${reference_samples[@]}"; do
                 echo "    QC directory copied to: $sample_output_dir/best_assembly_info_and_QC"
             else
                 echo "    🍄 Warning: QC directory not found: $source_qc_dir"
+                echo "    Do you want to continue? (y/N)"
+                read -r response
+                if [[ ! "$response" =~ ^[Yy]$ ]]; then
+                    echo "Aborting."
+                    exit 1
+                fi
             fi
 
             # Copy the config file from the winning run
@@ -231,9 +264,21 @@ for sample in "${reference_samples[@]}"; do
                 echo "    Config copied to: $sample_output_dir/${sample}_best_assembly_config.yml"
             else
                 echo "    🍄 Warning: Config file not found: $source_config"
+                echo "    Do you want to continue? (y/N)"
+                read -r response
+                if [[ ! "$response" =~ ^[Yy]$ ]]; then
+                    echo "Aborting."
+                    exit 1
+                fi
             fi
         else
             echo "  🍄 Error: Source assembly not found: $source_assembly"
+            echo "    Do you want to continue? (y/N)"
+            read -r response
+            if [[ ! "$response" =~ ^[Yy]$ ]]; then
+                echo "Aborting."
+                exit 1
+            fi
         fi
         echo ""
         continue
@@ -281,6 +326,12 @@ for sample in "${reference_samples[@]}"; do
                 echo "    QC directory copied to: $sample_output_dir/best_assembly_info_and_QC"
             else
                 echo "    🍄 Warning: QC directory not found: $source_qc_dir"
+                echo "    Do you want to continue? (y/N)"
+                read -r response
+                if [[ ! "$response" =~ ^[Yy]$ ]]; then
+                    echo "Aborting."
+                    exit 1
+                fi
             fi
 
             # Copy the config file from the winning run
@@ -290,10 +341,21 @@ for sample in "${reference_samples[@]}"; do
                 echo "    Config copied to: $sample_output_dir/${sample}_best_assembly_config.yml"
             else
                 echo "    🍄 Warning: Config file not found: $source_config"
-
+                echo "    Do you want to continue? (y/N)"
+                read -r response
+                if [[ ! "$response" =~ ^[Yy]$ ]]; then
+                    echo "Aborting."
+                    exit 1
+                fi
             fi
         else
             echo "  🍄 Error: Source assembly not found: $source_assembly"
+            echo "    Do you want to continue? (y/N)"
+            read -r response
+            if [[ ! "$response" =~ ^[Yy]$ ]]; then
+                echo "Aborting."
+                exit 1
+            fi
         fi
     else
         # Tie in BUSCO scores - use auN as tiebreaker
@@ -338,7 +400,13 @@ for sample in "${reference_samples[@]}"; do
                     cp -r "$source_qc_dir" "$sample_output_dir/best_assembly_info_and_QC"
                     echo "    QC directory copied to: $sample_output_dir/best_assembly_info_and_QC"
                 else
-                    echo "    ⚠ Warning: QC directory not found: $source_qc_dir"
+                    echo "    🍄 Warning: QC directory not found: $source_qc_dir"
+                    echo "    Do you want to continue? (y/N)"
+                    read -r response
+                    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+                        echo "Aborting."
+                        exit 1
+                    fi
                 fi
 
                 # Copy the config file from the winning run
@@ -347,13 +415,31 @@ for sample in "${reference_samples[@]}"; do
                     cp "$source_config" "$sample_output_dir/${sample}_best_assembly_config.yml"
                     echo "    Config copied to: $sample_output_dir/${sample}_best_assembly_config.yml"
                 else
-                    echo "    ⚠ Warning: Config file not found: $source_config"
+                    echo "    🍄 Warning: Config file not found: $source_config"
+                    echo "    Do you want to continue? (y/N)"
+                    read -r response
+                    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+                        echo "Aborting."
+                        exit 1
+                    fi
                 fi
             else
                 echo "  🍄 Error: Source assembly not found: $source_assembly"
+                echo "    Do you want to continue? (y/N)"
+                read -r response
+                if [[ ! "$response" =~ ^[Yy]$ ]]; then
+                    echo "Aborting."
+                    exit 1
+                fi
             fi
         else
             echo "  🍄 Error: Could not determine best assembly for sample '$sample'"
+            echo "    Do you want to continue? (y/N)"
+            read -r response
+            if [[ ! "$response" =~ ^[Yy]$ ]]; then
+                echo "Aborting."
+                exit 1
+            fi
         fi
     fi
     
