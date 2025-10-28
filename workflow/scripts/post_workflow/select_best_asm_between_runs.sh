@@ -187,10 +187,10 @@ for sample in "${reference_samples[@]}"; do
                     run_assemblies+=("$subdir:$best_assembler")
                     run_busco_scores+=("$subdir:$best_assembler:$busco_score")
                 else
-                    echo "    ⚠ Warning: No BUSCO file found for best assembly"
+                    echo "    🍄 Warning: No BUSCO file found for best assembly"
                 fi
             else
-                echo "  ⚠ Warning: No best_assembly.txt found in run '$subdir' for sample '$sample'"
+                echo "  🍄 Warning: No best_assembly.txt found in run '$subdir' for sample '$sample'"
             fi
         else
             echo "  - Run '$subdir': sample not present"
@@ -221,7 +221,7 @@ for sample in "${reference_samples[@]}"; do
                 cp -r "$source_qc_dir" "$sample_output_dir/best_assembly_info_and_QC"
                 echo "    QC directory copied to: $sample_output_dir/best_assembly_info_and_QC"
             else
-                echo "    ⚠ Warning: QC directory not found: $source_qc_dir"
+                echo "    🍄 Warning: QC directory not found: $source_qc_dir"
             fi
 
             # Copy the config file from the winning run
@@ -230,7 +230,7 @@ for sample in "${reference_samples[@]}"; do
                 cp "$source_config" "$sample_output_dir/${sample}_best_assembly_config.yml"
                 echo "    Config copied to: $sample_output_dir/${sample}_best_assembly_config.yml"
             else
-                echo "    ⚠ Warning: Config file not found: $source_config"
+                echo "    🍄 Warning: Config file not found: $source_config"
             fi
         else
             echo "  🍄 Error: Source assembly not found: $source_assembly"
@@ -280,7 +280,7 @@ for sample in "${reference_samples[@]}"; do
                 cp -r "$source_qc_dir" "$sample_output_dir/best_assembly_info_and_QC"
                 echo "    QC directory copied to: $sample_output_dir/best_assembly_info_and_QC"
             else
-                echo "    ⚠ Warning: QC directory not found: $source_qc_dir"
+                echo "    🍄 Warning: QC directory not found: $source_qc_dir"
             fi
 
             # Copy the config file from the winning run
@@ -289,7 +289,8 @@ for sample in "${reference_samples[@]}"; do
                 cp "$source_config" "$sample_output_dir/${sample}_best_assembly_config.yml"
                 echo "    Config copied to: $sample_output_dir/${sample}_best_assembly_config.yml"
             else
-                echo "    ⚠ Warning: Config file not found: $source_config"
+                echo "    🍄 Warning: Config file not found: $source_config"
+
             fi
         else
             echo "  🍄 Error: Source assembly not found: $source_assembly"

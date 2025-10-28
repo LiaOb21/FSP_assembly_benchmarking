@@ -335,7 +335,7 @@ snakemake --cores 2 --sdm conda apptainer --directory .test
   - Royal Botanic Gardens, Kew
   - [ORCID profile](https://orcid.org/0000-0002-3208-323X)
 
-The other members of the FSP bioinformatics team, [Wu Huang](https://github.com/bcgsc/arcs/issues/19) and [Niall Garvey](https://github.com/NiallG1), and [George Mears]() also contributed to the development and testing of this part of the workflow (which is only a part of the full pipeline developed for the FSP).
+The other members of the FSP bioinformatics team, [Wu Huang](https://github.com/bcgsc/arcs/issues/19) and [Niall Garvey](https://github.com/NiallG1), and [George Mears](https://github.com/George-Mears) also contributed to the development and testing of this part of the workflow (which is only a part of the full pipeline developed for the FSP).
 
 ## References (needs update)
 
