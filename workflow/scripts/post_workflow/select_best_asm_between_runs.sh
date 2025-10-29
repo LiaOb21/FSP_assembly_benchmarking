@@ -49,6 +49,78 @@ if [[ -z "$where_to_save" || -z "$results_directory_name" || -z "$batch_number" 
     exit 1
 fi
 
+
+# Function to copy assembly files and associated data
+copy_assembly_files() {
+    local best_run="$1"
+    local best_assembler="$2"
+    local sample="$3"
+    local sample_output_dir="$4"
+    
+    # Copy the assembly
+    local source_assembly="$where_to_save/$best_run/$sample/assemblies/${sample}_best_assembly_pilon.fa"
+    if [[ -f "$source_assembly" ]]; then
+        cp "$source_assembly" "$sample_output_dir/${sample}_best_assembly.fa"
+        echo "$best_run:$best_assembler" > "$sample_output_dir/best_assembly_source.txt"
+        echo "    Assembly copied to: $sample_output_dir/${sample}_best_assembly.fa"
+        
+        # Copy the entire QC directory for the best assembly
+        local source_qc_dir="$where_to_save/$best_run/$sample/best_assembly_info_and_QC"
+        if [[ -d "$source_qc_dir" ]]; then
+            cp -r "$source_qc_dir" "$sample_output_dir/best_assembly_info_and_QC"
+            echo "    QC directory copied to: $sample_output_dir/best_assembly_info_and_QC"
+        else
+            echo "    🍄 Warning: QC directory not found: $source_qc_dir"
+            echo "    Do you want to continue? (y/N)"
+            read -r response
+            if [[ ! "$response" =~ ^[Yy]$ ]]; then
+                echo "Aborting."
+                exit 1
+            fi
+        fi
+
+        # Copy the logs for the best assembly
+        local source_logs_dir="$where_to_save/$best_run/${best_run}_logs/$sample"
+        if [[ -d "$source_logs_dir" ]]; then
+            cp -r "$source_logs_dir" "$sample_output_dir/logs"
+            echo "    Logs copied to: $sample_output_dir/logs"
+        else
+            echo "    🍄 Warning: Logs directory not found: $source_logs_dir"
+            echo "    Do you want to continue? (y/N)"
+            read -r response
+            if [[ ! "$response" =~ ^[Yy]$ ]]; then
+                echo "Aborting."
+                exit 1
+            fi
+        fi
+
+        # Copy the config file from the winning run
+        local source_config="$where_to_save/$best_run/${best_run}_config.yml"
+        if [[ -f "$source_config" ]]; then
+            cp "$source_config" "$sample_output_dir/${sample}_best_assembly_config.yml"
+            echo "    Config copied to: $sample_output_dir/${sample}_best_assembly_config.yml"
+        else
+            echo "    🍄 Warning: Config file not found: $source_config"
+            echo "    Do you want to continue? (y/N)"
+            read -r response
+            if [[ ! "$response" =~ ^[Yy]$ ]]; then
+                echo "Aborting."
+                exit 1
+            fi
+        fi
+    else
+        echo "  🍄 Error: Source assembly not found: $source_assembly"
+        echo "    Do you want to continue? (y/N)"
+        read -r response
+        if [[ ! "$response" =~ ^[Yy]$ ]]; then
+            echo "Aborting."
+            exit 1
+        fi
+    fi
+}
+
+
+
 # Each subdirectory in where_to_save matching is named as:
 # <batch_number>_<reads_type>_<kmer_strategy>_<run_id>
 # Find each subdirectory in the where_to_save directory that matches the batch number and run identifier
@@ -235,54 +307,9 @@ for sample in "${reference_samples[@]}"; do
         IFS=':' read -r best_run best_assembler <<< "${run_assemblies[0]}"
         echo "  ✓ Only one run has this sample - selecting '$best_assembler' from '$best_run'"
         
-        # Copy the assembly
-        source_assembly="$where_to_save/$best_run/$sample/assemblies/${sample}_best_assembly_pilon.fa"
-        if [[ -f "$source_assembly" ]]; then
-            cp "$source_assembly" "$sample_output_dir/${sample}_best_assembly.fa"
-            echo "$best_run:$best_assembler" > "$sample_output_dir/best_assembly_source.txt"
-            echo "    Assembly copied to: $sample_output_dir/${sample}_best_assembly.fa"
-            
-            # Copy the entire QC directory for the best assembly
-            source_qc_dir="$where_to_save/$best_run/$sample/best_assembly_info_and_QC"
-            if [[ -d "$source_qc_dir" ]]; then
-                cp -r "$source_qc_dir" "$sample_output_dir/best_assembly_info_and_QC"
-                echo "    QC directory copied to: $sample_output_dir/best_assembly_info_and_QC"
-            else
-                echo "    🍄 Warning: QC directory not found: $source_qc_dir"
-                echo "    Do you want to continue? (y/N)"
-                read -r response
-                if [[ ! "$response" =~ ^[Yy]$ ]]; then
-                    echo "Aborting."
-                    exit 1
-                fi
-            fi
+        copy_assembly_files "$best_run" "$best_assembler" "$sample" "$sample_output_dir"
 
-            # Copy the config file from the winning run
-            source_config="$where_to_save/$best_run/${best_run}_config.yml"
-            if [[ -f "$source_config" ]]; then
-                cp "$source_config" "$sample_output_dir/${sample}_best_assembly_config.yml"
-                echo "    Config copied to: $sample_output_dir/${sample}_best_assembly_config.yml"
-            else
-                echo "    🍄 Warning: Config file not found: $source_config"
-                echo "    Do you want to continue? (y/N)"
-                read -r response
-                if [[ ! "$response" =~ ^[Yy]$ ]]; then
-                    echo "Aborting."
-                    exit 1
-                fi
-            fi
-        else
-            echo "  🍄 Error: Source assembly not found: $source_assembly"
-            echo "    Do you want to continue? (y/N)"
-            read -r response
-            if [[ ! "$response" =~ ^[Yy]$ ]]; then
-                echo "Aborting."
-                exit 1
-            fi
-        fi
-        echo ""
-        continue
-    fi
+    else
     
     # Multiple runs have this sample - compare BUSCO scores
     echo "  Comparing ${#run_assemblies[@]} assemblies across runs..."
@@ -312,51 +339,7 @@ for sample in "${reference_samples[@]}"; do
         read -r best_run best_assembler best_busco < "$sample_output_dir/best_busco_assemblies.txt"
         echo "  ✓ Best assembly: '$best_assembler' from '$best_run' (BUSCO: $best_busco)"
         
-        # Copy the assembly
-        source_assembly="$where_to_save/$best_run/$sample/assemblies/${sample}_best_assembly_pilon.fa"
-        if [[ -f "$source_assembly" ]]; then
-            cp "$source_assembly" "$sample_output_dir/${sample}_best_assembly.fa"
-            echo "$best_run:$best_assembler" > "$sample_output_dir/best_assembly_source.txt"
-            echo "    Assembly copied to: $sample_output_dir/${sample}_best_assembly.fa"
-            
-            # Copy the entire QC directory for the best assembly
-            source_qc_dir="$where_to_save/$best_run/$sample/best_assembly_info_and_QC"
-            if [[ -d "$source_qc_dir" ]]; then
-                cp -r "$source_qc_dir" "$sample_output_dir/best_assembly_info_and_QC"
-                echo "    QC directory copied to: $sample_output_dir/best_assembly_info_and_QC"
-            else
-                echo "    🍄 Warning: QC directory not found: $source_qc_dir"
-                echo "    Do you want to continue? (y/N)"
-                read -r response
-                if [[ ! "$response" =~ ^[Yy]$ ]]; then
-                    echo "Aborting."
-                    exit 1
-                fi
-            fi
-
-            # Copy the config file from the winning run
-            source_config="$where_to_save/$best_run/${best_run}_config.yml"
-            if [[ -f "$source_config" ]]; then
-                cp "$source_config" "$sample_output_dir/${sample}_best_assembly_config.yml"
-                echo "    Config copied to: $sample_output_dir/${sample}_best_assembly_config.yml"
-            else
-                echo "    🍄 Warning: Config file not found: $source_config"
-                echo "    Do you want to continue? (y/N)"
-                read -r response
-                if [[ ! "$response" =~ ^[Yy]$ ]]; then
-                    echo "Aborting."
-                    exit 1
-                fi
-            fi
-        else
-            echo "  🍄 Error: Source assembly not found: $source_assembly"
-            echo "    Do you want to continue? (y/N)"
-            read -r response
-            if [[ ! "$response" =~ ^[Yy]$ ]]; then
-                echo "Aborting."
-                exit 1
-            fi
-        fi
+        copy_assembly_files "$best_run" "$best_assembler" "$sample" "$sample_output_dir"
     else
         # Tie in BUSCO scores - use auN as tiebreaker
         echo "  → Tie in BUSCO scores ($max_busco) - checking auN scores..."
@@ -387,51 +370,7 @@ for sample in "${reference_samples[@]}"; do
         if [[ -n "$best_run" ]]; then
             echo "  ✓ Best assembly: '$best_assembler' from '$best_run' (BUSCO: $max_busco, auN: $best_aun)"
             
-            # Copy the assembly
-            source_assembly="$where_to_save/$best_run/$sample/assemblies/${sample}_best_assembly_pilon.fa"
-            if [[ -f "$source_assembly" ]]; then
-                cp "$source_assembly" "$sample_output_dir/${sample}_best_assembly.fa"
-                echo "$best_run:$best_assembler" > "$sample_output_dir/best_assembly_source.txt"
-                echo "    Assembly copied to: $sample_output_dir/${sample}_best_assembly.fa"
-                
-                # Copy the entire QC directory for the best assembly
-                source_qc_dir="$where_to_save/$best_run/$sample/best_assembly_info_and_QC"
-                if [[ -d "$source_qc_dir" ]]; then
-                    cp -r "$source_qc_dir" "$sample_output_dir/best_assembly_info_and_QC"
-                    echo "    QC directory copied to: $sample_output_dir/best_assembly_info_and_QC"
-                else
-                    echo "    🍄 Warning: QC directory not found: $source_qc_dir"
-                    echo "    Do you want to continue? (y/N)"
-                    read -r response
-                    if [[ ! "$response" =~ ^[Yy]$ ]]; then
-                        echo "Aborting."
-                        exit 1
-                    fi
-                fi
-
-                # Copy the config file from the winning run
-                source_config="$where_to_save/$best_run/${best_run}_config.yml"
-                if [[ -f "$source_config" ]]; then
-                    cp "$source_config" "$sample_output_dir/${sample}_best_assembly_config.yml"
-                    echo "    Config copied to: $sample_output_dir/${sample}_best_assembly_config.yml"
-                else
-                    echo "    🍄 Warning: Config file not found: $source_config"
-                    echo "    Do you want to continue? (y/N)"
-                    read -r response
-                    if [[ ! "$response" =~ ^[Yy]$ ]]; then
-                        echo "Aborting."
-                        exit 1
-                    fi
-                fi
-            else
-                echo "  🍄 Error: Source assembly not found: $source_assembly"
-                echo "    Do you want to continue? (y/N)"
-                read -r response
-                if [[ ! "$response" =~ ^[Yy]$ ]]; then
-                    echo "Aborting."
-                    exit 1
-                fi
-            fi
+            copy_assembly_files "$best_run" "$best_assembler" "$sample" "$sample_output_dir"
         else
             echo "  🍄 Error: Could not determine best assembly for sample '$sample'"
             echo "    Do you want to continue? (y/N)"
@@ -442,7 +381,7 @@ for sample in "${reference_samples[@]}"; do
             fi
         fi
     fi
-    
+fi
     # Clean up temporary files
     rm -f "$sample_output_dir"/temp_*.txt
     echo ""
