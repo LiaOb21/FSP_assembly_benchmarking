@@ -42,12 +42,11 @@ def extract_sample_info(busco_filename, best_assembly_source_path):
                     run_info, assembler = content.split(':', 1)
                     
                     # Extract reads type from run info
-                    # Look for patterns like R1R2, R1R2R3, etc.
-                    reads_pattern = r'(R\d+(?:R\d+)*)'
-                    reads_match = re.search(reads_pattern, run_info)
-                    
-                    if reads_match:
-                        reads_type = reads_match.group(1)
+                    # Look for either R1R2 or merged
+                    if 'R1R2' in run_info:
+                        reads_type = 'R1R2'
+                    elif 'merged' in run_info:
+                        reads_type = 'merged'
                 
         except FileNotFoundError:
             print(f"Warning: best_assembly_source.txt not found at {best_assembly_source_path}")
