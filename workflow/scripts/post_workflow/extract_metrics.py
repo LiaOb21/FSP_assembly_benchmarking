@@ -10,14 +10,14 @@ import sys
 
 def extract_sample_info(busco_filename, best_assembly_source_path):
     """
-    Extract sample ID, assembler, reads type and lineage info from multiple sources.
+    Extract sample ID, assembler, reads type, kmer strategy and lineage info from multiple sources.
     
     Args:
         busco_filename (str): BUSCO summary filename
         best_assembly_source_path (str): Path to best_assembly_source.txt file
         
     Returns:
-        tuple: (sample_id, lineage, reads_type, assembler)
+        tuple: (sample_id, lineage, reads_type, kmer_strategy, assembler)
     """
     # Extract sample_id and lineage from BUSCO filename
     # short_summary.specific.fungi_odb12.BUSCO_048ds_best_assembly_pilon.fa.txt
@@ -28,14 +28,17 @@ def extract_sample_info(busco_filename, best_assembly_source_path):
         lineage = match1.group(1)
         sample_id = match1.group(2)
         
-        # Extract reads_type and assembler from best_assembly_source.txt
+        # Extract reads_type, kmer_strategy, and assembler from best_assembly_source.txt
         reads_type = None
+        kmer_strategy = None
         assembler = None
         
         try:
             with open(best_assembly_source_path, 'r') as f:
                 content = f.read().strip()
                 # Format: "06_EG_R1R2_reads_length_2samples_SP_Lia:masurca"
+                # or:     "06_EG_merged_kmergenie_2samples_SP_Lia:masurca"
+                # or:     "06_EG_R1R2_manual_2samples_SP_Lia:masurca"
                 
                 # Split by colon to separate run info from assembler
                 if ':' in content:
@@ -47,15 +50,24 @@ def extract_sample_info(busco_filename, best_assembly_source_path):
                         reads_type = 'R1R2'
                     elif 'merged' in run_info:
                         reads_type = 'merged'
+                    
+                    # Extract kmer strategy from run info
+                    # Look for reads_length, kmergenie, or manual
+                    if 'reads_length' in run_info:
+                        kmer_strategy = 'reads_length'
+                    elif 'kmergenie' in run_info:
+                        kmer_strategy = 'kmergenie'
+                    elif 'manual' in run_info:
+                        kmer_strategy = 'manual'
                 
         except FileNotFoundError:
             print(f"Warning: best_assembly_source.txt not found at {best_assembly_source_path}")
         except Exception as e:
             print(f"Error reading best_assembly_source.txt: {e}")
         
-        return sample_id, lineage, reads_type, assembler
+        return sample_id, lineage, reads_type, kmer_strategy, assembler
 
-    return None, None, None, None
+    return None, None, None, None, None
 
 
 def parse_busco_file(filepath):
@@ -338,7 +350,7 @@ def collect_all_metrics(base_dir, verbose=True):
                 best_source_file = os.path.join(sample_path, 'best_assembly_source.txt')
                 
                 filename = os.path.basename(busco_file)
-                sample_id, lineage, reads_type, assembler = extract_sample_info(filename, best_source_file)
+                sample_id, lineage, reads_type, kmer_strategy, assembler = extract_sample_info(filename, best_source_file)
                 
                 if sample_id and lineage:
                     busco_results = parse_busco_file(busco_file)
@@ -348,6 +360,7 @@ def collect_all_metrics(base_dir, verbose=True):
                             'lineage': lineage,
                             'busco_type': busco_type.replace('busco_', '').replace('_pilon', ''),
                             'reads_type': reads_type,
+                            'kmer_strategy': kmer_strategy,
                             'assembler': assembler,
                         }
                         # Add BUSCO results
@@ -355,7 +368,7 @@ def collect_all_metrics(base_dir, verbose=True):
                         # Add all other metrics (QUAST, Merqury, Coverage)
                         entry.update(other_data)
                         
-                        data.append(entry)  # THIS LINE WAS MISSING!
+                        data.append(entry)
                         
                         if verbose:
                             print(f"✓ {sample_id} ({busco_type.replace('busco_', '').replace('_pilon', '')}) + All Metrics")
@@ -404,7 +417,7 @@ def create_wide_format_with_all_metrics(df):
     df_specific = df_specific.rename(columns={'lineage': 'lineage_specific'})
     
     # Select columns to merge
-    base_columns = ['sample_id', 'reads_type', 'assembler']
+    base_columns = ['sample_id', 'reads_type', 'kmer_strategy', 'assembler']  # Added kmer_strategy
     general_columns = (base_columns + ['lineage_general'] + 
                       [f'{m}_general' for m in busco_metrics if f'{m}_general' in df_general.columns])
     specific_columns = (['sample_id', 'lineage_specific'] + 
