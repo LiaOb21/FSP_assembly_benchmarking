@@ -147,7 +147,7 @@ def parse_quast_file(filepath):
             'N90': row.get('N90', None),
             'L50': row.get('L50', None),
             'L90': row.get('L90', None),
-            'Ns_per_100kbp': row.get('Ns per 100 kbp', None)
+            'Ns_per_100kbp': row.get('# N\'s per 100 kbp', None)
         }
 
         # Convert to appropriate types - preserve decimals
@@ -491,7 +491,7 @@ Example:
         df_wide = create_wide_format_with_all_metrics(df)
         
         # Save results
-        df_wide.to_csv(args.output_file, index=False)
+        df_wide.to_csv(args.output_file, index=False, sep='\t')
         
         if not args.quiet:
             print(f"Results saved to: {args.output_file}")
