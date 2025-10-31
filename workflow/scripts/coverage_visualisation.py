@@ -155,13 +155,22 @@ def create_coverage_plots(coverage_file, output_file, sample_name, assembler_nam
     
     # Plot 1: Coverage distribution histogram (top-left)
     ax1 = axes[0, 0]
-    n, bins, patches = ax1.hist(coverage_data['meandepth'], bins=50, alpha=0.7, 
+    
+    # Option 1: X-axis log scale
+    ax1.set_xscale('log')
+    
+    # Create log-spaced bins for better distribution
+    min_coverage = max(0.1, coverage_data['meandepth'].min())  # Avoid log(0)
+    max_coverage = coverage_data['meandepth'].max()
+    log_bins_coverage = np.logspace(np.log10(min_coverage), np.log10(max_coverage), 40)
+    
+    n, bins, patches = ax1.hist(coverage_data['meandepth'], bins=log_bins_coverage, alpha=0.7, 
                             color='skyblue', edgecolor='black', density=False)
-
+    
     # Force Y-axis to show integer counts
-    ax1.yaxis.set_major_locator(plt.MaxNLocator(integer=True))  # Force integer ticks
-    ax1.set_ylim(0, max(n) + 1)  # Set Y-axis limit to actual max count + 1
-
+    ax1.yaxis.set_major_locator(plt.MaxNLocator(integer=True))
+    ax1.set_ylim(0, max(n) + 1)
+    
     # Add vertical lines for key statistics
     ax1.axvline(avg_coverage, color='red', linestyle='--', linewidth=2, 
             label=f'Mean: {avg_coverage:.1f}x')
@@ -169,7 +178,7 @@ def create_coverage_plots(coverage_file, output_file, sample_name, assembler_nam
             label=f'Median: {median_coverage:.1f}x')
     ax1.axvline(peak_coverage, color='orange', linestyle='--', linewidth=2, 
             label=f'Peak: {peak_coverage:.1f}x')
-    ax1.set_xlabel('Coverage Depth (x)')
+    ax1.set_xlabel('Coverage Depth (x) - Log Scale')  # Update label
     ax1.set_ylabel('Number of Contigs')
     ax1.set_title('Coverage Distribution')
     ax1.legend()
@@ -177,34 +186,46 @@ def create_coverage_plots(coverage_file, output_file, sample_name, assembler_nam
     
     # Plot 2: Coverage vs Contig Length scatter plot (top-middle)
     ax2 = axes[0, 1]
+    
+    # ADD LOG SCALE FOR BOTH AXES
+    ax2.set_xscale('log')  # Log scale for contig length
+    ax2.set_yscale('log')  # Log scale for coverage depth
+    
     # Color points by coverage percentage, size by default
     scatter = ax2.scatter(coverage_data['endpos'], coverage_data['meandepth'], 
                          alpha=0.6, c=coverage_data['coverage'], cmap='viridis', s=20)
+    
     # Add horizontal reference lines
     ax2.axhline(avg_coverage, color='red', linestyle='--', linewidth=2, 
                label=f'Mean: {avg_coverage:.1f}x')
     ax2.axhline(weighted_avg_coverage, color='purple', linestyle='--', linewidth=2, 
                label=f'Weighted Mean: {weighted_avg_coverage:.1f}x')
-    ax2.set_xlabel('Contig Length (bp)')
-    ax2.set_ylabel('Coverage Depth (x)')
+    
+    ax2.set_xlabel('Contig Length (bp) - Log Scale')  # Update label  
+    ax2.set_ylabel('Coverage Depth (x) - Log Scale')   # Update label
     ax2.set_title('Coverage vs Contig Length')
-#    ax2.set_xscale('log')  # Log scale for better visualization of length distribution
     ax2.legend()
     ax2.grid(True, alpha=0.3)
     plt.colorbar(scatter, ax=ax2, label='Coverage %')
     
     # Plot 3: Cumulative coverage distribution (top-right)
     ax3 = axes[0, 2]
+    
+    # ADD LOG SCALE FOR X-AXIS
+    ax3.set_xscale('log')
+    
     # Sort coverage values and create cumulative count
     sorted_coverage = np.sort(coverage_data['meandepth'])
     cumulative_count = np.arange(1, len(sorted_coverage) + 1)
     ax3.plot(sorted_coverage, cumulative_count, linewidth=2, color='blue')
+    
     # Add vertical reference lines
     ax3.axvline(avg_coverage, color='red', linestyle='--', linewidth=2, 
                label=f'Mean: {avg_coverage:.1f}x')
     ax3.axvline(median_coverage, color='green', linestyle='--', linewidth=2, 
                label=f'Median: {median_coverage:.1f}x')
-    ax3.set_xlabel('Coverage Depth (x)')
+    
+    ax3.set_xlabel('Coverage Depth (x) - Log Scale')  # Update label
     ax3.set_ylabel('Number of Contigs')
     ax3.set_title('Cumulative Coverage Distribution')
     ax3.legend()
@@ -255,36 +276,49 @@ def create_coverage_plots(coverage_file, output_file, sample_name, assembler_nam
     # Subplot 1: Small contigs < 250bp (top-left)
     ax4_1 = fig.add_axes([x1, y1, subplot_width, subplot_height])
     if len(small_contigs) > 0:
-        n1, bins1, patches1 = ax4_1.hist(small_contigs, bins=20, alpha=0.7, color='lightcoral', edgecolor='black')
-        ax4_1.set_xlim(0, 250)
+        # ADD LOG SCALE AND LOG BINS
+        min_small = small_contigs.min()
+        log_bins_small = np.logspace(np.log10(max(1, min_small)), np.log10(250), 20)
+        
+        n1, bins1, patches1 = ax4_1.hist(small_contigs, bins=log_bins_small, alpha=0.7, color='lightcoral', edgecolor='black')
+        ax4_1.set_xscale('log')  # Add log scale
+        ax4_1.set_xlim(max(1, min_small), 250)
         ax4_1.set_ylim(0, max(n1) * 1.1)
     else:
         ax4_1.text(0.5, 0.5, 'No contigs\n< 250bp', ha='center', va='center', transform=ax4_1.transAxes)
     ax4_1.set_title(f'< 250bp: {len(small_contigs):,} ({small_contigs_pct:.1f}%)', fontsize=10)
     ax4_1.set_ylabel('Count', fontsize=10)
-    ax4_1.set_xlabel('Length (bp)', fontsize=10)
+    ax4_1.set_xlabel('Length (bp) - Log Scale', fontsize=10)  # Update label
     ax4_1.tick_params(labelsize=9)
     ax4_1.grid(True, alpha=0.3)
 
     # Subplot 2: Medium contigs 250-1000bp (top-right)
     ax4_2 = fig.add_axes([x2, y1, subplot_width, subplot_height])
     if len(mid_contigs) > 0:
-        n2, bins2, patches2 = ax4_2.hist(mid_contigs, bins=20, alpha=0.7, color='lightblue', edgecolor='black')
+        # ADD LOG SCALE AND LOG BINS
+        log_bins_mid = np.logspace(np.log10(250), np.log10(1000), 20)
+        
+        n2, bins2, patches2 = ax4_2.hist(mid_contigs, bins=log_bins_mid, alpha=0.7, color='lightblue', edgecolor='black')
+        ax4_2.set_xscale('log')  # Add log scale
         ax4_2.set_xlim(250, 1000)
         ax4_2.set_ylim(0, max(n2) * 1.1)
     else:
         ax4_2.text(0.5, 0.5, 'No contigs\n250-1000bp', ha='center', va='center', transform=ax4_2.transAxes)
     ax4_2.set_title(f'250bp-1kb: {len(mid_contigs):,} ({mid_contigs_pct:.1f}%)', fontsize=10)
-    ax4_2.set_xlabel('Length (bp)', fontsize=10)
+    ax4_2.set_xlabel('Length (bp) - Log Scale', fontsize=10)  # Update label
     ax4_2.tick_params(labelsize=9)
     ax4_2.grid(True, alpha=0.3)
 
-    # Subplot 3: Large contigs > 1000bp (bottom-left) - FORCED LINEAR
+    # Subplot 3: Large contigs > 1000bp (bottom-left)
     ax4_3 = fig.add_axes([x1, y2, subplot_width, subplot_height])
     if len(large_contigs) > 0:
-        n3, bins3, patches3 = ax4_3.hist(large_contigs, bins=20, alpha=0.7, color='lightgreen', edgecolor='black')
-        # ALWAYS LINEAR - no log scaling
-        ax4_3.set_xlabel('Length (bp)', fontsize=10)
+        # ADD LOG SCALE AND LOG BINS
+        max_large = large_contigs.max()
+        log_bins_large = np.logspace(np.log10(1000), np.log10(max_large), 20)
+        
+        n3, bins3, patches3 = ax4_3.hist(large_contigs, bins=log_bins_large, alpha=0.7, color='lightgreen', edgecolor='black')
+        ax4_3.set_xscale('log')  # Add log scale
+        ax4_3.set_xlabel('Length (bp) - Log Scale', fontsize=10)  # Update label
         ax4_3.set_ylim(0, max(n3) * 1.1)
     else:
         ax4_3.text(0.5, 0.5, 'No contigs\n> 1kb', ha='center', va='center', transform=ax4_3.transAxes)
@@ -293,13 +327,17 @@ def create_coverage_plots(coverage_file, output_file, sample_name, assembler_nam
     ax4_3.tick_params(labelsize=9)
     ax4_3.grid(True, alpha=0.3)
 
-    # Subplot 4: All contigs >= 250bp (bottom-right) - FORCED LINEAR
+    # Subplot 4: All contigs >= 250bp (bottom-right)
     ax4_4 = fig.add_axes([x2, y2, subplot_width, subplot_height])
     if len(above_250) > 0:
-        n4, bins4, patches4 = ax4_4.hist(above_250, bins=25, alpha=0.7, color='mediumpurple', edgecolor='black')
+        # ADD LOG SCALE AND LOG BINS
+        max_above250 = above_250.max()
+        log_bins_above250 = np.logspace(np.log10(250), np.log10(max_above250), 25)
+        
+        n4, bins4, patches4 = ax4_4.hist(above_250, bins=log_bins_above250, alpha=0.7, color='mediumpurple', edgecolor='black')
+        ax4_4.set_xscale('log')  # Add log scale
         ax4_4.axvline(1000, color='red', linestyle='--', linewidth=2, label='1kb threshold')
-        # ALWAYS LINEAR - no log scaling
-        ax4_4.set_xlabel('Length (bp)', fontsize=10)
+        ax4_4.set_xlabel('Length (bp) - Log Scale', fontsize=10)  # Update label
         ax4_4.set_ylim(0, max(n4) * 1.1)
         ax4_4.legend(fontsize=9)
     else:
