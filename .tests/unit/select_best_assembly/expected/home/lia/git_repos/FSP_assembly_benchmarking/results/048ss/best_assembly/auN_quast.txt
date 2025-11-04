@@ -1,6 +1,0 @@
-spades 372.0
-megahit 566.4
-abyss 334.0
-sparseassembler 331.7
-minia 313.6
-masurca 566.5

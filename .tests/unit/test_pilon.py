@@ -22,14 +22,14 @@ def test_pilon():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly/pilon/048ss_best_assembly_pilon.fasta /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/assemblies/048ss_best_assembly_pilon.fa", file=sys.stderr)
+        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly/pilon/048ds_best_assembly_pilon.fasta /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/assemblies/048ds_best_assembly_pilon.fa", file=sys.stderr)
 
         # Run the test job.
         sp.check_output([
             "python",
             "-m",
             "snakemake", 
-            "/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly/pilon/048ss_best_assembly_pilon.fasta /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/assemblies/048ss_best_assembly_pilon.fa",
+            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly/pilon/048ds_best_assembly_pilon.fasta /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/assemblies/048ds_best_assembly_pilon.fa",
             "-f", 
             "-j1",
             "--target-files-omit-workdir-adjustment",

@@ -22,14 +22,14 @@ def test_merquryfk_2():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/merquryfk_pilon/merquryfk.completeness.stats /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/merquryfk_pilon/merquryfk.qv", file=sys.stderr)
+        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/merquryfk_pilon/merquryfk.completeness.stats /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/merquryfk_pilon/merquryfk.qv", file=sys.stderr)
 
         # Run the test job.
         sp.check_output([
             "python",
             "-m",
             "snakemake", 
-            "/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/merquryfk_pilon/merquryfk.completeness.stats /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly_qc/merquryfk_pilon/merquryfk.qv",
+            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/merquryfk_pilon/merquryfk.completeness.stats /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/merquryfk_pilon/merquryfk.qv",
             "-f", 
             "-j1",
             "--target-files-omit-workdir-adjustment",

@@ -22,14 +22,14 @@ def test_get_busco_db():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/busco_specific/busco_db.txt", file=sys.stderr)
+        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/busco_db/busco_db.txt", file=sys.stderr)
 
         # Run the test job.
         sp.check_output([
             "python",
             "-m",
             "snakemake", 
-            "/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/busco_specific/busco_db.txt",
+            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/busco_db/busco_db.txt",
             "-f", 
             "-j1",
             "--target-files-omit-workdir-adjustment",

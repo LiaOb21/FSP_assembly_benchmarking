@@ -22,14 +22,14 @@ def test_bwa_mem2_samtools():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly/bwa_mem2_samtools/048ss_best_assembly.sam /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly/bwa_mem2_samtools/048ss_best_assembly.bam /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly/bwa_mem2_samtools/048ss_best_assembly_sorted.bam /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly/bwa_mem2_samtools/048ss_best_assembly_sorted.bam.bai", file=sys.stderr)
+        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly/bwa_mem2_samtools/048ds_best_assembly.sam /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly/bwa_mem2_samtools/048ds_best_assembly.bam /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly/bwa_mem2_samtools/048ds_best_assembly_sorted.bam /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly/bwa_mem2_samtools/048ds_best_assembly_sorted.bam.bai", file=sys.stderr)
 
         # Run the test job.
         sp.check_output([
             "python",
             "-m",
             "snakemake", 
-            "/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly/bwa_mem2_samtools/048ss_best_assembly.sam /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly/bwa_mem2_samtools/048ss_best_assembly.bam /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly/bwa_mem2_samtools/048ss_best_assembly_sorted.bam /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/best_assembly/bwa_mem2_samtools/048ss_best_assembly_sorted.bam.bai",
+            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly/bwa_mem2_samtools/048ds_best_assembly.sam /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly/bwa_mem2_samtools/048ds_best_assembly.bam /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly/bwa_mem2_samtools/048ds_best_assembly_sorted.bam /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly/bwa_mem2_samtools/048ds_best_assembly_sorted.bam.bai",
             "-f", 
             "-j1",
             "--target-files-omit-workdir-adjustment",

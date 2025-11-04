@@ -22,14 +22,14 @@ def test_minia():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/minia/048ss.contigs.fa /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/assemblies/048ss_minia.fa", file=sys.stderr)
+        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/minia/048ds.contigs.fa /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/assemblies/048ds_minia.fa", file=sys.stderr)
 
         # Run the test job.
         sp.check_output([
             "python",
             "-m",
             "snakemake", 
-            "/home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/minia/048ss.contigs.fa /home/lia/git_repos/FSP_assembly_benchmarking/results/048ss/assemblies/048ss_minia.fa",
+            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/minia/048ds.contigs.fa /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/assemblies/048ds_minia.fa",
             "-f", 
             "-j1",
             "--target-files-omit-workdir-adjustment",
