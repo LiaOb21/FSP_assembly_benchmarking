@@ -5,7 +5,7 @@ import os
 
 rule seqkit:
     input:
-        forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
+        merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
     output:
         seqkit_results=f"{output_dir}" + "{sample}/seqkit/{sample}_seqkit.txt",
         kmer=f"{output_dir}" + "{sample}/seqkit/{sample}_kmer_value.txt",
@@ -22,8 +22,8 @@ rule seqkit:
     shell:
         """
         echo "Running seqkit with the following command:" >> {log} 2>&1
-        echo "seqkit stats -a {input.forward_in} -j {threads} > {output.seqkit_results}" 
-        seqkit stats -a {input.forward_in} -j {threads} > {output.seqkit_results} 
+        echo "seqkit stats -a {input.merged_in} -j {threads} > {output.seqkit_results}" 
+        seqkit stats -a {input.merged_in} -j {threads} > {output.seqkit_results} 
         # calculate kmer as 2/3rds of median read length
         awk '{{print $10}}' {output.seqkit_results} | tail -n1 | awk '{{result = int($1 * 2 / 3); print (result % 2 == 0) ? result - 1 : result}}' > {output.kmer}
         echo "Calculated kmer value (2/3rds of median read length):" >> {log} 2>&1

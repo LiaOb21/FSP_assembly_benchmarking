@@ -11,8 +11,8 @@ rule decompress_reads:
         fq=temp(f"{output_dir}" + "fqreads/{sample}/{sample}_merged.fq"),
     threads: 1
     resources:
-        mem_mb=get_low_mem,
-        partition=config["low"]["partition"],
+        mem_mb=get_very_low_mem,
+        partition=config["very_low"]["partition"],
     conda:
         "../envs/basic.yaml"
     log:

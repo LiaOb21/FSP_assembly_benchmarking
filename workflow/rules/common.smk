@@ -8,7 +8,7 @@ def get_scaled_mem(wildcards, attempt, tier="medium"):
     Args:
         wildcards: Snakemake wildcards
         attempt: Retry attempt number (starts at 1)
-        tier: Resource tier ("low", "medium", "high")
+        tier: Resource tier ("very_low", "low", "medium", "medium_high", "high")
     """
     base_mem = config[tier]["mem_mb"]
     return min(base_mem * attempt, 500000)  # Cap at 500GB
@@ -21,7 +21,7 @@ def get_scaled_threads(wildcards, attempt, tier="medium"):
     Args:
         wildcards: Snakemake wildcards
         attempt: Retry attempt number (starts at 1)
-        tier: Resource tier ("low", "medium", "high")
+        tier: Resource tier ("very_low", "low", "medium", "medium_high", "high")
     """
     base_threads = config[tier]["t"]
     return min(
@@ -30,9 +30,17 @@ def get_scaled_threads(wildcards, attempt, tier="medium"):
 
 
 # Convenience functions for each tier
-# low for: coverage_viz, decompress, masurca_config, merquryfk, quast, select_best_assembly
-# medium for: busco, fastk, megahit, minia, sparseassembler (only mem), seqkit, kmergenie
-# high for: abyss, bwa, masurca, pilon, spades
+# very_low for: coverage_viz, get_busco_db, decompress, masurca_config, select_best_assembly, seqkit
+# low for: merquryfk, quast, fastk
+# medium for: busco, minia, sparseassembler (only mem, single CPU), kmergenie, abyss (for CPUs only), pilon (for CPUs only)
+# medium_high for: bwa_samtools, megahit, sparseassembler (partition only)
+# high for: abyss (for memory and partition), masurca, pilon (for memory and partition), spades
+
+
+def get_very_low_mem(wildcards, attempt):
+    return get_scaled_mem(wildcards, attempt, "very_low")
+
+
 def get_low_mem(wildcards, attempt):
     return get_scaled_mem(wildcards, attempt, "low")
 
@@ -41,8 +49,16 @@ def get_medium_mem(wildcards, attempt):
     return get_scaled_mem(wildcards, attempt, "medium")
 
 
+def get_medium_high_mem(wildcards, attempt):
+    return get_scaled_mem(wildcards, attempt, "medium_high")
+
+
 def get_high_mem(wildcards, attempt):
     return get_scaled_mem(wildcards, attempt, "high")
+
+
+def get_very_low_threads(wildcards, attempt):
+    return get_scaled_threads(wildcards, attempt, "very_low")
 
 
 def get_low_threads(wildcards, attempt):
@@ -51,6 +67,10 @@ def get_low_threads(wildcards, attempt):
 
 def get_medium_threads(wildcards, attempt):
     return get_scaled_threads(wildcards, attempt, "medium")
+
+
+def get_medium_high_threads(wildcards, attempt):
+    return get_scaled_threads(wildcards, attempt, "medium_high")
 
 
 def get_high_threads(wildcards, attempt):

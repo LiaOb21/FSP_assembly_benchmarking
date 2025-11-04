@@ -17,10 +17,10 @@ rule bwa_mem2_samtools:
         + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly_sorted.bam",
         bam_index=f"{output_dir}"
         + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly_sorted.bam.bai",
-    threads: get_high_threads
+    threads: get_medium_high_threads
     resources:
-        mem_mb=get_high_mem,
-        partition=config["high"]["partition"],
+        mem_mb=get_medium_high_mem,
+        partition=config["medium_high"]["partition"],
     log:
         "logs/{sample}/bwa_mem2_best_assembly.log",
     benchmark:

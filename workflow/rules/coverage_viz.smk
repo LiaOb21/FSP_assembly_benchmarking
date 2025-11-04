@@ -11,8 +11,8 @@ rule coverage_viz:
         + "{sample}/best_assembly_qc/coverage_viz_pilon/{sample}_best_assembly_pilon_coverage_summary.txt",
     threads: 1
     resources:
-        mem_mb=get_low_mem,
-        partition=config["low"]["partition"],
+        mem_mb=get_very_low_mem,
+        partition=config["very_low"]["partition"],
     log:
         "logs/{sample}/coverage_viz_best_assembly_pilon.log",
     benchmark:

@@ -35,7 +35,7 @@ if config["kmer_strategy"]["mode"] == "kmergenie":
 # Conditionally include seqkit rule only if using reads_length mode
 if config["kmer_strategy"]["mode"] == "reads_length":
 
-    include: "rules/seqkit.smk"
+    include: "rules/seqkit_merged.smk"
 
 
 # if spades is in ASSEMBLERS include spades rules
@@ -74,6 +74,7 @@ if "masurca" in ASSEMBLERS:
 
     include: "rules/masurca_config_merged.smk"
     include: "rules/masurca.smk"
+
 
 # include get_busco_db rule
 include: "rules/get_busco_db.smk"

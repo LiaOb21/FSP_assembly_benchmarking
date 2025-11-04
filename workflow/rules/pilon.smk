@@ -23,7 +23,7 @@ rule pilon:
             if value and value is not False and value != ""
         ),
         java_heap=lambda wildcards, resources: f"{int(resources.mem_mb*0.8//1024)}G",
-    threads: get_high_threads
+    threads: get_medium_threads
     resources:
         mem_mb=get_high_mem,
         partition=config["high"]["partition"],

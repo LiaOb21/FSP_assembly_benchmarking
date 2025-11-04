@@ -5,7 +5,7 @@ rule masurca_config:
         kmergenie_result=get_kmergenie_dependency,
     output:
         cfg=protected(f"{output_dir}" + "{sample}/masurca/masurca_config.txt"),
-    threads: get_high_threads
+    threads: 1
     resources:
         mem_mb=get_low_mem,
         partition=config["low"]["partition"],
@@ -15,6 +15,7 @@ rule masurca_config:
         k=lambda wildcards: get_single_kmer(wildcards, "masurca", "k"),
         jf_size=config["masurca"].get("jf_size", 10000000000),
         ca_parameters=config["masurca"].get("ca_parameters", "cgwErrorRate=0.15"),
+        config_threads=lambda wildcards: get_high_threads(wildcards, 1),
     log:
         "logs/{sample}/masurca_config.log",
     benchmark:
@@ -33,7 +34,7 @@ with open("{input.template}") as t, open("{output.cfg}", "w") as out:
         fragment_mean={params.fragment_mean},
         fragment_stdev={params.fragment_stdev},
         kmer="{params.k}",
-        threads={threads},
+        threads={params.config_threads},
         jf_size={params.jf_size},
         ca_parameters="{params.ca_parameters}"
     ))

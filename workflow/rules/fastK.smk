@@ -18,10 +18,10 @@ rule fastk:
         temp_dir=lambda wildcards, output: os.path.join(
             os.path.dirname(output.ktab), "temp"
         ),
-    threads: get_medium_threads
+    threads: get_low_threads
     resources:
-        mem_mb=get_medium_mem,
-        partition=config["medium"]["partition"],
+        mem_mb=get_low_mem,
+        partition=config["low"]["partition"],
     log:
         "logs/{sample}/fastk.log",
     benchmark:

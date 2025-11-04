@@ -10,8 +10,8 @@ rule get_busco_db:
         extension=config["busco"]["extension"],
     threads: 1
     resources:
-        mem_mb=get_low_mem,
-        partition=config["low"]["partition"],
+        mem_mb=get_very_low_mem,
+        partition=config["very_low"]["partition"],
     log:
         "logs/{sample}/get_busco_db.log",
     benchmark:

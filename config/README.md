@@ -10,54 +10,69 @@ Plese notice that the indentation in `config.yml` is important.
 # Set memory and threads for high demanding rules
 high:
   mem_mb: 45000 # memory in MB
+  t: 32 # number of threads
+  partition: "himem"
+
+# Set memory and threads for medium demanding rules
+medium_high:
+  mem_mb: 16000 # memory in MB
   t: 16 # number of threads
-  partition: "himem" # partition to use for high memory jobs
+  partition: "long" # partition to use for medium memory jobs
 
 # Set memory and threads for medium demanding rules
 medium:
-  mem_mb: 16000 # memory in MB
-  t: 16 # number of threads
+  mem_mb: 10000 # memory in MB
+  t: 8 # number of threads
   partition: "medium" # partition to use for medium memory jobs
 
 # Set memory and threads for low demanding rules
 low:
-  mem_mb: 5000 # memory in MB
-  t: 8 # number of threads
+  mem_mb: 4000 # memory in MB
+  t: 4 # number of threads
+  partition: "short" # partition to use for low memory jobs
+
+# Set memory and threads for very low demanding rules
+very_low:
+  mem_mb: 500 # memory in MB
+  t: 4 # number of threads
   partition: "short" # partition to use for low memory jobs
 ```
 
 This section of the `config.yml` allows to set memory, threads, and partition for the tools included in the snakemake workflow. The rules are divided in high, medium, and low based on empirical observations on memory requirements. Depending on the samples characteristics (e.g. number of reads, genome size) and HPC requirements, you may need to adjust these values. Note that this part of the config is not relevant if you are running Snakemake locally, in which case you should always use the `--cores` flag in the initial command, which allocates a number of cores to the whole workflow.
 
-| Rule                 | High               | Medium             | Low                |
-| -------------------- | ------------------ | ------------------ | ------------------ |
-| kmergenie            |                    | :heavy_check_mark: |                    |
-| seqkit               |                    | :heavy_check_mark: |                    |
-| decompress           |                    |                    | :heavy_check_mark: |
-| masurca_config       |                    |                    | :heavy_check_mark: |
-| fastk                |                    | :heavy_check_mark: |                    |
-| spades               | :heavy_check_mark: |                    |                    |
-| megahit              |                    | :heavy_check_mark: |                    |
-| abyss                | :heavy_check_mark: |                    |                    |
-| masurca              | :heavy_check_mark: |                    |                    |
-| minia                |                    | :heavy_check_mark: |                    |
-| sparseassembler      |                    | :heavy_check_mark: |                    |
-| busco                |                    | :heavy_check_mark: |                    |
-| quast                |                    |                    | :heavy_check_mark: |
-| merquryfk            |                    |                    | :heavy_check_mark: |
-| select_best_assembly |                    |                    | :heavy_check_mark: |
-| bwa                  | :heavy_check_mark: |                    |                    |
-| pilon                | :heavy_check_mark: |                    |                    |
-| coverage_viz         |                    |                    | :heavy_check_mark: |
+| Rule                 | High (memory / CPUs / partition )                           | Medium-High (memory / CPUs / partition )                    | Medium (memory / CPUs / partition )                         | Low (memory / CPUs / partition )                            | Very Low (memory / CPUs / partition )                       |
+| -------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- |
+| kmergenie            |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |
+| seqkit               |                                                             |                                                             |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |
+| decompress           |                                                             |                                                             |                                                             |                                                             | :heavy_check_mark: / 1 CPU /:heavy_check_mark:              |
+| masurca_config       |                                                             |                                                             |                                                             |                                                             | :heavy_check_mark: / 1 CPU /:heavy_check_mark:              |
+| fastk                |                                                             |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |
+| spades               | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |                                                             |                                                             |
+| megahit              |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |                                                             |
+| abyss                | :heavy_check_mark: / :x: / :heavy_check_mark:               |                                                             | :x: / :heavy_check_mark: /:x:                               |                                                             |                                                             |
+| masurca              | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |                                                             |                                                             |
+| minia                |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |
+| sparseassembler      |                                                             | :x:/ 1CPU / :heavy_check_mark:                              | :heavy_check_mark: / 1 CPU /:x:                             |                                                             |                                                             |
+| get_busco_db         |                                                             |                                                             |                                                             |                                                             | :heavy_check_mark: / 1 CPU /:heavy_check_mark:              |
+| busco                |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |
+| quast                |                                                             |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |
+| merquryfk            |                                                             |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |
+| select_best_assembly |                                                             |                                                             |                                                             |                                                             | :heavy_check_mark: / 1 CPU /:heavy_check_mark:              |
+| bwa                  |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |                                                             |
+| pilon                | :heavy_check_mark: / :x: / :heavy_check_mark:               |                                                             | :x: / :heavy_check_mark: /:x:                               |                                                             |                                                             |
+| coverage_viz         |                                                             |                                                             |                                                             |                                                             | :heavy_check_mark: / 1 CPU /:heavy_check_mark:              |
 
-Note that the number of threads allocated in this section of the config file is only used when the tool allows multithreading. If not, the number of threads is set to 1 internally.
+Note that the number of threads allocated in this section of the config file is only used when the tool allows multithreading. If not, the number of threads is set to 1 internally (shown in the table as "1 CPU").
 
 Also, these are the starting values. If a rule does not complete successfully due to insufficient memory allocation, the workflow will automatically attempt again increasing the allocated memory and threads for a maximum of three attempts:
 
 - first attempt: memory set in config; threads set in config
 - second attempt: memory set in config x 2; threads set in config + 4
-- third attempt: memory set in config x 2; threads set in config + 8
+- third attempt: memory set in config x 3; threads set in config + 8
 
 Memory caps internally at 500GB, threads at 128.
+
+The values shown here in the `config/README.md` are suitable values for fungal samples. If dealing with organisms that typically have larger genomes (e.g. plants), or smaller genomes (e.g. bacteria), these values should be changed for a more efficient use of resources on HPC.
 
 ## Input and output directories
 

@@ -18,10 +18,10 @@ rule megahit:
             for k, v in config["megahit"]["optional_params"].items()
             if v and v is not False and v != ""
         ),
-    threads: get_medium_threads
+    threads: get_medium_high_threads
     resources:
-        mem_mb=get_medium_mem,
-        partition=config["medium"]["partition"],
+        mem_mb=get_medium_high_mem,
+        partition=config["medium_high"]["partition"],
     log:
         "logs/{sample}/megahit.log",
     benchmark:
