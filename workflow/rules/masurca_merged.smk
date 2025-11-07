@@ -3,11 +3,10 @@ import glob
 import os
 
 
-rule masurca:
+rule masurca_merged:
     input:
-        r1=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
-        r2=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
-        template="workflow/scripts/masurca_config_template.txt",
+        merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
+        template="workflow/scripts/masurca_config_template_merged.txt",
         kmergenie_result=get_kmergenie_dependency,
     output:
         masurca_config=f"{output_dir}" + "{sample}/masurca/masurca_config.txt",
@@ -38,8 +37,7 @@ rule masurca:
 with open("{input.template}") as t, open("{output.masurca_config}", "w") as out:
     template = t.read()
     out.write(template.format(
-        input_r1="{input.r1}",
-        input_r2="{input.r2}",
+        input_merged="{input.merged_in}",
         fragment_mean={params.fragment_mean},
         fragment_stdev={params.fragment_stdev},
         kmer="{params.k}",

@@ -231,6 +231,8 @@ masurca:
 
 This is the section of the `config.yml` where the user can set parameters for masurca assembler. The comments in the `config.yml` are already explaining which parameters are set internally in the workflow. Since these values are going to be used for setting up the config file for masurca, here it's not possible to set any optional parameter. Note that when using `kmergenie` or `reads_length` k-mer strategies the `k` parameter here is ignored. For further information about using masurca parameters, refer to the [official documentation](https://github.com/alekseyzimin/masurca).
 
+When the user needs to re-run masurca again changing parameters, it's recommended to remove the output directory (e.g. `results/masurca`) completely before attempting a new run. This is because Masurca will automatically try resuming the previous run if it finds old results in the output directory, causing the failure of the assembly process.
+
 ## BUSCO
 
 ```

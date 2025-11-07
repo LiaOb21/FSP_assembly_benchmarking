@@ -30,10 +30,10 @@ very_low:
 
 # Set the path to the input directory (this directory must contain
 # one subdirectory for each sample, and the subdirectories must be named after the sample)
-input_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/" # use absolute path and add trailing slash
+input_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/test_data/" # use absolute path and add trailing slash
 
 # Customise the results directory
-output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results_prova_masurca/" # use absolute path and add trailing slash
+output_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/results/" # use absolute path and add trailing slash
 
 # K-mer size determination strategy
 # Note that if you set this to "manual", you must also set the k-mer size for spades, megahit, abyss, sparseassembler, minia, and masurca.
@@ -117,9 +117,9 @@ masurca:
 
 # Customise busco parameters
 busco:
-  taxonomy_file: "/home/lobinu/git_repos/FSP_assembly_benchmarking/resources/samples.csv" # path to the file containing the taxonomy information for the samples to process (see Readme.md for instructions on how to format it)
-  database_list: "/home/lobinu/git_repos/FSP_assembly_benchmarking/resources/fungi_busco_lineages.txt" # path to the file containing the list of downloaded busco databases (see Readme.md for instructions on how to create it)
-  path_to_busco_bds: "/home/lobinu/git_repos/FSP_assembly_benchmarking/resources/lineages/" # path to the directory containing the busco databases. Please add trailing slash (see Readme.md for instructions on how to download them)
+  taxonomy_file: "/home/lia/git_repos/FSP_assembly_benchmarking/resources/samples.csv" # path to the file containing the taxonomy information for the samples to process (see Readme.md for instructions on how to format it)
+  database_list: "/home/lia/git_repos/FSP_assembly_benchmarking/resources/fungi_busco_lineages.txt" # path to the file containing the list of downloaded busco databases (see Readme.md for instructions on how to create it)
+  path_to_busco_bds: "/home/lia/git_repos/FSP_assembly_benchmarking/resources/lineages/" # path to the directory containing the busco databases. Please add trailing slash (see Readme.md for instructions on how to download them)
   lineage_general: "fungi_odb12" # chose a "general" dataset, in our case "fungi_odb10"
   extension: "_odb12" # extension of the busco datasets, in our case "_odb12"
   optional_params: # if you do not want to use any optional parameters, add `{}` here

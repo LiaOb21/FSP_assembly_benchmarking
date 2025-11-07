@@ -72,8 +72,7 @@ if "minia" in ASSEMBLERS:
 # include masurca rule
 if "masurca" in ASSEMBLERS:
 
-    include: "rules/masurca_config_merged.smk"
-    include: "rules/masurca.smk"
+    include: "rules/masurca_merged.smk"
 
 
 # include get_busco_db rule
