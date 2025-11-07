@@ -3,7 +3,7 @@ import glob
 import os
 
 
-rule sparseassembler:
+rule sparseassembler_merged:
     input:
         merged_in=f"{output_dir}" + "fqreads/{sample}/{sample}_merged.fq",
         kmergenie_result=get_kmergenie_dependency,

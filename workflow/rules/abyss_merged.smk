@@ -3,7 +3,7 @@ import glob
 import os
 
 
-rule abyss:
+rule abyss_merged:
     input:
         merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",

@@ -3,7 +3,7 @@ import glob
 import os
 
 
-rule spades:
+rule spades_merged:
     input:
         merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
         unmerged_r1=f"{input_dir}" + "{sample}/{sample}_unmerged.R1.fq.gz",

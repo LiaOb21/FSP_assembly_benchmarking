@@ -3,7 +3,7 @@ import glob
 import os
 
 
-rule minia:
+rule minia_merged:
     input:
         merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
         kmergenie_result=get_kmergenie_dependency,

@@ -4,7 +4,7 @@
 # the input is expected to be gzipped FASTQ files with a specific naming convention
 
 
-rule decompress_reads:
+rule decompress_reads_merged:
     input:
         gz=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
     output:

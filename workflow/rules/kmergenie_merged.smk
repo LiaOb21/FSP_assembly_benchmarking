@@ -3,7 +3,7 @@ import glob
 import os
 
 
-rule kmergenie:
+rule kmergenie_merged:
     input:
         merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
     output:

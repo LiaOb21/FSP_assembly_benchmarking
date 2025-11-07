@@ -72,7 +72,7 @@ if "minia" in ASSEMBLERS:
 # if masurca is in ASSEMBLERS include masurca rules
 if "masurca" in ASSEMBLERS:
 
-    include: "rules/masurca_config.smk"
+#    include: "rules/masurca_config.smk"
     include: "rules/masurca.smk"
 
 

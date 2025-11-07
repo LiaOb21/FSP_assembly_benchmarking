@@ -5,12 +5,22 @@ import os
 
 rule masurca:
     input:
-        masurca_config=f"{output_dir}" + "{sample}/masurca/masurca_config.txt",
+        r1=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
+        r2=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
+        template="workflow/scripts/masurca_config_template.txt",
+        kmergenie_result=get_kmergenie_dependency,
     output:
+        masurca_config=f"{output_dir}" + "{sample}/masurca/masurca_config.txt",
         scaffolds=f"{output_dir}" + "{sample}/masurca/CA/primary.genome.scf.fasta",
         link_assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_masurca.fa",
     params:
-        config_dir=lambda wildcards, input: os.path.dirname(input.masurca_config),
+        fragment_mean=config["masurca"].get("fragment_mean", 500),
+        fragment_stdev=config["masurca"].get("fragment_stdev", 50),
+        k=lambda wildcards: get_single_kmer(wildcards, "masurca", "k"),
+        jf_size=config["masurca"].get("jf_size", 10000000000),
+        ca_parameters=config["masurca"].get("ca_parameters", "cgwErrorRate=0.15"),
+#        config_threads=lambda wildcards: get_high_threads(wildcards, 1),
+        config_dir=lambda wildcards, input, output: os.path.dirname(output.masurca_config)
     threads: get_high_threads
     resources:
         mem_mb=get_high_mem,
@@ -23,8 +33,26 @@ rule masurca:
         "../envs/masurca.yaml"
     shell:
         """
+        echo "Processing sample: {wildcards.sample}" >> {log} 2>&1
+        echo "Using k-mer size: {params.k}" >> {log} 2>&1 
+        python3 <<EOF
+with open("{input.template}") as t, open("{output.masurca_config}", "w") as out:
+    template = t.read()
+    out.write(template.format(
+        input_r1="{input.r1}",
+        input_r2="{input.r2}",
+        fragment_mean={params.fragment_mean},
+        fragment_stdev={params.fragment_stdev},
+        kmer="{params.k}",
+        threads={threads},
+        jf_size={params.jf_size},
+        ca_parameters="{params.ca_parameters}"
+    ))
+EOF
+        echo "Config generated for sample {wildcards.sample} with kmer size {params.k}" >> {log} 2>&1
+
         cd {params.config_dir}
-        masurca {input.masurca_config} 
+        masurca {output.masurca_config} 
         ./assemble.sh >> masurca.log 2>&1
 
         cd -

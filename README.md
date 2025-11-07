@@ -196,7 +196,7 @@ cd ~/FSP_assembly_benchmarking
 snakemake --configfile config/config.yml --software-deployment-method conda --snakefile workflow/Snakefile_merged --cores 8
 ```
 
-Note that for the workflow to run properly when using `workflow/Snakefile_merged` the input directory must contain all the files showed in [Your input data directory structure](README.md#1-your-input-data-directory-structure), including `*_unmerged.R1.fq.gz`, `*_unmerged.R2.fq.gz`, `*_trimmed.R1.fq.gz`, and `*_trimmed.R2.fq.gz`, as some of the assemblers needs these file in order to run.
+Note that for the workflow to run properly when using `workflow/Snakefile_merged` the input directory must contain all the files showed in [Your input data directory structure](README.md#1-your-input-data-directory-structure), including `*_unmerged.R1.fq.gz`, `*_unmerged.R2.fq.gz`, `*_trimmed.R1.fq.gz`, and `*_trimmed.R2.fq.gz`, as some of the assemblers needs these file in order to run, and the reads alignment is always performed using `*_trimmed.R1.fq.gz` and `*_trimmed.R2.fq.gz`.
 
 Even in this case you can add the `--logger snkmt` flag.
 
@@ -271,7 +271,7 @@ snakemake --snakefile workflow/Snakefile_merged --profile profile/ --logger snkm
 echo "Workflow completed at $(date)"
 ```
 
-Note that for the workflow to run properly when using `workflow/Snakefile_merged` the input directory must contain all the files showed in [Your input data directory structure](README.md#1-your-input-data-directory-structure), including `*_unmerged.R1.fq.gz`, `*_unmerged.R2.fq.gz`, `*_trimmed.R1.fq.gz`, and `*_trimmed.R2.fq.gz`, as some of the assemblers needs these file in order to run.
+Note that for the workflow to run properly when using `workflow/Snakefile_merged` the input directory must contain all the files showed in [Your input data directory structure](README.md#1-your-input-data-directory-structure), including `*_unmerged.R1.fq.gz`, `*_unmerged.R2.fq.gz`, `*_trimmed.R1.fq.gz`, and `*_trimmed.R2.fq.gz`, as some of the assemblers needs these file in order to run, and the reads alignment is always performed using `*_trimmed.R1.fq.gz` and `*_trimmed.R2.fq.gz`.
 
 :mushroom::mushroom::mushroom: **IMPORTANT**: These are examples of sbatch script. Make sure to set up your sbatch script according to your system settings. :mushroom::mushroom::mushroom:
 
