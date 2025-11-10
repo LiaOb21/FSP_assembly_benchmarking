@@ -88,7 +88,9 @@ include: "rules/merquryFK.smk"
 # include select_best_assembly rule
 include: "rules/select_best_assembly.smk"
 # include bwa_mem2 rule
-include: "rules/bwa_mem2_samtools.smk"
+include: "rules/bwa_mem2.smk"
+# include samtools rule`
+include: "rules/samtools.smk"
 # include pilon rule
 include: "rules/pilon.smk"
 # include busco_2 rule (runs after pilon)
@@ -97,8 +99,10 @@ include: "rules/busco_2.smk"
 include: "rules/merquryFK_2.smk"
 # include quast_2 rule (runs after pilon)
 include: "rules/quast_2.smk"
-# include bwa_mem2_samtools_2 rule (runs after pilon)
-include: "rules/bwa_mem2_samtools_2.smk"
+# include bwa_mem2_2 rule (runs after pilon)
+include: "rules/bwa_mem2_2.smk"
+# include samtools_2 rule (runs after pilon)
+include: "rules/samtools_2.smk"
 # include coverage_viz_2 rule
 include: "rules/coverage_viz.smk"
 

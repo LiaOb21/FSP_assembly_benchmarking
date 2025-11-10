@@ -1,9 +1,9 @@
 rule coverage_viz:
     input:
         coverage_stats=f"{output_dir}"
-        + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon_coverage_stats.txt",
+        + "{sample}/best_assembly_qc/samtools_pilon/{sample}_best_assembly_pilon_coverage_stats.txt",
         flagstat=f"{output_dir}"
-        + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon_flagstat.txt",
+        + "{sample}/best_assembly_qc/samtools_pilon/{sample}_best_assembly_pilon_flagstat.txt",
     output:
         coverage_plot=f"{output_dir}"
         + "{sample}/best_assembly_qc/coverage_viz_pilon/{sample}_best_assembly_pilon_coverage_plot.png",

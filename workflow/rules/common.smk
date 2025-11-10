@@ -115,7 +115,7 @@ def get_all_inputs():
         ),
         expand(
             f"{output_dir}"
-            + "{sample}/best_assembly_qc/bwa_mem2_samtools_pilon/{sample}_best_assembly_pilon_sorted.bam",
+            + "{sample}/best_assembly_qc/samtools_pilon/{sample}_best_assembly_pilon_sorted.bam",
             sample=SAMPLES,
         ),
         expand(

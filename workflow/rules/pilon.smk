@@ -6,8 +6,8 @@ import os
 rule pilon:
     input:
         assembly=f"{output_dir}" + "{sample}/best_assembly/{sample}_best_assembly.fa",
-        sorted_bam=f"{output_dir}"
-        + "{sample}/best_assembly/bwa_mem2_samtools/{sample}_best_assembly_sorted.bam",
+        bam_markdup=f"{output_dir}"
+        + "{sample}/best_assembly/samtools/{sample}_best_assembly_fixmate_sorted_markdup.bam",
     output:
         pilon_fasta=f"{output_dir}"
         + "{sample}/best_assembly/pilon/{sample}_best_assembly_pilon.fasta",
@@ -37,7 +37,7 @@ rule pilon:
         """
         PILON=${{CONDA_PREFIX}}/share/pilon-*/pilon*.jar
         echo "Running pilon with the following command:" >> {log} 2>&1
-        echo "java -Xmx{params.java_heap} -jar ${{PILON}} --genome {input.assembly} --bam {input.sorted_bam} --output {params.results_prefix} --threads {threads} {params.optional_params} --verbose" >> {log} 2>&1
-        java -Xmx{params.java_heap} -jar ${{PILON}} --genome {input.assembly} --bam {input.sorted_bam} --output {params.results_prefix} --threads {threads} {params.optional_params} --verbose >> {log} 2>&1
+        echo "java -Xmx{params.java_heap} -jar ${{PILON}} --genome {input.assembly} --bam {input.bam_markdup} --output {params.results_prefix} --threads {threads} {params.optional_params} --verbose" >> {log} 2>&1
+        java -Xmx{params.java_heap} -jar ${{PILON}} --genome {input.assembly} --bam {input.bam_markdup} --output {params.results_prefix} --threads {threads} {params.optional_params} --verbose >> {log} 2>&1
         ln -srn {output.pilon_fasta} {output.link_pilon_assembly}
         """
