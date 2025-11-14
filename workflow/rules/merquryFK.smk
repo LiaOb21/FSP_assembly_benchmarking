@@ -1,6 +1,4 @@
 # This rule generates a runs merquryFK to evaluate assembly quality based on kmer
-import glob
-import os
 
 
 rule merquryfk:
@@ -31,6 +29,8 @@ rule merquryfk:
         "benchmark/{sample}/merquryFK_{sample}_{assembler}.txt"
     conda:
         "../envs/merquryFK.yaml"
+    container:
+        "docker://quay.io/biocontainers/merquryfk:1.1.3--h71df26d_0"
     shell:
         """
         mkdir -p {params.temp_dir}

@@ -1,6 +1,4 @@
 # This rule runs spades assembler with the parameters specified in the config file.
-import glob
-import os
 
 
 rule spades:
@@ -29,6 +27,8 @@ rule spades:
         "benchmark/{sample}/spades.txt"
     conda:
         "../envs/spades.yaml"
+    container:
+        "docker://quay.io/biocontainers/spades:4.2.0--h8d6e82b_2"
     shell:
         """
         echo "Running spades with the following command:" >> {log} 2>&1

@@ -1,13 +1,14 @@
 rule busco_2:
     input:
-        assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_best_assembly_pilon.fa",
+        assembly=f"{output_dir}"
+        + "{sample}/assemblies/{sample}_best_assembly_pypolca.fa",
         specific_db=f"{output_dir}" + "{sample}/busco_db/busco_db.txt",
     output:
         general_dir=directory(
-            f"{output_dir}" + "{sample}/best_assembly_qc/busco_general_pilon"
+            f"{output_dir}" + "{sample}/best_assembly_qc/busco_general_pypolca"
         ),
         specific_dir=directory(
-            f"{output_dir}" + "{sample}/best_assembly_qc/busco_specific_pilon"
+            f"{output_dir}" + "{sample}/best_assembly_qc/busco_specific_pypolca"
         ),
     params:
         path_to_busco_bds=config["busco"]["path_to_busco_bds"],
@@ -23,11 +24,13 @@ rule busco_2:
         mem_mb=get_medium_mem,
         partition=config["medium"]["partition"],
     log:
-        "logs/{sample}/busco_best_assembly_pilon.log",
+        "logs/{sample}/busco_best_assembly_pypolca.log",
     benchmark:
-        "benchmark/{sample}/busco_best_assembly_pilon.txt"
+        "benchmark/{sample}/busco_best_assembly_pypolca.txt"
     conda:
         "../envs/busco.yaml"
+    container:
+        "docker://quay.io/biocontainers/busco:6.0.0--pyhdfd78af_1"
     shell:
         """
         echo "Running busco with the following command:" >> {log} 2>&1

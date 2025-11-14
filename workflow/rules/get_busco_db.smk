@@ -18,6 +18,8 @@ rule get_busco_db:
         "benchmark/{sample}/get_busco_db.txt"
     conda:
         "../envs/data_viz.yaml"
+    container:
+        "docker://lobinu21/data_viz_py:latest"
     shell:
         """
         python workflow/scripts/map_busco_db_to_sample.py -t {input.taxonomy} \

@@ -22,6 +22,8 @@ rule quast:
         "benchmark/{sample}/quast.txt"
     conda:
         "../envs/quast.yaml"
+    container:
+        "docker://quay.io/biocontainers/quast:5.3.0--py313pl5321h5ca1c30_2"
     shell:
         """
         echo "Running quast with the following command:" >> {log} 2>&1

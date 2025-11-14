@@ -87,23 +87,19 @@ include: "rules/fastK.smk"
 include: "rules/merquryFK.smk"
 # include select_best_assembly rule
 include: "rules/select_best_assembly.smk"
-# include bwa_mem2 rule
-include: "rules/bwa_mem2.smk"
-# include samtools rule`
-include: "rules/samtools.smk"
-# include pilon rule
-include: "rules/pilon.smk"
-# include busco_2 rule (runs after pilon)
+# include pypolca rule
+include: "rules/pypolca.smk"
+# include busco_2 rule (runs after pypolca)
 include: "rules/busco_2.smk"
-# include merquryFK_2 rule (runs after pilon)
+# include merquryFK_2 rule (runs after pypolca)
 include: "rules/merquryFK_2.smk"
-# include quast_2 rule (runs after pilon)
+# include quast_2 rule (runs after pypolca)
 include: "rules/quast_2.smk"
-# include bwa_mem2_2 rule (runs after pilon)
-include: "rules/bwa_mem2_2.smk"
-# include samtools_2 rule (runs after pilon)
-include: "rules/samtools_2.smk"
-# include coverage_viz_2 rule
+# include bwa_mem2 rule (runs after pypolca)
+include: "rules/bwa_mem2.smk"
+# include samtools rule (runs after pypolca)
+include: "rules/samtools.smk"
+# include coverage_viz rule
 include: "rules/coverage_viz.smk"
 
 

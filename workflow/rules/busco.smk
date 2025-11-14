@@ -24,6 +24,8 @@ rule busco:
         "benchmark/{sample}/busco_{sample}_{assembler}.txt"
     conda:
         "../envs/busco.yaml"
+    container:
+        "docker://quay.io/biocontainers/busco:6.0.0--pyhdfd78af_1"
     shell:
         """
         echo "Running busco with the following command:" >> {log} 2>&1

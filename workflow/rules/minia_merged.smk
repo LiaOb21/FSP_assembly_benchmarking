@@ -1,6 +1,4 @@
 # This rule runs minia assembler with the parameters specified in the config file.
-import glob
-import os
 
 
 rule minia_merged:
@@ -30,6 +28,8 @@ rule minia_merged:
         "benchmark/{sample}/minia.txt"
     conda:
         "../envs/minia.yaml"
+    container:
+        "docker://quay.io/biocontainers/minia:3.2.6--h22625ea_5"
     shell:
         """
         echo "Running minia with the following command:" >> {log} 2>&1

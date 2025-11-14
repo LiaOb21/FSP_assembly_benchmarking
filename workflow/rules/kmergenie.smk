@@ -1,6 +1,4 @@
 # This rule runs kmergenie to find the best kmer value for subsequent assembly if the config file specifies kmer_strategy: mode: auto.
-import glob
-import os
 
 
 rule kmergenie:
@@ -34,6 +32,8 @@ rule kmergenie:
         "benchmark/{sample}/kmergenie.txt"
     conda:
         "../envs/kmergenie.yaml"
+    container:
+        "docker://quay.io/biocontainers/kmergenie:1.7051--py27r40h077b44d_11"
     shell:
         """
         # Create file list for kmergenie

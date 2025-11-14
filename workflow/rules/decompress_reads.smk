@@ -15,6 +15,8 @@ rule decompress_reads:
         partition=config["very_low"]["partition"],
     conda:
         "../envs/basic.yaml"
+    container:
+        "docker://debian:stable-slim"
     log:
         "logs/{sample}/{read}_decompress.log",
     benchmark:

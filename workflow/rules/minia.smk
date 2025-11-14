@@ -1,6 +1,4 @@
 # This rule runs minia assembler with the parameters specified in the config file.
-import glob
-import os
 
 
 rule minia:
@@ -34,6 +32,8 @@ rule minia:
         "benchmark/{sample}/minia.txt"
     conda:
         "../envs/minia.yaml"
+    container:
+        "docker://quay.io/biocontainers/minia:3.2.6--h22625ea_5"
     shell:
         """
         # Create file list for minia

@@ -1,6 +1,4 @@
 # This rule runs seqkit to calculate the read median length and the kmer value as 2/3rds of the median if the config file specifies kmer_strategy: mode: reads_length.
-import glob
-import os
 
 
 rule seqkit:
@@ -19,6 +17,8 @@ rule seqkit:
         "benchmark/{sample}/seqkit.txt"
     conda:
         "../envs/seqkit.yaml"
+    container:
+        "docker://quay.io/biocontainers/seqkit:2.10.1--he881be0_0"
     shell:
         """
         echo "Running seqkit with the following command:" >> {log} 2>&1

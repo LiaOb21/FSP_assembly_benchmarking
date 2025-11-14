@@ -1,16 +1,15 @@
 # This rule generates a runs merquryFK to evaluate assembly quality based on kmer
-import glob
-import os
 
 
 rule merquryfk_2:
     input:
         ktab=f"{output_dir}" + "{sample}/fastk/fastk_table.ktab",
-        assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_best_assembly_pilon.fa",
+        assembly=f"{output_dir}"
+        + "{sample}/assemblies/{sample}_best_assembly_pypolca.fa",
     output:
         stats=f"{output_dir}"
-        + "{sample}/best_assembly_qc/merquryfk_pilon/merquryfk.completeness.stats",
-        qv=f"{output_dir}" + "{sample}/best_assembly_qc/merquryfk_pilon/merquryfk.qv",
+        + "{sample}/best_assembly_qc/merquryfk_pypolca/merquryfk.completeness.stats",
+        qv=f"{output_dir}" + "{sample}/best_assembly_qc/merquryfk_pypolca/merquryfk.qv",
     params:
         result_prefix=lambda wildcards, output: os.path.splitext(output.qv)[0],
         temp_dir=lambda wildcards, output: os.path.join(
@@ -26,11 +25,13 @@ rule merquryfk_2:
         mem_mb=get_low_mem,
         partition=config["low"]["partition"],
     log:
-        "logs/{sample}/merquryfk_best_assembly_pilon.log",
+        "logs/{sample}/merquryfk_best_assembly_pypolca.log",
     benchmark:
-        "benchmark/{sample}/merquryFK_best_assembly_pilon.txt"
+        "benchmark/{sample}/merquryFK_best_assembly_pypolca.txt"
     conda:
         "../envs/merquryFK.yaml"
+    container:
+        "docker://quay.io/biocontainers/merquryfk:1.1.3--h71df26d_0"
     shell:
         """
         mkdir -p {params.temp_dir}

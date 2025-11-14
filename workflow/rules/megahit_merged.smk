@@ -1,6 +1,4 @@
 # This rule runs megahit assembler with the parameters specified in the config file.
-import glob
-import os
 
 
 rule megahit_merged:
@@ -28,6 +26,8 @@ rule megahit_merged:
         "benchmark/{sample}/megahit.txt"
     conda:
         "../envs/megahit.yaml"
+    container:
+        "docker://quay.io/biocontainers/megahit:1.2.9--haf24da9_8"
     shell:
         """
         echo "Running megahit with the following command:" >> {log} 2>&1

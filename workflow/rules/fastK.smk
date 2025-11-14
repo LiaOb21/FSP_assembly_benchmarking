@@ -1,6 +1,4 @@
 # This rule generates a FastK table needed to run merquryFK
-import glob
-import os
 
 
 rule fastk:
@@ -28,6 +26,8 @@ rule fastk:
         "benchmark/{sample}/fastk.txt"
     conda:
         "../envs/merquryFK.yaml"
+    container:
+        "docker://quay.io/biocontainers/merquryfk:1.1.3--h71df26d_0"
     shell:
         """
         mkdir -p {params.temp_dir}

@@ -1,6 +1,4 @@
 # This rule runs SparseAssembler assembler with the parameters specified in the config file.
-import glob
-import os
 
 
 rule sparseassembler_merged:
@@ -32,6 +30,8 @@ rule sparseassembler_merged:
         "benchmark/{sample}/sparseassembler.txt"
     conda:
         "../envs/sparseassembler.yaml"
+    container:
+        "docker://quay.io/biocontainers/sparseassembler:20160205--h9948957_11"
     shell:
         """
         cd {params.result_dir}

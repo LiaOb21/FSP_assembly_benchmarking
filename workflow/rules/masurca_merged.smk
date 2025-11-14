@@ -1,6 +1,4 @@
 # This rule runs masurca assembler with the parameters specified in the config file.
-import glob
-import os
 
 
 rule masurca_merged:
@@ -18,7 +16,9 @@ rule masurca_merged:
         k=lambda wildcards: get_single_kmer(wildcards, "masurca", "k"),
         jf_size=config["masurca"].get("jf_size", 10000000000),
         ca_parameters=config["masurca"].get("ca_parameters", "cgwErrorRate=0.15"),
-        config_dir=lambda wildcards, input, output: os.path.dirname(output.masurca_config)
+        config_dir=lambda wildcards, input, output: os.path.dirname(
+            output.masurca_config
+        ),
     threads: get_high_threads
     resources:
         mem_mb=get_high_mem,
@@ -29,6 +29,8 @@ rule masurca_merged:
         "benchmark/{sample}/masurca.txt"
     conda:
         "../envs/masurca.yaml"
+    container:
+        "docker://quay.io/biocontainers/masurca:4.1.4--h6b3f7d6_0"
     shell:
         """
         echo "Processing sample: {wildcards.sample}" >> {log} 2>&1

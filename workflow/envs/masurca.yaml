@@ -3,4 +3,4 @@ channels:
   - bioconda
 
 dependencies:
-  - masurca=4.1.3
+  - masurca=4.1.4

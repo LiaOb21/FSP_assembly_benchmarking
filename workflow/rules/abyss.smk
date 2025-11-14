@@ -1,6 +1,4 @@
 # This rule runs abyss assembler with the parameters specified in the config file.
-import glob
-import os
 
 
 rule abyss:
@@ -34,6 +32,8 @@ rule abyss:
         "benchmark/{sample}/abyss.txt"
     conda:
         "../envs/abyss.yaml"
+    container:
+        "docker://quay.io/biocontainers/abyss:2.3.10--hf316886_2"
     shell:
         """
         echo "Running abyss with the following command:" >> {log} 2>&1

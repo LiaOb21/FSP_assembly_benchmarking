@@ -32,9 +32,9 @@ def get_scaled_threads(wildcards, attempt, tier="medium"):
 # Convenience functions for each tier
 # very_low for: coverage_viz, get_busco_db, decompress, masurca_config, select_best_assembly, seqkit
 # low for: merquryfk, quast, fastk
-# medium for: busco, minia, sparseassembler (only mem, single CPU), kmergenie, abyss (for CPUs only), pilon (for CPUs only)
+# medium for: busco, minia, sparseassembler (only mem, single CPU), kmergenie, abyss (for CPUs only), pypolca (for CPUs only)
 # medium_high for: bwa_samtools, megahit, sparseassembler (partition only)
-# high for: abyss (for memory and partition), masurca, pilon (for memory and partition), spades
+# high for: abyss (for memory and partition), masurca, pypolca (for memory and partition), spades
 
 
 def get_very_low_mem(wildcards, attempt):
@@ -94,33 +94,34 @@ def get_all_inputs():
             assembler=ASSEMBLERS,
         ),
         expand(
-            f"{output_dir}" + "{sample}/best_assembly_qc/busco_general_pilon",
+            f"{output_dir}" + "{sample}/best_assembly_qc/busco_general_pypolca",
             sample=SAMPLES,
         ),
         expand(
-            f"{output_dir}" + "{sample}/best_assembly_qc/busco_specific_pilon",
-            sample=SAMPLES,
-        ),
-        expand(
-            f"{output_dir}"
-            + "{sample}/best_assembly_qc/merquryfk_pilon/merquryfk.completeness.stats",
-            sample=SAMPLES,
-        ),
-        expand(
-            f"{output_dir}" + "{sample}/best_assembly_qc/merquryfk_pilon/merquryfk.qv",
-            sample=SAMPLES,
-        ),
-        expand(
-            f"{output_dir}" + "{sample}/best_assembly_qc/quast_pilon", sample=SAMPLES
-        ),
-        expand(
-            f"{output_dir}"
-            + "{sample}/best_assembly_qc/samtools_pilon/{sample}_best_assembly_pilon_sorted.bam",
+            f"{output_dir}" + "{sample}/best_assembly_qc/busco_specific_pypolca",
             sample=SAMPLES,
         ),
         expand(
             f"{output_dir}"
-            + "{sample}/best_assembly_qc/coverage_viz_pilon/{sample}_best_assembly_pilon_coverage_summary.txt",
+            + "{sample}/best_assembly_qc/merquryfk_pypolca/merquryfk.completeness.stats",
+            sample=SAMPLES,
+        ),
+        expand(
+            f"{output_dir}"
+            + "{sample}/best_assembly_qc/merquryfk_pypolca/merquryfk.qv",
+            sample=SAMPLES,
+        ),
+        expand(
+            f"{output_dir}" + "{sample}/best_assembly_qc/quast_pypolca", sample=SAMPLES
+        ),
+        expand(
+            f"{output_dir}"
+            + "{sample}/best_assembly_qc/samtools_pypolca/{sample}_best_assembly_pypolca_sorted.bam",
+            sample=SAMPLES,
+        ),
+        expand(
+            f"{output_dir}"
+            + "{sample}/best_assembly_qc/coverage_viz_pypolca/{sample}_best_assembly_pypolca_coverage_summary.txt",
             sample=SAMPLES,
         ),
     ]

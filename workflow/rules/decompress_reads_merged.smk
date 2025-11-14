@@ -15,6 +15,8 @@ rule decompress_reads_merged:
         partition=config["very_low"]["partition"],
     conda:
         "../envs/basic.yaml"
+    container:
+        "docker://debian:stable-slim"
     log:
         "logs/{sample}/merged_decompress.log",
     benchmark:

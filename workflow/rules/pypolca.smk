@@ -1,3 +1,6 @@
+# This rule runs pypolca on the best draft assemblies
+
+
 rule pypolca:
     input:
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
@@ -9,9 +12,9 @@ rule pypolca:
         link_pypolca_assembly=f"{output_dir}"
         + "{sample}/assemblies/{sample}_best_assembly_pypolca.fa",
     params:
-        results_prefix=lambda wildcards, output: os.path.splitext(output.pypolca_fasta)[
-            0
-        ].replace(".fasta", ""),
+        results_prefix=lambda wildcards, output: os.path.basename(
+            output.pypolca_fasta
+        ).replace("_corrected.fasta", ""),
         out_dir=lambda wildcards, input, output: os.path.dirname(output.pypolca_fasta),
         optional_params=" ".join(
             f"{key}" if value is True else f"{key} {value}"
@@ -28,11 +31,13 @@ rule pypolca:
         "benchmark/{sample}/pypolca_best_assembly.txt"
     conda:
         "../envs/pypolca.yaml"
+    container:
+        "docker://quay.io/biocontainers/pypolca:0.4.0--pyhdfd78af_0"
     shell:
         """
         echo "Running pypolca with the following command:" >> {log} 2>&1
         echo "pypolca run -a {input.assembly} -1 {input.forward_in} -2 {input.reverse_in} -t {threads} -f -o {params.out_dir} -p {params.results_prefix} {params.optional_params}" >> {log} 2>&1
-        pypolca run -a {input.assembly} -1 {input.forward_in} -2 {input.reverse_in} -t {threads} -f -o {params.out_dir} -p {params.results_prefix} {params.optional_params} >> {log} 2>&
+        pypolca run -a {input.assembly} -1 {input.forward_in} -2 {input.reverse_in} -t {threads} -f -o {params.out_dir} -p {params.results_prefix} {params.optional_params} >> {log} 2>&1
         
         ln -srn {output.pypolca_fasta} {output.link_pypolca_assembly}
         """

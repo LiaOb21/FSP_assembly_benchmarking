@@ -3,4 +3,4 @@ channels:
   - bioconda
 
 dependencies:
-  - merquryfk=1.1.2
+  - merquryfk=1.1.3

@@ -23,6 +23,8 @@ rule select_best_assembly:
         "benchmark/{sample}/select_best_assembly.txt"
     conda:
         "../envs/basic.yaml"
+    container:
+        "docker://debian:stable-slim"
     shell:
         """
         echo "Running the script as follows:" >> {log} 2>&1

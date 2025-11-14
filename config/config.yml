@@ -144,8 +144,6 @@ merquryfk:
 #    "-pdf": True # outputs results in PDF format (default is png)
 
 # Customise pilon parameters
-pilon:
+pypolca:
   optional_params: # if you do not want to use any optional parameters, add `{}` here
-    "--K": 47 # Kmer size used by internal assembler (default 47).
-    "--fix": "all" # A comma-separated list of categories of issues to try to fix: "all": all of the above (default);
-    "--changes": True # Output a file with the changes made to the assembly.
+    "--careful": True # Authors recommend to always use this option
