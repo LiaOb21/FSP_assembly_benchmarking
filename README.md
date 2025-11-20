@@ -10,8 +10,7 @@ A Snakemake workflow for *de novo* genome assembly using Illumina reads.
 
 This workflow was developed for the [Fungarium Sequencing Project (FSP)](https://www.kew.org/science/our-science/projects/sequencing-kews-fungarium) at Royal Botanic Gardens, Kew. 
 
-<img width="1920" height="1080" alt="FSP_assembly_benchmarking_DAG" src="https://github.com/user-attachments/assets/b908d9c6-d2f0-44ab-8f05-fb689d156374" />
-
+<img width="1920" height="1080" alt="version2_FSP_assembly_benchmarking_DAG" src="https://github.com/user-attachments/assets/8f672376-730e-4d61-8999-58b059a02737" />
 
 The usage of this workflow is described in the [Snakemake Workflow Catalog](https://snakemake.github.io/snakemake-workflow-catalog/docs/workflows/LiaOb21/FSP_assembly_benchmarking).
 
