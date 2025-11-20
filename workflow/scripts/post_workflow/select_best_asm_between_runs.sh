@@ -58,7 +58,7 @@ copy_assembly_files() {
     local sample_output_dir="$4"
     
     # Copy the assembly
-    local source_assembly="$where_to_save/$best_run/$sample/assemblies/${sample}_best_assembly_pilon.fa"
+    local source_assembly="$where_to_save/$best_run/$sample/assemblies/${sample}_best_assembly_pypolca.fa"
     if [[ -f "$source_assembly" ]]; then
         cp "$source_assembly" "$sample_output_dir/${sample}_best_assembly.fa"
         echo "$best_run:$best_assembler" > "$sample_output_dir/best_assembly_source.txt"
@@ -265,7 +265,7 @@ for sample in "${reference_samples[@]}"; do
                 echo "  → Run '$subdir': best assembler is '$best_assembler'"
                 
                 # Get BUSCO score for this best assembly
-                busco_dir="$where_to_save/$subdir/$sample/best_assembly_info_and_QC/busco_specific_pilon"
+                busco_dir="$where_to_save/$subdir/$sample/best_assembly_info_and_QC/busco_specific_pypolca"
                 busco_file=$(find "$busco_dir" -name "short_summary.specific.*.txt" 2>/dev/null | head -1)
                 
                 if [[ -f "$busco_file" ]]; then
@@ -350,7 +350,7 @@ for sample in "${reference_samples[@]}"; do
         
         while read -r run assembler busco; do
             # Get auN score from QUAST report for this run
-            quast_file="$where_to_save/$run/$sample/best_assembly_info_and_QC/quast_pilon/report.txt"
+            quast_file="$where_to_save/$run/$sample/best_assembly_info_and_QC/quast_pypolca/report.txt"
             if [[ -f "$quast_file" ]]; then
                 # Since this is the best assembly QUAST report, there's only one column
                 # Just extract the auN value directly

@@ -2,7 +2,7 @@ Command line: /home/lobinu/git_repos/FSP_assembly_benchmarking/.snakemake/conda/
 
 System information:
   SPAdes version: 4.2.0
-  Python version: 3.13.5
+  Python version: 3.14.0
   OS: Linux-5.15.167.4-microsoft-standard-WSL2-x86_64-with-glibc2.39
 
 Output dir: /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades

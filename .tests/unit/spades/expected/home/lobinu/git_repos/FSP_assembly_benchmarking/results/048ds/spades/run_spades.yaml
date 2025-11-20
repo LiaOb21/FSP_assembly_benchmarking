@@ -2,7 +2,7 @@
   args: []
   config_dir: ''
   del_after: []
-  job_uuid: SPAdes_Before_start_YT3Y0EMTNFNNRL0SBSVLSHRQMYHVXHYK
+  job_uuid: SPAdes_Before_start_11BKT4PSX8Y0S09FG7QEQ190TW1CJSUJ
   mpi_support: false
   output_files: []
   path: 'true'
@@ -11,7 +11,7 @@
   args: []
   config_dir: ''
   del_after: []
-  job_uuid: SPAdes_Assembling_ZTJTPV5EEUZK0UHH7LL0NQ4SHEWRDOA6
+  job_uuid: SPAdes_Assembling_A6EBMTLI9MAVLSTO914H1WZ9QZR11K3D
   mpi_support: false
   output_files: []
   path: 'true'
@@ -21,7 +21,7 @@
   - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/K21/configs/config.info
   config_dir: K21
   del_after: []
-  job_uuid: hpcSPAdes_K21_IC0T94AY8U4LY0MTS806WSS76M4BR9UX
+  job_uuid: hpcSPAdes_K21_RMO9Z18S0S0C8CFS5QY0X298O9UG32N6
   mpi_support: true
   output_files: []
   path: /home/lobinu/git_repos/FSP_assembly_benchmarking/.snakemake/conda/c9d8da4aeba45c11e035c12a2dc44715_/bin/{spades_core}
@@ -31,7 +31,7 @@
   - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/K33/configs/config.info
   config_dir: K33
   del_after: []
-  job_uuid: hpcSPAdes_K33_0ZVRDL04SWHDBVW9TPQSWG05LBALKNJJ
+  job_uuid: hpcSPAdes_K33_C970GCIKSF6SDHMCWXNBQRRY6374T72K
   mpi_support: true
   output_files: []
   path: /home/lobinu/git_repos/FSP_assembly_benchmarking/.snakemake/conda/c9d8da4aeba45c11e035c12a2dc44715_/bin/{spades_core}
@@ -41,7 +41,7 @@
   - /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/K55/configs/config.info
   config_dir: K55
   del_after: []
-  job_uuid: hpcSPAdes_K55_STPG3TJGG8969O8DW12Q7K8VXGEARRVK
+  job_uuid: hpcSPAdes_K55_2V7YNJTRYMSA3VYXW5ES24WZNU70Q94J
   mpi_support: true
   output_files: []
   path: /home/lobinu/git_repos/FSP_assembly_benchmarking/.snakemake/conda/c9d8da4aeba45c11e035c12a2dc44715_/bin/{spades_core}
@@ -72,8 +72,8 @@
   config_dir: ''
   del_after:
   - .bin_reads
-  - tmp/spades_8q8qq4s2
-  job_uuid: SPAdes_Copy_files_JKJLBTI5AKCE3F4OOBV4DS9MRFMPZXUK
+  - tmp/spades_g6icbxev
+  job_uuid: SPAdes_Copy_files_6YN7UQCSHQ0EO6OI5ZMYN3VPJOE300T2
   mpi_support: false
   output_files: []
   path: /home/lobinu/git_repos/FSP_assembly_benchmarking/.snakemake/conda/c9d8da4aeba45c11e035c12a2dc44715_/bin/python3
@@ -82,7 +82,7 @@
   args: []
   config_dir: ''
   del_after: []
-  job_uuid: SPAdes_Assembling_C7S6RA53RYW9A3M1K6QTTZWQIPNWGBCF
+  job_uuid: SPAdes_Assembling_NEKYJHI9ZHBUO3WPSUO11NFM8ZYJ7NDZ
   mpi_support: false
   output_files: []
   path: 'true'
@@ -98,7 +98,7 @@
   - '3'
   config_dir: ''
   del_after: []
-  job_uuid: SPAdes_Breaking_scaffolds_1YPOOGCKRNIHVRYZP0RSCCR80J4BJRJH
+  job_uuid: SPAdes_Breaking_scaffolds_FFBFVR6ORD6C5A7JT0F0RH0MQFY6HRPW
   mpi_support: false
   output_files: []
   path: /home/lobinu/git_repos/FSP_assembly_benchmarking/.snakemake/conda/c9d8da4aeba45c11e035c12a2dc44715_/bin/python3
@@ -108,7 +108,7 @@
   config_dir: ''
   del_after:
   - configs
-  job_uuid: SPAdes_Terminate_QEUPPP3RR9A59WQ5VKLIF8JF3AIG8MWD
+  job_uuid: SPAdes_Terminate_BFYLONW0U9NNM5GLLJLS2J1WQ44ECGOV
   mpi_support: false
   output_files: []
   path: 'true'

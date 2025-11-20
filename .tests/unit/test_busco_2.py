@@ -22,14 +22,14 @@ def test_busco_2():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/busco_general_pilon /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/busco_specific_pilon", file=sys.stderr)
+        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/busco_general_pypolca /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/busco_specific_pypolca", file=sys.stderr)
 
         # Run the test job.
         sp.check_output([
             "python",
             "-m",
             "snakemake", 
-            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/busco_general_pilon /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/busco_specific_pilon",
+            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/busco_general_pypolca /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/busco_specific_pypolca",
             "-f", 
             "-j1",
             "--target-files-omit-workdir-adjustment",

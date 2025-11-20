@@ -20,8 +20,8 @@ def extract_sample_info(busco_filename, best_assembly_source_path):
         tuple: (sample_id, lineage, reads_type, kmer_strategy, assembler)
     """
     # Extract sample_id and lineage from BUSCO filename
-    # short_summary.specific.fungi_odb12.BUSCO_048ds_best_assembly_pilon.fa.txt
-    pattern1 = r'short_summary\.specific\.([^.]+)\.BUSCO_(.+)_best_assembly_pilon\.fa\.txt'
+    # short_summary.specific.fungi_odb12.BUSCO_048ds_best_assembly_pypolca.fa.txt
+    pattern1 = r'short_summary\.specific\.([^.]+)\.BUSCO_(.+)_best_assembly_pypolca\.fa\.txt'
     match1 = re.search(pattern1, busco_filename)
     
     if match1:
@@ -312,29 +312,29 @@ def collect_all_metrics(base_dir, verbose=True):
         
         # Get QUAST data (should be same for both general and specific)
         quast_file = os.path.join(sample_path, 'best_assembly_info_and_QC', 
-                                 'quast_pilon', 'transposed_report.tsv')
+                                 'quast_pypolca', 'transposed_report.tsv')
         quast_data = parse_quast_file(quast_file) if os.path.exists(quast_file) else {}
         
         # Get Merqury data (should be same for both general and specific)
         merqury_qv_file = os.path.join(sample_path, 'best_assembly_info_and_QC', 
-                                      'merquryfk_pilon', 'merquryfk.qv')
+                                      'merquryfk_pypolca', 'merquryfk.qv')
         merqury_completeness_file = os.path.join(sample_path, 'best_assembly_info_and_QC', 
-                                               'merquryfk_pilon', 'merquryfk.completeness.stats')
+                                               'merquryfk_pypolca', 'merquryfk.completeness.stats')
         
         merqury_qv_data = parse_merqury_qv_file(merqury_qv_file) if os.path.exists(merqury_qv_file) else {}
         merqury_completeness_data = parse_merqury_completeness_file(merqury_completeness_file) if os.path.exists(merqury_completeness_file) else {}
         
         # Get Coverage data (should be same for both general and specific)
         coverage_file = os.path.join(sample_path, 'best_assembly_info_and_QC', 
-                                    'coverage_viz_pilon', 
-                                    f'{sample_dir_name}_best_assembly_pilon_coverage_summary.txt')
+                                    'coverage_viz_pypolca', 
+                                    f'{sample_dir_name}_best_assembly_pypolca_coverage_summary.txt')
         coverage_data = parse_coverage_file(coverage_file) if os.path.exists(coverage_file) else {}
         
         # Combine all non-BUSCO data
         other_data = {**quast_data, **merqury_qv_data, **merqury_completeness_data, **coverage_data}
         
         # Check both general and specific BUSCO directories
-        busco_types = ['busco_general_pilon', 'busco_specific_pilon']
+        busco_types = ['busco_general_pypolca', 'busco_specific_pypolca']
         
         for busco_type in busco_types:
             # Direct path to expected BUSCO file location
@@ -358,7 +358,7 @@ def collect_all_metrics(base_dir, verbose=True):
                         entry = {
                             'sample_id': sample_id,
                             'lineage': lineage,
-                            'busco_type': busco_type.replace('busco_', '').replace('_pilon', ''),
+                            'busco_type': busco_type.replace('busco_', '').replace('_pypolca', ''),
                             'reads_type': reads_type,
                             'kmer_strategy': kmer_strategy,
                             'assembler': assembler,
@@ -371,7 +371,7 @@ def collect_all_metrics(base_dir, verbose=True):
                         data.append(entry)
                         
                         if verbose:
-                            print(f"✓ {sample_id} ({busco_type.replace('busco_', '').replace('_pilon', '')}) + All Metrics")
+                            print(f"✓ {sample_id} ({busco_type.replace('busco_', '').replace('_pypolca', '')}) + All Metrics")
     
     return pd.DataFrame(data)
 

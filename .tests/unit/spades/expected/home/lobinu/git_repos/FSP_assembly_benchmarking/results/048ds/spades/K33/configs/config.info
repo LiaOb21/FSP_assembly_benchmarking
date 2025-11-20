@@ -14,7 +14,7 @@ dataset /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/da
 log_filename    log.properties
 
 output_base /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades
-tmp_dir /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/tmp/spades_8q8qq4s2
+tmp_dir /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/spades/tmp/spades_g6icbxev
 
 main_iteration false
 ; iterative mode switcher, activates additional contigs usage

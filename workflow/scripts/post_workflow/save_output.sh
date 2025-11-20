@@ -73,7 +73,7 @@ validate_sample_structure() {
             if [[ -d "$sample_path/assemblies" ]]; then
                 if ls "$sample_path/assemblies"/*.fa 1> /dev/null 2>&1; then
                     local fa_count=$(ls "$sample_path/assemblies"/*.fa | wc -l)
-                    echo "    ✓ Found $fa_count assembly files (including best assembly improved with Pilon)"
+                    echo "    ✓ Found $fa_count assembly files (including best assembly improved with pypolca)"
                 else
                     echo "    🍄 No .fa files found in assemblies directory"
                     ((validation_errors++))
@@ -122,19 +122,19 @@ validate_sample_structure() {
                 fi
             fi            
             
-            # Check for Pilon changes file
+            # Check for pypolca vcf file
             if [[ -d "$sample_path/best_assembly" ]]; then
-                if ls "$sample_path/best_assembly"/pilon/*.changes 1> /dev/null 2>&1; then
-                    echo "    ✓ Found Pilon changes file"
+                if ls "$sample_path/best_assembly"/pypolca/*.vcf 1> /dev/null 2>&1; then
+                    echo "    ✓ Found pypolca vcf file"
                 else
-                    echo "    🍄 Warning: No Pilon changes file found"
+                    echo "    🍄 Warning: No pypolca vcf file found"
                     ((validation_errors++))
                 fi
             fi  
 
             # Check for best assembly QUAST reports
-            if [[ -d "$sample_path/best_assembly_qc/quast_pilon" ]]; then
-                if ls "$sample_path/best_assembly_qc/quast_pilon"/*report* 1> /dev/null 2>&1; then
+            if [[ -d "$sample_path/best_assembly_qc/quast_pypolca" ]]; then
+                if ls "$sample_path/best_assembly_qc/quast_pypolca"/*report* 1> /dev/null 2>&1; then
                     echo "    ✓ Found best assembly QUAST reports"
                 else
                     echo "    🍄 Warning: No best assembly QUAST reports found"
@@ -146,7 +146,7 @@ validate_sample_structure() {
             fi
 
             # Check for best assembly BUSCO results
-            for busco_type in "busco_general_pilon" "busco_specific_pilon"; do
+            for busco_type in "busco_general_pypolca" "busco_specific_pypolca"; do
                 if [[ -d "$sample_path/best_assembly_qc/$busco_type" ]]; then
                     if find "$sample_path/best_assembly_qc/$busco_type" -name "short_summary.*.txt" | grep -q .; then
                         echo "    ✓ Found best assembly $busco_type results"
@@ -161,8 +161,8 @@ validate_sample_structure() {
             done
             
             # Check for best assembly merquryfk results
-            if [[ -d "$sample_path/best_assembly_qc/merquryfk_pilon" ]]; then
-                if ls "$sample_path/best_assembly_qc/merquryfk_pilon"/*{qv,stats,bed,png} 1> /dev/null 2>&1; then
+            if [[ -d "$sample_path/best_assembly_qc/merquryfk_pypolca" ]]; then
+                if ls "$sample_path/best_assembly_qc/merquryfk_pypolca"/*{qv,stats,bed,png} 1> /dev/null 2>&1; then
                     echo "    ✓ Found best assembly MerquryFK results"
                 else
                     echo "    🍄 Warning: No best assembly MerquryFK results found"
@@ -174,27 +174,27 @@ validate_sample_structure() {
             fi
 
             # Check for best assembly alignments results
-            if [[ -d "$sample_path/best_assembly_qc/bwa_mem2_samtools_pilon" ]]; then
-                if ls "$sample_path/best_assembly_qc/bwa_mem2_samtools_pilon"/*{sorted.bam,.txt} 1> /dev/null 2>&1; then
+            if [[ -d "$sample_path/best_assembly_qc/samtools_pypolca" ]]; then
+                if ls "$sample_path/best_assembly_qc/samtools_pypolca"/*{sorted.bam,.txt} 1> /dev/null 2>&1; then
                     echo "    ✓ Found best assembly alignments results"
                 else
                     echo "    🍄 Warning: No best assembly alignments results found"
                     ((validation_errors++))
                 fi
             else
-                echo "    🍄 Warning: Best assembly bwa_mem2_samtools_pilon directory not found"
+                echo "    🍄 Warning: Best assembly samtools_pypolca directory not found"
                 ((validation_errors++))
             fi
             # Check for best assembly coverage_viz results
-            if [[ -d "$sample_path/best_assembly_qc/coverage_viz_pilon" ]]; then
-                if ls "$sample_path/best_assembly_qc/coverage_viz_pilon"/*{.png,.txt} 1> /dev/null 2>&1; then
+            if [[ -d "$sample_path/best_assembly_qc/coverage_viz_pypolca" ]]; then
+                if ls "$sample_path/best_assembly_qc/coverage_viz_pypolca"/*{.png,.txt} 1> /dev/null 2>&1; then
                     echo "    ✓ Found best assembly coverage_viz results"
                 else
                     echo "    🍄 Warning: No best assembly coverage_viz results found"
                     ((validation_errors++))
                 fi
             else
-                echo "    🍄 Warning: Best assembly coverage_viz_pilon directory not found"
+                echo "    🍄 Warning: Best assembly coverage_viz_pypolca directory not found"
                 ((validation_errors++))
             fi
         fi
@@ -434,7 +434,7 @@ for busco_dir in "$workflow_path/$results_directory_name"/*/busco_{general,speci
                 # Also copy full_table.tsv for downstream analysis
                 full_table_file="$assembler_subdir/run_*/full_table.tsv"
                 if ls $full_table_file 1> /dev/null 2>&1; then
-                    cp $full_table_file "$target_dir/"
+                    cp $full_table_file "$target_dir/${assembler_name}_full_table.tsv"
                     echo "    Copied $assembler_name BUSCO full table"
                 fi
             fi
@@ -494,20 +494,21 @@ for sample_dir in "$workflow_path/$results_directory_name"/*/best_assembly; do
         echo "  Copying $sample_name best assembly info to $target_dir"
         mkdir -p "$target_dir"
         cp -r "$sample_dir"/*txt "$target_dir/"
-        cp -r "$sample_dir"/pilon/*changes "$target_dir/"
+        cp -r "$sample_dir"/pypolca/*vcf "$target_dir/"
+        cp -r "$sample_dir"/pypolca/*report "$target_dir/"
     fi
 done
 
 
 # Save QUAST results for each sample with sample name preserved
-echo "Saving QUAST results for best assemblies improved with pilon..."
-for sample_dir in "$workflow_path/$results_directory_name"/*/best_assembly_qc/quast_pilon; do
+echo "Saving QUAST results for best assemblies improved with pypolca..."
+for sample_dir in "$workflow_path/$results_directory_name"/*/best_assembly_qc/quast_pypolca; do
     if [[ -d "$sample_dir" ]]; then
         # Extract sample name from path
         sample_name=$(basename "$(dirname "$(dirname "$sample_dir")")")
         
         # Create descriptive directory name
-        target_dir="$where_to_save/$name/${sample_name}/best_assembly_info_and_QC/quast_pilon"
+        target_dir="$where_to_save/$name/${sample_name}/best_assembly_info_and_QC/quast_pypolca"
         
         echo "  Copying $sample_name QUAST results to $target_dir"
         mkdir -p "$target_dir"
@@ -540,7 +541,7 @@ for busco_dir in "$workflow_path/$results_directory_name"/*/best_assembly_qc/bus
         # Also copy full_table.tsv for downstream analysis
         full_table_file="$busco_dir/*/run_*/full_table.tsv"
         if ls $full_table_file 1> /dev/null 2>&1; then
-            cp $full_table_file "$target_dir/"
+            cp $full_table_file "$target_dir/${sample_name}_best_assembly_full_table.tsv"
             echo "    Copied $busco_type BUSCO full table"
         fi
     fi
@@ -549,13 +550,13 @@ done
 
 # Save MerquryFK results - key files only
 echo "Saving best assembly MerquryFK results..."
-for merqury_dir in "$workflow_path/$results_directory_name"/*/best_assembly_qc/merquryfk_pilon; do
+for merqury_dir in "$workflow_path/$results_directory_name"/*/best_assembly_qc/merquryfk_pypolca; do
     if [[ -d "$merqury_dir" ]]; then
         # Extract sample name  
         sample_name=$(basename "$(dirname "$(dirname "$merqury_dir")")")
 
         # Create target directory
-        target_dir="$where_to_save/$name/${sample_name}/best_assembly_info_and_QC/merquryfk_pilon"
+        target_dir="$where_to_save/$name/${sample_name}/best_assembly_info_and_QC/merquryfk_pypolca"
         mkdir -p "$target_dir"
         
         echo "  Copying $sample_name best assembly MerquryFK results..."
@@ -578,34 +579,34 @@ for merqury_dir in "$workflow_path/$results_directory_name"/*/best_assembly_qc/m
     fi
 done
 
-# Save alignments of reads to best assemblies improved with pilon (BAM files and indexes)
-echo "Saving alignments and stats results for best assemblies improved with pilon..."
-for sample_dir in "$workflow_path/$results_directory_name"/*/best_assembly_qc/bwa_mem2_samtools_pilon; do
+# Save alignments of reads to best assemblies improved with pypolca (BAM files and indexes)
+echo "Saving alignments and stats results for best assemblies improved with pypolca..."
+for sample_dir in "$workflow_path/$results_directory_name"/*/best_assembly_qc/samtools_pypolca; do
     if [[ -d "$sample_dir" ]]; then
         # Extract sample name from path
         sample_name=$(basename "$(dirname "$(dirname "$sample_dir")")")
         
         # Create descriptive directory name
-        target_dir="$where_to_save/$name/${sample_name}/best_assembly_info_and_QC/bwa_mem2_samtools_pilon"
+        target_dir="$where_to_save/$name/${sample_name}/best_assembly_info_and_QC/samtools_pypolca"
 
-        echo "  Copying $sample_name bwa_mem2_samtools_pilon results to $target_dir"
+        echo "  Copying $sample_name samtools_pypolca results to $target_dir"
         mkdir -p "$target_dir"
         cp -r "$sample_dir"/*sorted.bam* "$target_dir/"
         cp -r "$sample_dir"/*.txt "$target_dir/"
     fi
 done
 
-# Save coverage visualisation results for best assemblies improved with pilon
-echo "Saving coverage visualisation results for best assemblies improved with pilon..."
-for sample_dir in "$workflow_path/$results_directory_name"/*/best_assembly_qc/coverage_viz_pilon; do
+# Save coverage visualisation results for best assemblies improved with pypolca
+echo "Saving coverage visualisation results for best assemblies improved with pypolca..."
+for sample_dir in "$workflow_path/$results_directory_name"/*/best_assembly_qc/coverage_viz_pypolca; do
     if [[ -d "$sample_dir" ]]; then
         # Extract sample name from path
         sample_name=$(basename "$(dirname "$(dirname "$sample_dir")")")
         
         # Create descriptive directory name
-        target_dir="$where_to_save/$name/${sample_name}/best_assembly_info_and_QC/coverage_viz_pilon"
+        target_dir="$where_to_save/$name/${sample_name}/best_assembly_info_and_QC/coverage_viz_pypolca"
 
-        echo "  Copying $sample_name coverage_viz_pilon results to $target_dir"
+        echo "  Copying $sample_name coverage_viz_pypolca results to $target_dir"
         mkdir -p "$target_dir"
         cp -r "$sample_dir"/*png "$target_dir/"
         cp -r "$sample_dir"/*.txt "$target_dir/"

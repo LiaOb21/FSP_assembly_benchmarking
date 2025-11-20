@@ -22,14 +22,14 @@ def test_masurca():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/masurca/CA/primary.genome.scf.fasta /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/assemblies/048ds_masurca.fa", file=sys.stderr)
+        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/masurca/masurca_config.txt /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/masurca/CA/primary.genome.scf.fasta /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/assemblies/048ds_masurca.fa", file=sys.stderr)
 
         # Run the test job.
         sp.check_output([
             "python",
             "-m",
             "snakemake", 
-            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/masurca/CA/primary.genome.scf.fasta /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/assemblies/048ds_masurca.fa",
+            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/masurca/masurca_config.txt /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/masurca/CA/primary.genome.scf.fasta /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/assemblies/048ds_masurca.fa",
             "-f", 
             "-j1",
             "--target-files-omit-workdir-adjustment",

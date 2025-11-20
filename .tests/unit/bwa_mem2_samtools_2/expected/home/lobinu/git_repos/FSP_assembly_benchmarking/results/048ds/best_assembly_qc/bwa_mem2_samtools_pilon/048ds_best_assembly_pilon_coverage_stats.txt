@@ -1,3 +1,0 @@
-#rname	startpos	endpos	numreads	covbases	coverage	meandepth	meanbaseq	meanmapq
-scf7180000000020_pilon	1	489	94	489	100	16.3476	34.1	50.4
-scf7180000000021_pilon	1	371	85	371	100	21.9057	33.4	59
