@@ -72,7 +72,7 @@ The assemblies produced by each assembler for each sample are then quality inspe
 
 The best assembly for each sample is then selected. The selection is based on the highest complete and single BUSCO content (absolute number, not percentage). If more than one assembly have the highest complete and single copy BUSCO score, the assembly with the highest aUN (calculated by QUAST) among those is selected.
 
-The best assembly is then aligned to the reads using [bwa-mem2](https://github.com/bwa-mem2/bwa-mem2) and [samtools](https://www.htslib.org/doc/samtools.html) and handed over to [Pilon](https://github.com/broadinstitute/pilon), to improve the assembly by performing error correction and gap filling.
+The best assembly is then handed over to [pypolca](https://github.com/gbouras13/pypolca), to improve the assembly by performing substitution, insertion, and deletion errors.
 
 The improved best assembly is then quality assessed again with BUSCO, QUAST, and MerquryFK, and aligned back to the reads with bwa-mem2 and samtools, which is also used to analyse the genome coverage.
 

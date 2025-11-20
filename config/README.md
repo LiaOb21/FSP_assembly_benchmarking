@@ -300,16 +300,16 @@ This section of the `config.yml` allows the user to set the parameters for Merqu
 
 For further information about using MerquryFK parameters, refer to the [official documentation](https://github.com/thegenemyers/MERQURY.FK).
 
-## Pilon
+## Pypolca
 
 ```
-pilon:
+# Customise pypolca parameters
+pypolca:
   optional_params: # if you do not want to use any optional parameters, add `{}` here
-    "--K": 47 # Kmer size used by internal assembler (default 47).
-    "--fix": "all" # A comma-separated list of categories of issues to try to fix: "all": all of the above (default);
-    "--changes": True # Output a file with the changes made to the assembly.
+    "--careful": True # Authors recommend to always use this option
 ```
 
-This section of the `config.yml` allows the user to set the parameters for Pilon. In our testing we noticed that using `--fix snps,indels,gaps` rather than `--fix all` significantly speeds up Pilon.
+This section of the `config.yml` allows the user to set the parameters for pypolca. Pypolca replaces Pilon, that was used in the previous versions (1.x.x) to imporve the draft of the best selected assembly. The main reson for the replacement is a significant speed up of the workflow.
+The authors suggest to always use the `--careful` option, that sets  `--min_alt 4` (at least four reads supporting the alternative allele) and `--min_ratio 3` (at least three times as many reads supporting the alterative allele compared to the assembly allele), and prevents most false positives at low depths without sacrificing error removal.
 
-For further information about using Pilon parameters, refer to the [official documentation](https://github.com/broadinstitute/pilon/wiki).
+For further information about using pypolca parameters, refer to the [official documentation](https://github.com/gbouras13/pypolca).
