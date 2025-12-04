@@ -39,6 +39,12 @@ jobs:
       - Linting
       - Formatting
     steps:
+      - name: Clean up stale conda installation
+        run: |
+          sudo rm -rf /home/runner/miniconda3 || true
+          sudo rm -rf /usr/share/miniconda || true
+        continue-on-error: true
+        
       - uses: actions/checkout@v4
 
       - name: Test workflow
