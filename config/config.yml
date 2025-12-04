@@ -70,7 +70,7 @@ spades:
 
 # Customise megahit parameters
 megahit:
-  "k": "31,51,71,91,99" #comma-separated list of kmer size all must be odd, in the range 15-255, increment <= 28) [21,29,39,59,79,99,119,141]
+  "k": "31,51,71,91,99,119,141" #comma-separated list of kmer size all must be odd, in the range 15-255, increment <= 28) [21,29,39,59,79,99,119,141]
   optional_params: # if you do not want to use any optional parameters, add `{}` here
     "--no-mercy": True
     "--min-count": 3 # suggested value for single genome assembly
