@@ -8,20 +8,22 @@ import glob
 import argparse
 import sys
 
-def extract_sample_info(busco_filename, best_assembly_source_path):
+def extract_sample_info(busco_filename, best_assembly_source_path, polisher):
     """
     Extract sample ID, assembler, reads type, kmer strategy and lineage info from multiple sources.
     
     Args:
         busco_filename (str): BUSCO summary filename
         best_assembly_source_path (str): Path to best_assembly_source.txt file
+        polisher (str): The polisher used (pilon or pypolca)
         
     Returns:
         tuple: (sample_id, lineage, reads_type, kmer_strategy, assembler)
     """
     # Extract sample_id and lineage from BUSCO filename
     # short_summary.specific.fungi_odb12.BUSCO_048ds_best_assembly_pypolca.fa.txt
-    pattern1 = r'short_summary\.specific\.([^.]+)\.BUSCO_(.+)_best_assembly_pypolca\.fa\.txt'
+    # short_summary.specific.fungi_odb12.BUSCO_048ds_best_assembly_pilon.fa.txt
+    pattern1 = rf'short_summary\.specific\.([^.]+)\.BUSCO_(.+)_best_assembly_{polisher}\.fa\.txt'
     match1 = re.search(pattern1, busco_filename)
     
     if match1:
@@ -116,9 +118,6 @@ def parse_busco_file(filepath):
     if missing_match:
         results['missing_count'] = int(missing_match.group(1))
     
-    # REMOVED: Assembly statistics extraction
-    # We no longer extract num_scaffolds, num_contigs, total_length
-    
     return results
 
 
@@ -156,9 +155,7 @@ def parse_quast_file(filepath):
                 results[key] = None
             else:
                 try:
-                    # Try float first to preserve decimals
                     float_val = float(value)
-                    # Only convert to int if it's actually a whole number
                     if float_val.is_integer():
                         results[key] = int(float_val)
                     else:
@@ -175,26 +172,19 @@ def parse_quast_file(filepath):
 def parse_merqury_qv_file(filepath):
     """
     Parse a merquryfk.qv file and extract Error % and QV.
-    
-    Args:
-        filepath (str): Path to merquryfk.qv file
-        
-    Returns:
-        dict: Dictionary containing Error % and QV
     """
     try:
         df = pd.read_csv(filepath, sep='\t')
         if len(df) == 0:
             return {}
         
-        row = df.iloc[0]  # Take first row
+        row = df.iloc[0]
         
         results = {
             'error_percent': row.get('Error %', None),
             'qv': row.get('QV', None)
         }
         
-        # Convert to appropriate types - preserve decimals
         for key, value in results.items():
             if pd.isna(value) or value == 'inf':
                 results[key] = None if value != 'inf' else float('inf')
@@ -211,28 +201,22 @@ def parse_merqury_qv_file(filepath):
         print(f"Error parsing Merqury QV file {filepath}: {e}")
         return {}
 
+
 def parse_merqury_completeness_file(filepath):
     """
     Parse a merquryfk.completeness.stats file and extract % Covered.
-    
-    Args:
-        filepath (str): Path to merquryfk.completeness.stats file
-        
-    Returns:
-        dict: Dictionary containing % Covered
     """
     try:
         df = pd.read_csv(filepath, sep='\t')
         if len(df) == 0:
             return {}
         
-        row = df.iloc[0]  # Take first row
+        row = df.iloc[0]
         
         results = {
             'percent_covered': row.get('% Covered', None)
         }
         
-        # Convert to appropriate types - preserve decimals
         for key, value in results.items():
             if pd.isna(value):
                 results[key] = None
@@ -294,12 +278,37 @@ def parse_coverage_file(filepath):
     except Exception as e:
         print(f"Error parsing coverage file {filepath}: {e}")
         return {}
+
+
+def detect_polisher(sample_path):
+    """
+    Detect which polisher was used for a sample by checking directory names.
     
+    Args:
+        sample_path (str): Path to sample directory
+        
+    Returns:
+        str: 'pypolca', 'pilon', or None if neither found
+    """
+    qc_path = os.path.join(sample_path, 'best_assembly_info_and_QC')
+    
+    if not os.path.exists(qc_path):
+        return None
+    
+    # Check for pypolca directories first
+    if os.path.exists(os.path.join(qc_path, 'quast_pypolca')):
+        return 'pypolca'
+    elif os.path.exists(os.path.join(qc_path, 'quast_pilon')):
+        return 'pilon'
+    
+    return None
+
 
 def collect_all_metrics(base_dir, verbose=True):
     """
     Collection of BUSCO, QUAST, Merqury, and Coverage data.
     Collects both general and specific BUSCO results plus all other metrics.
+    Automatically detects whether pilon or pypolca was used.
     """
     data = []
     
@@ -310,34 +319,41 @@ def collect_all_metrics(base_dir, verbose=True):
     for sample_dir_name in sample_dirs:
         sample_path = os.path.join(base_dir, sample_dir_name)
         
-        # Get QUAST data (should be same for both general and specific)
+        # Detect which polisher was used
+        polisher = detect_polisher(sample_path)
+        
+        if polisher is None:
+            if verbose:
+                print(f"⚠ {sample_dir_name}: Could not detect polisher (pilon/pypolca), skipping")
+            continue
+        
+        # Get QUAST data
         quast_file = os.path.join(sample_path, 'best_assembly_info_and_QC', 
-                                 'quast_pypolca', 'transposed_report.tsv')
+                                 f'quast_{polisher}', 'transposed_report.tsv')
         quast_data = parse_quast_file(quast_file) if os.path.exists(quast_file) else {}
         
-        # Get Merqury data (should be same for both general and specific)
+        # Get Merqury data
         merqury_qv_file = os.path.join(sample_path, 'best_assembly_info_and_QC', 
-                                      'merquryfk_pypolca', 'merquryfk.qv')
+                                      f'merquryfk_{polisher}', 'merquryfk.qv')
         merqury_completeness_file = os.path.join(sample_path, 'best_assembly_info_and_QC', 
-                                               'merquryfk_pypolca', 'merquryfk.completeness.stats')
+                                               f'merquryfk_{polisher}', 'merquryfk.completeness.stats')
         
         merqury_qv_data = parse_merqury_qv_file(merqury_qv_file) if os.path.exists(merqury_qv_file) else {}
         merqury_completeness_data = parse_merqury_completeness_file(merqury_completeness_file) if os.path.exists(merqury_completeness_file) else {}
         
-        # Get Coverage data (should be same for both general and specific)
+        # Get Coverage data
         coverage_file = os.path.join(sample_path, 'best_assembly_info_and_QC', 
-                                    'coverage_viz_pypolca', 
-                                    f'{sample_dir_name}_best_assembly_pypolca_coverage_summary.txt')
+                                    f'coverage_viz_{polisher}', 
+                                    f'{sample_dir_name}_best_assembly_{polisher}_coverage_summary.txt')
         coverage_data = parse_coverage_file(coverage_file) if os.path.exists(coverage_file) else {}
         
         # Combine all non-BUSCO data
         other_data = {**quast_data, **merqury_qv_data, **merqury_completeness_data, **coverage_data}
         
         # Check both general and specific BUSCO directories
-        busco_types = ['busco_general_pypolca', 'busco_specific_pypolca']
+        busco_types = [f'busco_general_{polisher}', f'busco_specific_{polisher}']
         
         for busco_type in busco_types:
-            # Direct path to expected BUSCO file location
             busco_pattern = os.path.join(sample_path, 
                                         'best_assembly_info_and_QC', 
                                         busco_type, 
@@ -346,11 +362,11 @@ def collect_all_metrics(base_dir, verbose=True):
             busco_files = glob.glob(busco_pattern)
             
             if busco_files:
-                busco_file = busco_files[0]  # Take first match
+                busco_file = busco_files[0]
                 best_source_file = os.path.join(sample_path, 'best_assembly_source.txt')
                 
                 filename = os.path.basename(busco_file)
-                sample_id, lineage, reads_type, kmer_strategy, assembler = extract_sample_info(filename, best_source_file)
+                sample_id, lineage, reads_type, kmer_strategy, assembler = extract_sample_info(filename, best_source_file, polisher)
                 
                 if sample_id and lineage:
                     busco_results = parse_busco_file(busco_file)
@@ -358,10 +374,11 @@ def collect_all_metrics(base_dir, verbose=True):
                         entry = {
                             'sample_id': sample_id,
                             'lineage': lineage,
-                            'busco_type': busco_type.replace('busco_', '').replace('_pypolca', ''),
+                            'busco_type': busco_type.replace('busco_', '').replace(f'_{polisher}', ''),
                             'reads_type': reads_type,
                             'kmer_strategy': kmer_strategy,
                             'assembler': assembler,
+                            'polisher': polisher,  # Add polisher info
                         }
                         # Add BUSCO results
                         entry.update(busco_results)
@@ -371,7 +388,7 @@ def collect_all_metrics(base_dir, verbose=True):
                         data.append(entry)
                         
                         if verbose:
-                            print(f"✓ {sample_id} ({busco_type.replace('busco_', '').replace('_pypolca', '')}) + All Metrics")
+                            print(f"✓ {sample_id} ({busco_type.replace('busco_', '').replace(f'_{polisher}', '')}, {polisher}) + All Metrics")
     
     return pd.DataFrame(data)
 
@@ -390,15 +407,15 @@ def create_wide_format_with_all_metrics(df):
                      'complete_count', 'single_copy_count', 'duplicated_count',
                      'fragmented_count', 'missing_count']
     
-    # Use only the QUAST metrics that actually exist in your data
+    # QUAST metrics
     quast_metrics = ['total_contigs>250bp', 'contigs>1000bp', 'contigs>5000bp', 'contigs>10000bp',
                      'contigs>25000bp', 'total_length>250bp', 'largest_contig', 'gc_percent', 'aUN',
                      'N50', 'N90', 'L50', 'L90', 'Ns_per_100kbp']
     
-    # Define Merqury metrics
+    # Merqury metrics
     merqury_metrics = ['error_percent', 'qv', 'percent_covered']
     
-    # Define Coverage metrics
+    # Coverage metrics
     coverage_metrics = ['mean_coverage', 'weighted_mean_coverage', 'median_coverage', 
                        'peak_coverage', 'min_coverage', 'std_coverage',
                        'mean_mapping_quality', 'median_mapping_quality',
@@ -416,13 +433,13 @@ def create_wide_format_with_all_metrics(df):
     df_general = df_general.rename(columns={'lineage': 'lineage_general'})
     df_specific = df_specific.rename(columns={'lineage': 'lineage_specific'})
     
-    # Select columns to merge
-    base_columns = ['sample_id', 'reads_type', 'kmer_strategy', 'assembler']  # Added kmer_strategy
+    # Select columns to merge (added 'polisher')
+    base_columns = ['sample_id', 'reads_type', 'kmer_strategy', 'assembler', 'polisher']
     general_columns = (base_columns + ['lineage_general'] + 
                       [f'{m}_general' for m in busco_metrics if f'{m}_general' in df_general.columns])
     specific_columns = (['sample_id', 'lineage_specific'] + 
                        [f'{m}_specific' for m in busco_metrics if f'{m}_specific' in df_specific.columns] +
-                      quast_metrics + merqury_metrics + coverage_metrics)  # All non-BUSCO metrics from specific df
+                      quast_metrics + merqury_metrics + coverage_metrics)
     
     # Merge on sample_id
     result = df_general[general_columns].merge(
@@ -432,8 +449,6 @@ def create_wide_format_with_all_metrics(df):
     )
     
     return result
-
-
 
 
 def main():
