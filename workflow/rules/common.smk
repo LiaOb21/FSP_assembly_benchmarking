@@ -84,45 +84,55 @@ def get_all_inputs():
     inputs = [
         expand(
             f"{output_dir}"
-            + "{sample}/merquryfk/{assembler}/merquryfk.completeness.stats",
+            + "{strategy}/{sample}/merquryfk/{assembler}/merquryfk.completeness.stats",
             sample=SAMPLES,
             assembler=ASSEMBLERS,
+            strategy=KMER_STRATEGIES,
         ),
         expand(
-            f"{output_dir}" + "{sample}/merquryfk/{assembler}/merquryfk.qv",
+            f"{output_dir}" + "{strategy}/{sample}/merquryfk/{assembler}/merquryfk.qv",
             sample=SAMPLES,
             assembler=ASSEMBLERS,
+            strategy=KMER_STRATEGIES,
         ),
         expand(
-            f"{output_dir}" + "{sample}/best_assembly_qc/busco_general_pypolca",
+            f"{output_dir}" + "{strategy}/{sample}/best_assembly_qc/busco_general_pypolca",
             sample=SAMPLES,
+            strategy=KMER_STRATEGIES,
         ),
         expand(
-            f"{output_dir}" + "{sample}/best_assembly_qc/busco_specific_pypolca",
+            f"{output_dir}" + "{strategy}/{sample}/best_assembly_qc/busco_specific_pypolca",
             sample=SAMPLES,
+            strategy=KMER_STRATEGIES,
         ),
         expand(
             f"{output_dir}"
-            + "{sample}/best_assembly_qc/merquryfk_pypolca/merquryfk.completeness.stats",
+            + "{strategy}/{sample}/best_assembly_qc/merquryfk_pypolca/merquryfk.completeness.stats",
             sample=SAMPLES,
+            strategy=KMER_STRATEGIES,
         ),
         expand(
             f"{output_dir}"
-            + "{sample}/best_assembly_qc/merquryfk_pypolca/merquryfk.qv",
+            + "{strategy}/{sample}/best_assembly_qc/merquryfk_pypolca/merquryfk.qv",
             sample=SAMPLES,
+            strategy=KMER_STRATEGIES,
         ),
         expand(
-            f"{output_dir}" + "{sample}/best_assembly_qc/quast_pypolca", sample=SAMPLES
+            f"{output_dir}" + "{strategy}/{sample}/best_assembly_qc/quast_pypolca",
+            sample=SAMPLES,
+            strategy=KMER_STRATEGIES,
         ),
         expand(
             f"{output_dir}"
-            + "{sample}/best_assembly_qc/samtools_pypolca/{sample}_best_assembly_pypolca_sorted.bam",
+            + "{strategy}/{sample}/best_assembly_qc/samtools_pypolca/{sample}_best_assembly_pypolca_sorted.bam",
             sample=SAMPLES,
+            strategy=KMER_STRATEGIES,
         ),
         expand(
             f"{output_dir}"
-            + "{sample}/best_assembly_qc/coverage_viz_pypolca/{sample}_best_assembly_pypolca_coverage_summary.txt",
+            + "{strategy}/{sample}/best_assembly_qc/coverage_viz_pypolca/{sample}_best_assembly_pypolca_coverage_summary.txt",
             sample=SAMPLES,
+            strategy=KMER_STRATEGIES,
         ),
     ]
 
@@ -140,6 +150,9 @@ def get_kmer_list(wildcards, assembler, config_key):
     Get k-mer list for assemblers that use multiple k-mer sizes.
     For spades and megahit.
     """
+    # Get strategy from wildcards
+    strategy = wildcards.strategy
+
     # Assembler-specific default k-mer lists and limits
     assembler_config = {
         "spades": {"default_kmers": [21, 33, 55, 77], "max_kmer": 127},
@@ -155,10 +168,10 @@ def get_kmer_list(wildcards, assembler, config_key):
     default_k_list = asm_config["default_kmers"]
     max_kmer = asm_config["max_kmer"]
 
-    if config["kmer_strategy"]["mode"] == "kmergenie":
+    if strategy == "kmergenie":
         # Read best k-mer from kmergenie output
         best_kmer_file = (
-            f"{output_dir}{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
+            f"{output_dir}{wildcards.strategy}/{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
         )
         with open(best_kmer_file, "r") as f:
             best_k = int(f.read().strip())
@@ -181,10 +194,10 @@ def get_kmer_list(wildcards, assembler, config_key):
 
         return ",".join(map(str, k_list))
 
-    elif config["kmer_strategy"]["mode"] == "reads_length":
+    elif strategy == "reads_length":
         # Read best k-mer from seqkit output
         kmer_file = (
-            f"{output_dir}{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
+            f"{output_dir}{wildcards.strategy}/{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
         )
         with open(kmer_file, "r") as f:
             best_k = int(f.read().strip())
@@ -243,10 +256,13 @@ def get_single_kmer(wildcards, assembler, config_key):
     Get single k-mer value for assemblers that use only one k-mer size.
     For abyss, sparseassembler, minia, masurca.
     """
-    if config["kmer_strategy"]["mode"] == "kmergenie":
+    # Get strategy from wildcards
+    strategy = wildcards.strategy
+
+    if strategy == "kmergenie":
         # Read best k-mer from kmergenie output
         best_kmer_file = (
-            f"{output_dir}{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
+            f"{output_dir}{wildcards.strategy}/{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
         )
         with open(best_kmer_file, "r") as f:
             best_k = int(f.read().strip())
@@ -257,10 +273,10 @@ def get_single_kmer(wildcards, assembler, config_key):
         else:
             return "25"  # Fallback to 25 if outside range
 
-    elif config["kmer_strategy"]["mode"] == "reads_length":
+    elif strategy == "reads_length":
         # Read best k-mer from seqkit output
         kmer_file = (
-            f"{output_dir}{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
+            f"{output_dir}{wildcards.strategy}/{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
         )
         with open(kmer_file, "r") as f:
             k_val = int(f.read().strip())
@@ -280,13 +296,16 @@ def get_single_kmer(wildcards, assembler, config_key):
 # it's also used to add seqkit rule as dependency when kmer_strategy is set to reads_length
 def get_kmergenie_dependency(wildcards):
     """Return kmergenie dependency if in kmergenie mode, empty list otherwise"""
-    if config["kmer_strategy"]["mode"] == "kmergenie":
+    # Get strategy from wildcards
+    strategy = wildcards.strategy
+    
+    if strategy == "kmergenie":
         return (
-            f"{output_dir}{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
+            f"{output_dir}{wildcards.strategy}/{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
         )
-    elif config["kmer_strategy"]["mode"] == "reads_length":
+    elif strategy == "reads_length":
         return (
-            f"{output_dir}{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
+            f"{output_dir}{wildcards.strategy}/{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
         )
     else:
         return []

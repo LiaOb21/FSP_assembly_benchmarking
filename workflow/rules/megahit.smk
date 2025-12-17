@@ -7,11 +7,11 @@ rule megahit:
         reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
         kmergenie_result=get_kmergenie_dependency,
     output:
-        result_dir=directory(f"{output_dir}" + "{sample}/megahit"),
-        link_assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_megahit.fa",
+        result_dir=directory(f"{output_dir}" + "{strategy}/{sample}/megahit"),
+        link_assembly=f"{output_dir}" + "{strategy}/{sample}/assemblies/{sample}_megahit.fa",
     params:
         k=lambda wildcards: get_kmer_list(wildcards, "megahit", "k"),
-        scaffolds=f"{output_dir}" + "{sample}/megahit/final.contigs.fa",
+        scaffolds=f"{output_dir}" + "{strategy}/{sample}/megahit/final.contigs.fa",
         optional_params=" ".join(
             f"{k}" if v is True else f"{k} {v}"
             for k, v in config["megahit"]["optional_params"].items()
@@ -22,9 +22,9 @@ rule megahit:
         mem_mb=get_medium_high_mem,
         partition=config["medium_high"]["partition"],
     log:
-        "logs/{sample}/megahit.log",
+        "logs/{strategy}/{sample}/megahit.log",
     benchmark:
-        "benchmark/{sample}/megahit.txt"
+        "benchmark/{strategy}/{sample}/megahit.txt"
     conda:
         "../envs/megahit.yaml"
     container:

@@ -7,9 +7,9 @@ rule spades:
         reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
         kmergenie_result=get_kmergenie_dependency,
     output:
-        result_dir=directory(f"{output_dir}" + "{sample}/spades"),
-        scaffolds=f"{output_dir}" + "{sample}/spades/scaffolds.fasta",
-        link_assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_spades.fa",
+        result_dir=directory(f"{output_dir}" + "{strategy}/{sample}/spades"),
+        scaffolds=f"{output_dir}" + "{strategy}/{sample}/spades/scaffolds.fasta",
+        link_assembly=f"{output_dir}" + "{strategy}/{sample}/assemblies/{sample}_spades.fa",
     params:
         k=lambda wildcards: get_kmer_list(wildcards, "spades", "k"),
         optional_params=" ".join(
@@ -22,9 +22,9 @@ rule spades:
         mem_mb=get_high_mem,
         partition=config["high"]["partition"],
     log:
-        "logs/{sample}/spades.log",
+        "logs/{strategy}/{sample}/spades.log",
     benchmark:
-        "benchmark/{sample}/spades.txt"
+        "benchmark/{strategy}/{sample}/spades.txt"
     conda:
         "../envs/spades.yaml"
     container:

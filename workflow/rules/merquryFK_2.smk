@@ -3,13 +3,13 @@
 
 rule merquryfk_2:
     input:
-        ktab=f"{output_dir}" + "{sample}/fastk/fastk_table.ktab",
+        ktab=f"{output_dir}" + "fastk/{sample}/fastk_table.ktab",
         assembly=f"{output_dir}"
-        + "{sample}/assemblies/{sample}_best_assembly_pypolca.fa",
+        + "{strategy}/{sample}/assemblies/{sample}_best_assembly_pypolca.fa",
     output:
         stats=f"{output_dir}"
-        + "{sample}/best_assembly_qc/merquryfk_pypolca/merquryfk.completeness.stats",
-        qv=f"{output_dir}" + "{sample}/best_assembly_qc/merquryfk_pypolca/merquryfk.qv",
+        + "{strategy}/{sample}/best_assembly_qc/merquryfk_pypolca/merquryfk.completeness.stats",
+        qv=f"{output_dir}" + "{strategy}/{sample}/best_assembly_qc/merquryfk_pypolca/merquryfk.qv",
     params:
         result_prefix=lambda wildcards, output: os.path.splitext(output.qv)[0],
         temp_dir=lambda wildcards, output: os.path.join(
@@ -25,9 +25,9 @@ rule merquryfk_2:
         mem_mb=get_low_mem,
         partition=config["low"]["partition"],
     log:
-        "logs/{sample}/merquryfk_best_assembly_pypolca.log",
+        "logs/{strategy}/{sample}/merquryfk_best_assembly_pypolca.log",
     benchmark:
-        "benchmark/{sample}/merquryFK_best_assembly_pypolca.txt"
+        "benchmark/{strategy}/{sample}/merquryFK_best_assembly_pypolca.txt"
     conda:
         "../envs/merquryFK.yaml"
     container:

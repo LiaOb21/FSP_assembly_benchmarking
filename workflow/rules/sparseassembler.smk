@@ -7,9 +7,9 @@ rule sparseassembler:
         reverse_in=f"{output_dir}" + "fqreads/{sample}/{sample}_trimmed.R2.fq",
         kmergenie_result=get_kmergenie_dependency,
     output:
-        scaffolds=f"{output_dir}" + "{sample}/sparseassembler/SuperContigs.txt",
+        scaffolds=f"{output_dir}" + "{strategy}/{sample}/sparseassembler/SuperContigs.txt",
         link_assembly=f"{output_dir}"
-        + "{sample}/assemblies/{sample}_sparseassembler.fa",
+        + "{strategy}/{sample}/assemblies/{sample}_sparseassembler.fa",
     params:
         result_dir=lambda wildcards, output: os.path.dirname(output.scaffolds),
         k=lambda wildcards: get_single_kmer(wildcards, "sparseassembler", "k"),
@@ -26,9 +26,9 @@ rule sparseassembler:
         mem_mb=get_medium_mem,
         partition=config["medium_high"]["partition"],
     log:
-        "logs/{sample}/sparseassembler.log",
+        "logs/{strategy}/{sample}/sparseassembler.log",
     benchmark:
-        "benchmark/{sample}/sparseassembler.txt"
+        "benchmark/{strategy}/{sample}/sparseassembler.txt"
     conda:
         "../envs/sparseassembler.yaml"
     container:

@@ -6,8 +6,8 @@ rule kmergenie:
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
         reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
     output:
-        kmergenie_report=f"{output_dir}" + "{sample}/kmergenie/{sample}_report.html",
-        best_kmer=f"{output_dir}" + "{sample}/kmergenie/{sample}_best_kmer.txt",
+        kmergenie_report=f"{output_dir}" + "{strategy}/{sample}/kmergenie/{sample}_report.html",
+        best_kmer=f"{output_dir}" + "{strategy}/{sample}/kmergenie/{sample}_best_kmer.txt",
     params:
         k=config["kmergenie"]["k"],
         l=config["kmergenie"]["l"],
@@ -27,9 +27,9 @@ rule kmergenie:
         mem_mb=get_medium_mem,
         partition=config["medium"]["partition"],
     log:
-        "logs/{sample}/kmergenie.log",
+        "logs/{strategy}/{sample}/kmergenie.log",
     benchmark:
-        "benchmark/{sample}/kmergenie.txt"
+        "benchmark/{strategy}/{sample}/kmergenie.txt"
     conda:
         "../envs/kmergenie.yaml"
     container:

@@ -44,7 +44,9 @@ output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/" # use ab
 # For the other assemblers only the predicted k-mer will be used when kmer_strategy is set to "kmergenie" or "reads_length".
 
 kmer_strategy:
-  mode: "manual" # "kmergenie" for KmerGenie, "reads_length" to calculate the k-mer size based on the median reads length, "manual" for user-defined k-mer sizes.
+  manual: True
+  kmergenie: True
+  reads_length: True
 
 # Customise kmergenie parameters
 kmergenie:

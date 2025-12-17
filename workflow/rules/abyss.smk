@@ -7,9 +7,9 @@ rule abyss:
         reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
         kmergenie_result=get_kmergenie_dependency,
     output:
-        result_dir=directory(f"{output_dir}" + "{sample}/abyss"),
-        scaffolds=f"{output_dir}" + "{sample}/abyss/abyss-scaffolds.fa",
-        link_assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_abyss.fa",
+        result_dir=directory(f"{output_dir}" + "{strategy}/{sample}/abyss"),
+        scaffolds=f"{output_dir}" + "{strategy}/{sample}/abyss/abyss-scaffolds.fa",
+        link_assembly=f"{output_dir}" + "{strategy}/{sample}/assemblies/{sample}_abyss.fa",
     params:
         k=lambda wildcards: get_single_kmer(wildcards, "abyss", "k"),
         B=config["abyss"]["B"],
@@ -27,9 +27,9 @@ rule abyss:
         mem_mb=get_high_mem,
         partition=config["high"]["partition"],
     log:
-        "logs/{sample}/abyss.log",
+        "logs/{strategy}/{sample}/abyss.log",
     benchmark:
-        "benchmark/{sample}/abyss.txt"
+        "benchmark/{strategy}/{sample}/abyss.txt"
     conda:
         "../envs/abyss.yaml"
     container:

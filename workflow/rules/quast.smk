@@ -1,11 +1,11 @@
 rule quast:
     input:
         assemblies=lambda wildcards: [
-            f"{output_dir}{wildcards.sample}/assemblies/{wildcards.sample}_{assembler}.fa"
+            f"{output_dir}{wildcards.strategy}/{wildcards.sample}/assemblies/{wildcards.sample}_{assembler}.fa"
             for assembler in ASSEMBLERS
         ],
     output:
-        dir=directory(f"{output_dir}" + "{sample}/quast"),
+        dir=directory(f"{output_dir}" + "{strategy}/{sample}/quast"),
     params:
         optional_params=" ".join(
             f"{k}" if v is True else f"{k} {v}"
@@ -17,9 +17,9 @@ rule quast:
         mem_mb=get_low_mem,
         partition=config["low"]["partition"],
     log:
-        "logs/{sample}/quast.log",
+        "logs/{strategy}/{sample}/quast.log",
     benchmark:
-        "benchmark/{sample}/quast.txt"
+        "benchmark/{strategy}/{sample}/quast.txt"
     conda:
         "../envs/quast.yaml"
     container:

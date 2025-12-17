@@ -8,9 +8,9 @@ rule masurca:
         template="workflow/scripts/masurca_config_template.txt",
         kmergenie_result=get_kmergenie_dependency,
     output:
-        masurca_config=f"{output_dir}" + "{sample}/masurca/masurca_config.txt",
-        scaffolds=f"{output_dir}" + "{sample}/masurca/CA/primary.genome.scf.fasta",
-        link_assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_masurca.fa",
+        masurca_config=f"{output_dir}" + "{strategy}/{sample}/masurca/masurca_config.txt",
+        scaffolds=f"{output_dir}" + "{strategy}/{sample}/masurca/CA/primary.genome.scf.fasta",
+        link_assembly=f"{output_dir}" + "{strategy}/{sample}/assemblies/{sample}_masurca.fa",
     params:
         fragment_mean=config["masurca"].get("fragment_mean", 500),
         fragment_stdev=config["masurca"].get("fragment_stdev", 50),
@@ -25,9 +25,9 @@ rule masurca:
         mem_mb=get_high_mem,
         partition=config["high"]["partition"],
     log:
-        "logs/{sample}/masurca.log",
+        "logs/{strategy}/{sample}/masurca.log",
     benchmark:
-        "benchmark/{sample}/masurca.txt"
+        "benchmark/{strategy}/{sample}/masurca.txt"
     conda:
         "../envs/masurca.yaml"
     container:

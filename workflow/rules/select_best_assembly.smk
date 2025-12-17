@@ -1,13 +1,13 @@
 rule select_best_assembly:
     input:
         busco_dirs=expand(
-            f"{output_dir}" + "{{sample}}/busco_specific/{assembler}",
-            assembler=ASSEMBLERS,
+            f"{output_dir}" + "{strategy}/{{sample}}/busco_specific/{assembler}",
+            assembler=ASSEMBLERS, strategy=KMER_STRATEGIES
         ),
-        quast_dir=f"{output_dir}" + "{sample}/quast",
+        quast_dir=f"{output_dir}" + "{strategy}/{sample}/quast",
     output:
-        best_assemblies_dir=directory(f"{output_dir}" + "{sample}/best_assembly/"),
-        assembly=f"{output_dir}" + "{sample}/best_assembly/{sample}_best_assembly.fa",
+        best_assemblies_dir=directory(f"{output_dir}" + "{strategy}/{sample}/best_assembly/"),
+        assembly=f"{output_dir}" + "{strategy}/{sample}/best_assembly/{sample}_best_assembly.fa",
     params:
         sample="{sample}",
         results_dir=lambda wildcards, input: os.path.dirname(
@@ -18,9 +18,9 @@ rule select_best_assembly:
         mem_mb=get_very_low_mem,
         partition=config["very_low"]["partition"],
     log:
-        "logs/{sample}/select_best_assembly.log",
+        "logs/{strategy}/{sample}/select_best_assembly.log",
     benchmark:
-        "benchmark/{sample}/select_best_assembly.txt"
+        "benchmark/{strategy}/{sample}/select_best_assembly.txt"
     conda:
         "../envs/basic.yaml"
     container:

@@ -3,12 +3,12 @@
 
 rule merquryfk:
     input:
-        ktab=f"{output_dir}" + "{sample}/fastk/fastk_table.ktab",
-        assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_{assembler}.fa",
+        ktab=f"{output_dir}" + "fastk/{sample}/fastk_table.ktab",
+        assembly=f"{output_dir}" + "{strategy}/{sample}/assemblies/{sample}_{assembler}.fa",
     output:
         stats=f"{output_dir}"
-        + "{sample}/merquryfk/{assembler}/merquryfk.completeness.stats",
-        qv=f"{output_dir}" + "{sample}/merquryfk/{assembler}/merquryfk.qv",
+        + "{strategy}/{sample}/merquryfk/{assembler}/merquryfk.completeness.stats",
+        qv=f"{output_dir}" + "{strategy}/{sample}/merquryfk/{assembler}/merquryfk.qv",
     params:
         result_prefix=lambda wildcards, output: os.path.splitext(output.qv)[0],
         temp_dir=lambda wildcards, output: os.path.join(
@@ -24,9 +24,9 @@ rule merquryfk:
         mem_mb=get_low_mem,
         partition=config["low"]["partition"],
     log:
-        "logs/{sample}/merquryfk_{sample}_{assembler}.log",
+        "logs/{strategy}/{sample}/merquryfk_{sample}_{assembler}.log",
     benchmark:
-        "benchmark/{sample}/merquryFK_{sample}_{assembler}.txt"
+        "benchmark/{strategy}/{sample}/merquryFK_{sample}_{assembler}.txt"
     conda:
         "../envs/merquryFK.yaml"
     container:

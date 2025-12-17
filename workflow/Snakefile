@@ -21,19 +21,22 @@ ASSEMBLERS = [
     assembler for assembler, enabled in config.get("assemblers", {}).items() if enabled
 ]
 
+KMER_STRATEGIES = [
+    strategy for strategy, enabled in config.get("kmer_strategy", {}).items() if enabled
+]
 
 # include common rule (where functions are defined)
 include: "rules/common.smk"
 
 
 # Conditionally include kmergenie rule only if using kmergenie mode
-if config["kmer_strategy"]["mode"] == "kmergenie":
+if "kmergenie" in KMER_STRATEGIES:
 
     include: "rules/kmergenie.smk"
 
 
 # Conditionally include seqkit rule only if using reads_length mode
-if config["kmer_strategy"]["mode"] == "reads_length":
+if "reads_length" in KMER_STRATEGIES:
 
     include: "rules/seqkit.smk"
 
