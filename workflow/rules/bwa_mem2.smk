@@ -4,20 +4,20 @@
 rule bwa_mem2:
     input:
         assembly=f"{output_dir}"
-        + "{strategy}/{sample}/assemblies/{sample}_best_assembly_pypolca.fa",
+        + "best_assembly_fa/{sample}/{sample}_best_assembly_pypolca.fa",
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
         reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
     output:
         sam=f"{output_dir}"
-        + "{strategy}/{sample}/best_assembly_qc/bwa_mem2_pypolca/{sample}_best_assembly_pypolca.sam",
+        + "best_assembly_qc/{sample}/bwa_mem2_pypolca/{sample}_best_assembly_pypolca.sam",
     threads: get_medium_high_threads
     resources:
         mem_mb=get_medium_high_mem,
         partition=config["medium_high"]["partition"],
     log:
-        "logs/{strategy}/{sample}/bwa_mem2_best_assembly_pypolca.log",
+        "logs/bwa_mem2_best_assembly/{sample}/bwa_mem2_best_assembly_pypolca.log",
     benchmark:
-        "benchmark/{strategy}/{sample}/bwa_mem2_best_assembly_pypolca.txt"
+        "benchmark/bwa_mem2_best_assembly/{sample}/bwa_mem2_best_assembly_pypolca.txt"
     conda:
         "../envs/bwa_mem2.yaml"
     container:

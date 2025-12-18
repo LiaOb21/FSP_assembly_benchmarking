@@ -96,41 +96,41 @@ def get_all_inputs():
             strategy=KMER_STRATEGIES,
         ),
         expand(
-            f"{output_dir}" + "{strategy}/{sample}/best_assembly_qc/busco_general_pypolca",
+            f"{output_dir}" + "best_assembly_qc/{sample}/busco_general_pypolca",
             sample=SAMPLES,
             strategy=KMER_STRATEGIES,
         ),
         expand(
-            f"{output_dir}" + "{strategy}/{sample}/best_assembly_qc/busco_specific_pypolca",
-            sample=SAMPLES,
-            strategy=KMER_STRATEGIES,
-        ),
-        expand(
-            f"{output_dir}"
-            + "{strategy}/{sample}/best_assembly_qc/merquryfk_pypolca/merquryfk.completeness.stats",
+            f"{output_dir}" + "best_assembly_qc/{sample}/busco_specific_pypolca",
             sample=SAMPLES,
             strategy=KMER_STRATEGIES,
         ),
         expand(
             f"{output_dir}"
-            + "{strategy}/{sample}/best_assembly_qc/merquryfk_pypolca/merquryfk.qv",
-            sample=SAMPLES,
-            strategy=KMER_STRATEGIES,
-        ),
-        expand(
-            f"{output_dir}" + "{strategy}/{sample}/best_assembly_qc/quast_pypolca",
+            + "best_assembly_qc/{sample}/merquryfk_pypolca/merquryfk.completeness.stats",
             sample=SAMPLES,
             strategy=KMER_STRATEGIES,
         ),
         expand(
             f"{output_dir}"
-            + "{strategy}/{sample}/best_assembly_qc/samtools_pypolca/{sample}_best_assembly_pypolca_sorted.bam",
+            + "best_assembly_qc/{sample}/merquryfk_pypolca/merquryfk.qv",
+            sample=SAMPLES,
+            strategy=KMER_STRATEGIES,
+        ),
+        expand(
+            f"{output_dir}" + "best_assembly_qc/{sample}/quast_pypolca",
             sample=SAMPLES,
             strategy=KMER_STRATEGIES,
         ),
         expand(
             f"{output_dir}"
-            + "{strategy}/{sample}/best_assembly_qc/coverage_viz_pypolca/{sample}_best_assembly_pypolca_coverage_summary.txt",
+            + "best_assembly_qc/{sample}/samtools_pypolca/{sample}_best_assembly_pypolca_sorted.bam",
+            sample=SAMPLES,
+            strategy=KMER_STRATEGIES,
+        ),
+        expand(
+            f"{output_dir}"
+            + "best_assembly_qc/{sample}/coverage_viz_pypolca/{sample}_best_assembly_pypolca_coverage_summary.txt",
             sample=SAMPLES,
             strategy=KMER_STRATEGIES,
         ),

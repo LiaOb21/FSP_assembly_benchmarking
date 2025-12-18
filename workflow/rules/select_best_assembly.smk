@@ -4,23 +4,24 @@ rule select_best_assembly:
             f"{output_dir}" + "{strategy}/{{sample}}/busco_specific/{assembler}",
             assembler=ASSEMBLERS, strategy=KMER_STRATEGIES
         ),
-        quast_dir=f"{output_dir}" + "{strategy}/{sample}/quast",
+        quast_dirs=expand(
+            f"{output_dir}" + "{strategy}/{{sample}}/quast",
+            strategy=KMER_STRATEGIES,  # All quast outputs
+        ),
     output:
-        best_assemblies_dir=directory(f"{output_dir}" + "{strategy}/{sample}/best_assembly/"),
-        assembly=f"{output_dir}" + "{strategy}/{sample}/best_assembly/{sample}_best_assembly.fa",
+        best_assemblies_dir=directory(f"{output_dir}" + "best_assembly/{sample}/"),
+        assembly=f"{output_dir}" + "best_assembly/{sample}/{sample}_best_assembly.fa",
     params:
         sample="{sample}",
-        results_dir=lambda wildcards, input: os.path.dirname(
-            os.path.dirname(input.quast_dir)
-        ),
+        results_dir=output_dir,
     threads: 1
     resources:
         mem_mb=get_very_low_mem,
         partition=config["very_low"]["partition"],
     log:
-        "logs/{strategy}/{sample}/select_best_assembly.log",
+        "logs/select_best_assembly/{sample}/select_best_assembly.log",
     benchmark:
-        "benchmark/{strategy}/{sample}/select_best_assembly.txt"
+        "benchmark/select_best_assembly/{sample}/select_best_assembly.txt"
     conda:
         "../envs/basic.yaml"
     container:

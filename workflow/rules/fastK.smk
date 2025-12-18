@@ -21,9 +21,9 @@ rule fastk:
         mem_mb=get_low_mem,
         partition=config["low"]["partition"],
     log:
-        "logs/{sample}/fastk.log",
+        "logs/fastk/{sample}/fastk.log",
     benchmark:
-        "benchmark/{sample}/fastk.txt"
+        "benchmark/fastk/{sample}/fastk.txt"
     conda:
         "../envs/merquryFK.yaml"
     container:

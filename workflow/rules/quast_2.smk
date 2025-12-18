@@ -1,9 +1,9 @@
 rule quast_2:
     input:
         assembly=f"{output_dir}"
-        + "{strategy}/{sample}/assemblies/{sample}_best_assembly_pypolca.fa",
+        + "best_assembly_fa/{sample}/{sample}_best_assembly_pypolca.fa",
     output:
-        dir=directory(f"{output_dir}" + "{strategy}/{sample}/best_assembly_qc/quast_pypolca"),
+        dir=directory(f"{output_dir}" + "best_assembly_qc/{sample}/quast_pypolca"),
     params:
         optional_params=" ".join(
             f"{k}" if v is True else f"{k} {v}"
@@ -15,9 +15,9 @@ rule quast_2:
         mem_mb=get_low_mem,
         partition=config["low"]["partition"],
     log:
-        "logs/{strategy}/{sample}/quast_best_assembly_pypolca.log",
+        "logs/quast_best_assembly/{sample}/quast_best_assembly_pypolca.log",
     benchmark:
-        "benchmark/{strategy}/{sample}/quast_best_assembly_pypolca.txt"
+        "benchmark/quast_best_assembly/{sample}/quast_best_assembly_pypolca.txt"
     conda:
         "../envs/quast.yaml"
     container:

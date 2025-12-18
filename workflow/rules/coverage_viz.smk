@@ -1,22 +1,22 @@
 rule coverage_viz:
     input:
         coverage_stats=f"{output_dir}"
-        + "{strategy}/{sample}/best_assembly_qc/samtools_pypolca/{sample}_best_assembly_pypolca_coverage_stats.txt",
+        + "best_assembly_qc/{sample}/samtools_pypolca/{sample}_best_assembly_pypolca_coverage_stats.txt",
         flagstat=f"{output_dir}"
-        + "{strategy}/{sample}/best_assembly_qc/samtools_pypolca/{sample}_best_assembly_pypolca_flagstat.txt",
+        + "best_assembly_qc/{sample}/samtools_pypolca/{sample}_best_assembly_pypolca_flagstat.txt",
     output:
         coverage_plot=f"{output_dir}"
-        + "{strategy}/{sample}/best_assembly_qc/coverage_viz_pypolca/{sample}_best_assembly_pypolca_coverage_plot.png",
+        + "best_assembly_qc/{sample}/coverage_viz_pypolca/{sample}_best_assembly_pypolca_coverage_plot.png",
         coverage_summary=f"{output_dir}"
-        + "{strategy}/{sample}/best_assembly_qc/coverage_viz_pypolca/{sample}_best_assembly_pypolca_coverage_summary.txt",
+        + "best_assembly_qc/{sample}/coverage_viz_pypolca/{sample}_best_assembly_pypolca_coverage_summary.txt",
     threads: 1
     resources:
         mem_mb=get_very_low_mem,
         partition=config["very_low"]["partition"],
     log:
-        "logs/{strategy}/{sample}/coverage_viz_best_assembly_pypolca.log",
+        "logs/coverage_viz_best_assembly/{sample}/coverage_viz_best_assembly_pypolca.log",
     benchmark:
-        "benchmark/{strategy}/{sample}/coverage_viz_best_assembly_pypolca.txt"
+        "benchmark/coverage_viz_best_assembly/{sample}/coverage_viz_best_assembly_pypolca.txt"
     conda:
         "../envs/data_viz.yaml"
     container:

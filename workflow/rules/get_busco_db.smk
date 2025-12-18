@@ -13,9 +13,9 @@ rule get_busco_db:
         mem_mb=get_very_low_mem,
         partition=config["very_low"]["partition"],
     log:
-        "logs/{sample}/get_busco_db.log",
+        "logs/busco_db/{sample}/get_busco_db.log",
     benchmark:
-        "benchmark/{sample}/get_busco_db.txt"
+        "benchmark/busco_db/{sample}/get_busco_db.txt"
     conda:
         "../envs/data_viz.yaml"
     container:

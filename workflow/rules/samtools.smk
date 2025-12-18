@@ -4,24 +4,24 @@
 rule samtools:
     input:
         sam=f"{output_dir}"
-        + "{strategy}/{sample}/best_assembly_qc/bwa_mem2_pypolca/{sample}_best_assembly_pypolca.sam",
+        + "best_assembly_qc/{sample}/bwa_mem2_pypolca/{sample}_best_assembly_pypolca.sam",
     output:
         bam=f"{output_dir}"
-        + "{strategy}/{sample}/best_assembly_qc/samtools_pypolca/{sample}_best_assembly_pypolca.bam",
+        + "best_assembly_qc/{sample}/samtools_pypolca/{sample}_best_assembly_pypolca.bam",
         sorted_bam=f"{output_dir}"
-        + "{strategy}/{sample}/best_assembly_qc/samtools_pypolca/{sample}_best_assembly_pypolca_sorted.bam",
+        + "best_assembly_qc/{sample}/samtools_pypolca/{sample}_best_assembly_pypolca_sorted.bam",
         coverage_stats=f"{output_dir}"
-        + "{strategy}/{sample}/best_assembly_qc/samtools_pypolca/{sample}_best_assembly_pypolca_coverage_stats.txt",
+        + "best_assembly_qc/{sample}/samtools_pypolca/{sample}_best_assembly_pypolca_coverage_stats.txt",
         flagstat=f"{output_dir}"
-        + "{strategy}/{sample}/best_assembly_qc/samtools_pypolca/{sample}_best_assembly_pypolca_flagstat.txt",
+        + "best_assembly_qc/{sample}/samtools_pypolca/{sample}_best_assembly_pypolca_flagstat.txt",
     threads: get_medium_high_threads
     resources:
         mem_mb=get_medium_high_mem,
         partition=config["medium_high"]["partition"],
     log:
-        "logs/{strategy}/{sample}/samtools_best_assembly_pypolca.log",
+        "logs/samtools_best_assembly/{sample}/samtools_best_assembly_pypolca.log",
     benchmark:
-        "benchmark/{strategy}/{sample}/samtools_best_assembly_pypolca.txt"
+        "benchmark/samtools_best_assembly/{sample}/samtools_best_assembly_pypolca.txt"
     conda:
         "../envs/samtools.yaml"
     container:

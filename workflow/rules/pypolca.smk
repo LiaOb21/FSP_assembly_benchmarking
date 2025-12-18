@@ -5,12 +5,12 @@ rule pypolca:
     input:
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
         reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
-        assembly=f"{output_dir}" + "{strategy}/{sample}/best_assembly/{sample}_best_assembly.fa",
+        assembly=f"{output_dir}" + "best_assembly/{sample}/{sample}_best_assembly.fa",
     output:
         pypolca_fasta=f"{output_dir}"
-        + "{strategy}/{sample}/best_assembly/pypolca/{sample}_best_assembly_pypolca_corrected.fasta",
+        + "best_assembly/{sample}/pypolca/{sample}_best_assembly_pypolca_corrected.fasta",
         link_pypolca_assembly=f"{output_dir}"
-        + "{strategy}/{sample}/assemblies/{sample}_best_assembly_pypolca.fa",
+        + "best_assembly_fa/{sample}/{sample}_best_assembly_pypolca.fa",
     params:
         results_prefix=lambda wildcards, output: os.path.basename(
             output.pypolca_fasta
@@ -26,9 +26,9 @@ rule pypolca:
         mem_mb=get_high_mem,
         partition=config["high"]["partition"],
     log:
-        "logs/{strategy}/{sample}/pypolca_best_assembly.log",
+        "logs/pypolca/{sample}/pypolca_best_assembly.log",
     benchmark:
-        "benchmark/{strategy}/{sample}/pypolca_best_assembly.txt"
+        "benchmark/pypolca/{sample}/pypolca_best_assembly.txt"
     conda:
         "../envs/pypolca.yaml"
     container:

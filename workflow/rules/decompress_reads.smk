@@ -18,9 +18,9 @@ rule decompress_reads:
     container:
         "docker://debian:stable-slim"
     log:
-        "logs/{sample}/{read}_decompress.log",
+        "logs/fqreads/{sample}/{read}_decompress.log",
     benchmark:
-        "benchmark/{sample}/decompress_{read}.txt"
+        "benchmark/fqreads/{sample}/decompress_{read}.txt"
     shell:
         """
         echo "Decompressing {input.gz} to {output.fq}" >> {log} 2>&1
