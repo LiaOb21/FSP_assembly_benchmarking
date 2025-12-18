@@ -1,12 +1,16 @@
 rule quast:
     input:
-        assemblies=lambda wildcards: [
-            f"{output_dir}{wildcards.strategy}/{wildcards.sample}/assemblies/{wildcards.sample}_{assembler}.fa"
-            for assembler in ASSEMBLERS
-        ],
+        assemblies=lambda wildcards: expand(
+            f"{output_dir}assemblies/{{sample}}/{{sample}}_{{reads_type}}_{{strategy}}_{{assembler}}.fa",
+            sample=wildcards.sample,  # Only this wildcard exists
+            reads_type=READS_TYPES,   # Expand over all read types
+            strategy=KMER_STRATEGIES, # Expand over all strategies
+            assembler=ASSEMBLERS,     # Expand over all assemblers
+        ),
     output:
-        dir=directory(f"{output_dir}" + "{strategy}/{sample}/quast"),
+        report=f"{output_dir}" + "quast/{sample}/report.txt"
     params:
+        quast_dir=lambda wildcards, output: os.path.dirname(output.report),
         optional_params=" ".join(
             f"{k}" if v is True else f"{k} {v}"
             for k, v in config["quast"]["optional_params"].items()
@@ -17,9 +21,9 @@ rule quast:
         mem_mb=get_low_mem,
         partition=config["low"]["partition"],
     log:
-        "logs/{strategy}/{sample}/quast.log",
+        "logs/{sample}/quast.log",
     benchmark:
-        "benchmark/{strategy}/{sample}/quast.txt"
+        "benchmark/{sample}/quast.txt"
     conda:
         "../envs/quast.yaml"
     container:
@@ -27,6 +31,6 @@ rule quast:
     shell:
         """
         echo "Running quast with the following command:" >> {log} 2>&1
-        echo "quast {input.assemblies} -o {output.dir} -t {threads} {params.optional_params}" >> {log} 2>&1
-        quast {input.assemblies} -o {output.dir} --min-contig 250 -t {threads} {params.optional_params} >> {log} 2>&1
+        echo "quast {input.assemblies} -o {params.quast_dir} -t {threads} {params.optional_params}" >> {log} 2>&1
+        quast {input.assemblies} -o {params.quast_dir} --min-contig 250 -t {threads} {params.optional_params} >> {log} 2>&1
         """

@@ -3,9 +3,9 @@
 
 rule merquryfk_2:
     input:
-        ktab=f"{output_dir}" + "fastk/{sample}/fastk_table.ktab",
+        ktab=get_fastk_table_for_best_assembly,
         assembly=f"{output_dir}"
-        + "best_assembly_fa/{sample}/{sample}_best_assembly_pypolca.fa",
+        + "assemblies/{sample}/{sample}_best_assembly_pypolca.fa",
     output:
         stats=f"{output_dir}"
         + "best_assembly_qc/{sample}/merquryfk_pypolca/merquryfk.completeness.stats",

@@ -1,7 +1,7 @@
 rule quast_2:
     input:
         assembly=f"{output_dir}"
-        + "best_assembly_fa/{sample}/{sample}_best_assembly_pypolca.fa",
+        + "assemblies/{sample}/{sample}_best_assembly_pypolca.fa",
     output:
         dir=directory(f"{output_dir}" + "best_assembly_qc/{sample}/quast_pypolca"),
     params:

@@ -79,19 +79,38 @@ sample_results_dir="$results_dir/$sample"
 
 echo "=== Searching for assemblies across all strategies ==="
 
-# Extract BUSCO complete and single-copy for each assembly across all strategies
-for strategy_dir in "$results_dir"/*/; do
-    if [[ -d "$strategy_dir" ]]; then
-        strategy=$(basename "$strategy_dir")
-        sample_results_dir="$strategy_dir/$sample"
+# Extract BUSCO complete and single-copy for each assembly across all strategies and read types
+for reads_type_dir in "$results_dir"/*/; do
+    if [[ -d "$reads_type_dir" ]]; then
+        reads_type=$(basename "$reads_type_dir")
         
-        for assembler_dir in "$sample_results_dir"/busco_specific/*/; do
-            if [[ -d "$assembler_dir" ]]; then
-                assembler=$(basename "$assembler_dir")
-                for file in "$assembler_dir"/BUSCO_*/short_summary.specific.*.txt; do
-                    if [[ -f "$file" ]]; then
-                        # Include strategy in output to track which strategy produced the best assembly
-                        awk -v assembler="$assembler" -v strategy="$strategy" '/Complete and single-copy/ {print strategy"_"assembler, $1}' "$file" >> "$output_dir/complete_single_copy_buscos.txt"
+        # Skip non-reads-type directories (like 'assemblies', 'best_assembly', etc.)
+        if [[ "$reads_type" != "R1R2" && "$reads_type" != "merged" ]]; then
+            continue
+        fi
+        
+        echo "  Checking reads_type: $reads_type" >&2
+        
+        for strategy_dir in "$reads_type_dir"/*/; do
+            if [[ -d "$strategy_dir" ]]; then
+                strategy=$(basename "$strategy_dir")
+                sample_results_dir="$strategy_dir/$sample"
+                
+                echo "    Checking strategy: $strategy" >&2
+                
+                for assembler_dir in "$sample_results_dir"/busco_specific/*/; do
+                    if [[ -d "$assembler_dir" ]]; then
+                        assembler=$(basename "$assembler_dir")
+                        for file in "$assembler_dir"/BUSCO_*/short_summary.specific.*.txt; do
+                            if [[ -f "$file" ]]; then
+                                # Include reads_type and strategy in output
+                                busco_score=$(awk '/Complete and single-copy/ {print $1}' "$file")
+                                echo "      Found: ${reads_type}_${strategy}_${assembler} (BUSCO: $busco_score)" >&2
+                                awk -v assembler="$assembler" -v strategy="$strategy" -v reads_type="$reads_type" \
+                                    '/Complete and single-copy/ {print reads_type"_"strategy"_"assembler, $1}' "$file" \
+                                    >> "$output_dir/complete_single_copy_buscos.txt"
+                            fi
+                        done
                     fi
                 done
             fi
@@ -135,31 +154,30 @@ fi
 echo "  Multiple assemblies with the highest BUSCOs, checking auN..."
 echo "Extracting auN scores..."
 
-# Search for quast reports across all strategies
-for strategy_dir in "$results_dir"/*/; do
-    if [[ -d "$strategy_dir" ]]; then
-        strategy=$(basename "$strategy_dir")
-        quast_file="$strategy_dir/$sample/quast/report.txt"
-        
-        if [[ -f "$quast_file" ]]; then
-            # Extract Assembly and auN values from quast report and transpose
-            # Prefix assembler names with strategy for consistency with BUSCO output
-            awk -v strategy="$strategy" '
-                /Assembly/ {
-                    for(i=2;i<=NF;i++) {
-                        split($i, parts, "_");
-                        a[i-1] = parts[length(parts)];  # Get assembler name
-                    }
-                }
-                /auN/ {
-                    for(i=2;i<=NF;i++) {
-                        print strategy"_"a[i-1], $i
-                    }
-                }
-            ' "$quast_file" >> "$output_dir/auN_quast.txt"
-        fi
-    fi
-done
+# Extract auN from QUAST report
+quast_file="$results_dir/quast/$sample/report.txt"
+
+if [[ -f "$quast_file" ]]; then
+    echo "  Found QUAST report at: $quast_file" >&2
+    # Extract Assembly and auN values from quast report
+    # Assembly names format: sample_reads_type_strategy_assembler
+    awk '
+        /Assembly/ {
+            for(i=2;i<=NF;i++) {
+                # Store full assembly name (includes reads_type, strategy, assembler)
+                split($i, parts, "_");
+                # Extract reads_type_strategy_assembler from sample_reads_type_strategy_assembler.fa
+                a[i-1] = parts[2]"_"parts[3]"_"parts[4];
+            }
+        }
+        /auN/ {
+            for(i=2;i<=NF;i++) {
+                print a[i-1], $i
+            }
+        }
+    ' "$quast_file" >> "$output_dir/auN_quast.txt"
+fi
+
 
 if [[ ! -f "$output_dir/auN_quast.txt" ]]; then
     echo "  No QUAST data found for sample $sample"
@@ -189,13 +207,11 @@ grep -F -f <(cut -d' ' -f1 "$output_dir/best_buscos.txt") "$output_dir/auN_quast
 echo ""
     
 if [[ -n "$best_assembly" ]]; then
-    echo "$best_assembly is the best assembly for sample $sample based on auN score."
-    # Extract strategy and assembler from best_assembly (format: strategy_assembler)
-    strategy=$(echo "$best_assembly" | cut -d'_' -f1)
-    assembler=$(echo "$best_assembly" | cut -d'_' -f2-)
+    echo "$best_assembly is the best assembly for sample $sample based on auN score." >&2
+    echo "  Best auN: $best_aun" >&2
     
-    echo "linking $results_dir/$strategy/$sample/assemblies/${sample}_${assembler}.fa to $output_dir"
-    ln -srn "$results_dir/$strategy/$sample/assemblies/${sample}_${assembler}.fa" "$output_dir/${sample}_best_assembly.fa"
+    echo "linking $results_dir/assemblies/$sample/${sample}_${best_assembly}.fa to $output_dir" >&2
+    ln -srn "$results_dir/assemblies/$sample/${sample}_${best_assembly}.fa" "$output_dir/${sample}_best_assembly.fa"
     echo "$best_assembly" > "$output_dir/best_assembly.txt"
     exit 0
 fi

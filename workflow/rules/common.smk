@@ -84,55 +84,50 @@ def get_all_inputs():
     inputs = [
         expand(
             f"{output_dir}"
-            + "{strategy}/{sample}/merquryfk/{assembler}/merquryfk.completeness.stats",
+            + "{reads_type}/{strategy}/{sample}/merquryfk/{assembler}/merquryfk.completeness.stats",
             sample=SAMPLES,
             assembler=ASSEMBLERS,
             strategy=KMER_STRATEGIES,
+            reads_type=READS_TYPES,
         ),
         expand(
-            f"{output_dir}" + "{strategy}/{sample}/merquryfk/{assembler}/merquryfk.qv",
+            f"{output_dir}" + "{reads_type}/{strategy}/{sample}/merquryfk/{assembler}/merquryfk.qv",
             sample=SAMPLES,
             assembler=ASSEMBLERS,
             strategy=KMER_STRATEGIES,
+            reads_type=READS_TYPES,
         ),
         expand(
             f"{output_dir}" + "best_assembly_qc/{sample}/busco_general_pypolca",
             sample=SAMPLES,
-            strategy=KMER_STRATEGIES,
         ),
         expand(
             f"{output_dir}" + "best_assembly_qc/{sample}/busco_specific_pypolca",
             sample=SAMPLES,
-            strategy=KMER_STRATEGIES,
         ),
         expand(
             f"{output_dir}"
             + "best_assembly_qc/{sample}/merquryfk_pypolca/merquryfk.completeness.stats",
             sample=SAMPLES,
-            strategy=KMER_STRATEGIES,
         ),
         expand(
             f"{output_dir}"
             + "best_assembly_qc/{sample}/merquryfk_pypolca/merquryfk.qv",
             sample=SAMPLES,
-            strategy=KMER_STRATEGIES,
         ),
         expand(
             f"{output_dir}" + "best_assembly_qc/{sample}/quast_pypolca",
             sample=SAMPLES,
-            strategy=KMER_STRATEGIES,
         ),
         expand(
             f"{output_dir}"
             + "best_assembly_qc/{sample}/samtools_pypolca/{sample}_best_assembly_pypolca_sorted.bam",
             sample=SAMPLES,
-            strategy=KMER_STRATEGIES,
         ),
         expand(
             f"{output_dir}"
             + "best_assembly_qc/{sample}/coverage_viz_pypolca/{sample}_best_assembly_pypolca_coverage_summary.txt",
             sample=SAMPLES,
-            strategy=KMER_STRATEGIES,
         ),
     ]
 
@@ -171,7 +166,7 @@ def get_kmer_list(wildcards, assembler, config_key):
     if strategy == "kmergenie":
         # Read best k-mer from kmergenie output
         best_kmer_file = (
-            f"{output_dir}{wildcards.strategy}/{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
+            f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
         )
         with open(best_kmer_file, "r") as f:
             best_k = int(f.read().strip())
@@ -197,7 +192,7 @@ def get_kmer_list(wildcards, assembler, config_key):
     elif strategy == "reads_length":
         # Read best k-mer from seqkit output
         kmer_file = (
-            f"{output_dir}{wildcards.strategy}/{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
+            f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
         )
         with open(kmer_file, "r") as f:
             best_k = int(f.read().strip())
@@ -262,7 +257,7 @@ def get_single_kmer(wildcards, assembler, config_key):
     if strategy == "kmergenie":
         # Read best k-mer from kmergenie output
         best_kmer_file = (
-            f"{output_dir}{wildcards.strategy}/{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
+            f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
         )
         with open(best_kmer_file, "r") as f:
             best_k = int(f.read().strip())
@@ -276,7 +271,7 @@ def get_single_kmer(wildcards, assembler, config_key):
     elif strategy == "reads_length":
         # Read best k-mer from seqkit output
         kmer_file = (
-            f"{output_dir}{wildcards.strategy}/{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
+            f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
         )
         with open(kmer_file, "r") as f:
             k_val = int(f.read().strip())
@@ -301,11 +296,32 @@ def get_kmergenie_dependency(wildcards):
     
     if strategy == "kmergenie":
         return (
-            f"{output_dir}{wildcards.strategy}/{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
+            f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
         )
     elif strategy == "reads_length":
         return (
-            f"{output_dir}{wildcards.strategy}/{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
+            f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
         )
     else:
         return []
+
+
+def get_fastk_table_for_best_assembly(wildcards):
+    """
+    Get the correct FastK table based on the best assembly's reads_type.
+    This function is called after the checkpoint completes.
+    """
+    # Wait for checkpoint to complete
+    checkpoints.select_best_assembly.get(sample=wildcards.sample)
+    
+    # Now the file exists, so we can read it
+    best_assembly_file = f"{output_dir}best_assembly/{wildcards.sample}/best_assembly.txt"
+    
+    with open(best_assembly_file) as f:
+        best_assembly = f.read().strip()
+    
+    # Extract reads_type (first part)
+    reads_type = best_assembly.split("_")[0]
+    
+    # Return the ktab path for this reads_type
+    return f"{output_dir}{reads_type}/fastk/{wildcards.sample}/fastk_table.ktab"

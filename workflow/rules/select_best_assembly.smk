@@ -1,16 +1,16 @@
-rule select_best_assembly:
+checkpoint select_best_assembly:
     input:
         busco_dirs=expand(
-            f"{output_dir}" + "{strategy}/{{sample}}/busco_specific/{assembler}",
-            assembler=ASSEMBLERS, strategy=KMER_STRATEGIES
+            f"{output_dir}" + "{reads_type}/{strategy}/{{sample}}/busco_specific/{assembler}",
+            reads_type=READS_TYPES,
+            strategy=KMER_STRATEGIES,
+            assembler=ASSEMBLERS,
         ),
-        quast_dirs=expand(
-            f"{output_dir}" + "{strategy}/{{sample}}/quast",
-            strategy=KMER_STRATEGIES,  # All quast outputs
-        ),
+        report=f"{output_dir}" + "quast/{sample}/report.txt"
     output:
         best_assemblies_dir=directory(f"{output_dir}" + "best_assembly/{sample}/"),
         assembly=f"{output_dir}" + "best_assembly/{sample}/{sample}_best_assembly.fa",
+        best_assembly_txt=f"{output_dir}" + "best_assembly/{sample}/best_assembly.txt",
     params:
         sample="{sample}",
         results_dir=output_dir,

@@ -1,7 +1,7 @@
 rule busco_2:
     input:
         assembly=f"{output_dir}"
-        + "best_assembly_fa/{sample}/{sample}_best_assembly_pypolca.fa",
+        + "assemblies/{sample}/{sample}_best_assembly_pypolca.fa",
         specific_db=f"{output_dir}" + "busco_db/{sample}/busco_db.txt",
     output:
         general_dir=directory(
@@ -24,9 +24,9 @@ rule busco_2:
         mem_mb=get_medium_mem,
         partition=config["medium"]["partition"],
     log:
-        "logs/busco_best_assembly/{sample}/busco_best_assembly_pypolca.log",
+        "logs/{sample}/busco_best_assembly_pypolca.log",
     benchmark:
-        "benchmark/busco_best_assembly/{sample}/busco_best_assembly_pypolca.txt"
+        "benchmark/{sample}/busco_best_assembly_pypolca.txt"
     conda:
         "../envs/busco.yaml"
     container:

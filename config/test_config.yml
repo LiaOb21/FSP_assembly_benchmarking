@@ -33,7 +33,13 @@ very_low:
 input_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/test_data/" # use absolute path and add trailing slash
 
 # Customise the results directory
-output_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/results_1/" # use absolute path and add trailing slash
+output_dir: "/home/lia/git_repos/FSP_assembly_benchmarking/results_2/" # use absolute path and add trailing slash
+
+
+# Select reads type to be used:
+reads_type: 
+  R1R2: True
+  merged: True
 
 # K-mer size determination strategy
 # Note that if you set this to "manual", you must also set the k-mer size for spades, megahit, abyss, sparseassembler, minia, and masurca.
@@ -60,8 +66,8 @@ assemblers:
   megahit: True
   abyss: False
   sparseassembler: False
-  minia: True
-  masurca: True
+  minia: False
+  masurca: False
 
 # Customise spades parameters
 # please do not use the `-o` option here, it is set into the workflow

@@ -25,57 +25,77 @@ KMER_STRATEGIES = [
     strategy for strategy, enabled in config.get("kmer_strategy", {}).items() if enabled
 ]
 
+READS_TYPES = [
+    rtype for rtype, enabled in config.get("reads_type", {}).items() if enabled
+]
+
 # include common rule (where functions are defined)
 include: "rules/common.smk"
 
 
 # Conditionally include kmergenie rule only if using kmergenie mode
 if "kmergenie" in KMER_STRATEGIES:
-
-    include: "rules/kmergenie.smk"
+    if "R1R2" in READS_TYPES:
+        include: "rules/kmergenie.smk"
+    if "merged" in READS_TYPES:
+        include: "rules/kmergenie_merged.smk"
 
 
 # Conditionally include seqkit rule only if using reads_length mode
 if "reads_length" in KMER_STRATEGIES:
-
-    include: "rules/seqkit.smk"
+    if "R1R2" in READS_TYPES:
+        include: "rules/seqkit.smk"
+    if "merged" in READS_TYPES:
+        include: "rules/seqkit_merged.smk"
 
 
 # if spades is in ASSEMBLERS include spades rules
 if "spades" in ASSEMBLERS:
-
-    include: "rules/spades.smk"
+    if "R1R2" in READS_TYPES:
+        include: "rules/spades.smk"
+    if "merged" in READS_TYPES:
+        include: "rules/spades_merged.smk"
 
 
 # if megahit is in ASSEMBLERS include megahit rules
 if "megahit" in ASSEMBLERS:
-
-    include: "rules/megahit.smk"
+    if "R1R2" in READS_TYPES:
+        include: "rules/megahit.smk"
+    if "merged" in READS_TYPES:
+        include: "rules/megahit_merged.smk"
 
 
 # if abyss is in ASSEMBLERS include abyss rules
 if "abyss" in ASSEMBLERS:
-
-    include: "rules/abyss.smk"
+    if "R1R2" in READS_TYPES:
+        include: "rules/abyss.smk"
+    if "merged" in READS_TYPES:
+        include: "rules/abyss_merged.smk"
 
 
 # if sparseassembler is in ASSEMBLERS include sparseassembler rules
 if "sparseassembler" in ASSEMBLERS:
-
-    include: "rules/decompress_reads.smk"
-    include: "rules/sparseassembler.smk"
+    if "R1R2" in READS_TYPES:
+        include: "rules/decompress_reads.smk"
+        include: "rules/sparseassembler.smk"
+    if "merged" in READS_TYPES:
+        include: "rules/decompress_reads_merged.smk"
+        include: "rules/sparseassembler_merged.smk"
 
 
 # if minia is in ASSEMBLERS include minia rules
-if "minia" in ASSEMBLERS:
-
-    include: "rules/minia.smk"
+    if "R1R2" in READS_TYPES:
+        include: "rules/minia.smk"
+    if "merged" in READS_TYPES:
+        include: "rules/minia_merged.smk"
 
 
 # if masurca is in ASSEMBLERS include masurca rules
 if "masurca" in ASSEMBLERS:
-
-    include: "rules/masurca.smk"
+    if "R1R2" in READS_TYPES:
+        include: "rules/masurca.smk"
+    if "merged" in READS_TYPES:
+        include: "rules/masurca_merged.smk"
 
 
 # include get_busco_db rule
@@ -84,8 +104,13 @@ include: "rules/get_busco_db.smk"
 include: "rules/busco.smk"
 # include quast rule
 include: "rules/quast.smk"
+
 # include fastK rule
-include: "rules/fastK.smk"
+if "R1R2" in READS_TYPES:
+    include: "rules/fastK.smk"
+if "merged" in READS_TYPES:
+    include: "rules/fastK_merged.smk"
+
 # include merquryFK rule
 include: "rules/merquryFK.smk"
 # include select_best_assembly rule

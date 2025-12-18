@@ -1,10 +1,10 @@
 rule busco:
     input:
-        assembly=f"{output_dir}" + "{strategy}/{sample}/assemblies/{sample}_{assembler}.fa",
+        assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{reads_type}_{strategy}_{assembler}.fa",
         specific_db=f"{output_dir}" + "busco_db/{sample}/busco_db.txt",
     output:
-        general_dir=directory(f"{output_dir}" + "{strategy}/{sample}/busco_general/{assembler}"),
-        specific_dir=directory(f"{output_dir}" + "{strategy}/{sample}/busco_specific/{assembler}"),
+        general_dir=directory(f"{output_dir}" + "{reads_type}/{strategy}/{sample}/busco_general/{assembler}"),
+        specific_dir=directory(f"{output_dir}" + "{reads_type}/{strategy}/{sample}/busco_specific/{assembler}"),
     params:
         path_to_busco_bds=config["busco"]["path_to_busco_bds"],
         lineage_general=config["busco"]["lineage_general"],
@@ -19,9 +19,9 @@ rule busco:
         mem_mb=get_medium_mem,
         partition=config["medium"]["partition"],
     log:
-        "logs/{strategy}/{sample}/busco_{sample}_{assembler}.log",
+        "logs/{sample}/busco_{sample}_{assembler}_{reads_type}_{strategy}.log",
     benchmark:
-        "benchmark/{strategy}/{sample}/busco_{sample}_{assembler}.txt"
+        "benchmark/{sample}/busco_{sample}_{assembler}_{reads_type}_{strategy}.txt"
     conda:
         "../envs/busco.yaml"
     container:

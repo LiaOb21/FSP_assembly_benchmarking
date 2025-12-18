@@ -2,11 +2,13 @@
 
 
 rule kmergenie_merged:
+    wildcard_constraints:
+        reads_type="merged"
     input:
         merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
     output:
-        kmergenie_report=f"{output_dir}" + "{sample}/kmergenie/{sample}_report.html",
-        best_kmer=f"{output_dir}" + "{sample}/kmergenie/{sample}_best_kmer.txt",
+        kmergenie_report=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/kmergenie/{sample}_report.html",
+        best_kmer=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/kmergenie/{sample}_best_kmer.txt",
     params:
         k=config["kmergenie"]["k"],
         l=config["kmergenie"]["l"],
@@ -23,9 +25,9 @@ rule kmergenie_merged:
         mem_mb=get_medium_mem,
         partition=config["medium"]["partition"],
     log:
-        "logs/{sample}/kmergenie.log",
+        "logs/{sample}/kmergenie_{reads_type}_{strategy}.log",
     benchmark:
-        "benchmark/{sample}/kmergenie.txt"
+        "benchmark/{sample}/kmergenie_{reads_type}_{strategy}.txt"
     conda:
         "../envs/kmergenie.yaml"
     container:

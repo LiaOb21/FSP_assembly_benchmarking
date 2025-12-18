@@ -2,11 +2,13 @@
 
 
 rule fastk_merged:
+    wildcard_constraints:
+        reads_type="merged"
     input:
         merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
     output:
-        ktab=f"{output_dir}" + "{sample}/fastk/fastk_table.ktab",
-        hist=f"{output_dir}" + "{sample}/fastk/fastk_table.hist",
+        ktab=f"{output_dir}" + "{reads_type}/fastk/{sample}/fastk_table.ktab",
+        hist=f"{output_dir}" + "{reads_type}/fastk/{sample}/fastk_table.hist",
     params:
         k=config["fastk"]["k"],
         result_prefix=lambda wildcards, output: os.path.splitext(output.ktab)[0],
@@ -20,9 +22,9 @@ rule fastk_merged:
         mem_mb=get_low_mem,
         partition=config["low"]["partition"],
     log:
-        "logs/{sample}/fastk.log",
+        "logs/{sample}/fastk_{reads_type}.log",
     benchmark:
-        "benchmark/{sample}/fastk.txt"
+        "benchmark/{sample}/fastk_{reads_type}.txt"
     conda:
         "../envs/merquryFK.yaml"
     container:

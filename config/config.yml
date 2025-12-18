@@ -35,6 +35,11 @@ input_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/" # use a
 # Customise the results directory
 output_dir: "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/" # use absolute path and add trailing slash
 
+# Select reads type to be used:
+reads_type: 
+  R1R2: True
+  merged: True
+
 # K-mer size determination strategy
 # Note that if you set this to "manual", you must also set the k-mer size for spades, megahit, abyss, sparseassembler, minia, and masurca.
 # If you set this to "kmergenie", kmergenie will be used to determine the optimal k-mer size and the values defined below for each rule will be ignored.

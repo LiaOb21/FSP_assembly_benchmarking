@@ -2,12 +2,14 @@
 
 
 rule fastk:
+    wildcard_constraints:
+        reads_type="R1R2"
     input:
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
         reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
     output:
-        ktab=f"{output_dir}" + "fastk/{sample}/fastk_table.ktab",
-        hist=f"{output_dir}" + "fastk/{sample}/fastk_table.hist",
+        ktab=f"{output_dir}" + "{reads_type}/fastk/{sample}/fastk_table.ktab",
+        hist=f"{output_dir}" + "{reads_type}/fastk/{sample}/fastk_table.hist",
     params:
         k=config["fastk"]["k"],
         result_prefix=lambda wildcards, output: os.path.splitext(output.ktab)[0],
@@ -21,9 +23,9 @@ rule fastk:
         mem_mb=get_low_mem,
         partition=config["low"]["partition"],
     log:
-        "logs/fastk/{sample}/fastk.log",
+        "logs/{sample}/fastk_{reads_type}.log",
     benchmark:
-        "benchmark/fastk/{sample}/fastk.txt"
+        "benchmark/{sample}/fastk_{reads_type}.txt"
     conda:
         "../envs/merquryFK.yaml"
     container:

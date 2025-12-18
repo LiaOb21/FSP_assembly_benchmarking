@@ -4,7 +4,7 @@
 rule bwa_mem2:
     input:
         assembly=f"{output_dir}"
-        + "best_assembly_fa/{sample}/{sample}_best_assembly_pypolca.fa",
+        + "assemblies/{sample}/{sample}_best_assembly_pypolca.fa",
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
         reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
     output:

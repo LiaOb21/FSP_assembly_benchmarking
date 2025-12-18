@@ -2,19 +2,21 @@
 
 
 rule seqkit:
+    wildcard_constraints:
+        reads_type="R1R2"
     input:
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
     output:
-        seqkit_results=f"{output_dir}" + "{strategy}/{sample}/seqkit/{sample}_seqkit.txt",
-        kmer=f"{output_dir}" + "{strategy}/{sample}/seqkit/{sample}_kmer_value.txt",
+        seqkit_results=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/seqkit/{sample}_seqkit.txt",
+        kmer=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/seqkit/{sample}_kmer_value.txt",
     threads: get_very_low_threads
     resources:
         mem_mb=get_very_low_mem,
         partition=config["very_low"]["partition"],
     log:
-        "logs/{strategy}/{sample}/seqkit.log",
+        "logs/{sample}/seqkit_{reads_type}_{strategy}.log",
     benchmark:
-        "benchmark/{strategy}/{sample}/seqkit.txt"
+        "benchmark/{sample}/seqkit_{reads_type}_{strategy}.txt"
     conda:
         "../envs/seqkit.yaml"
     container:
