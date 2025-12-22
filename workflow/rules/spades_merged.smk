@@ -2,15 +2,17 @@
 
 
 rule spades_merged:
+    wildcard_constraints:
+        reads_type="merged"
     input:
         merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
         unmerged_r1=f"{input_dir}" + "{sample}/{sample}_unmerged.R1.fq.gz",
         unmerged_r2=f"{input_dir}" + "{sample}/{sample}_unmerged.R2.fq.gz",
         kmergenie_result=get_kmergenie_dependency,
     output:
-        result_dir=directory(f"{output_dir}" + "{sample}/spades"),
-        scaffolds=f"{output_dir}" + "{sample}/spades/scaffolds.fasta",
-        link_assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_spades.fa",
+        result_dir=directory(f"{output_dir}" + "{reads_type}/{strategy}/{sample}/spades"),
+        scaffolds=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/spades/scaffolds.fasta",
+        link_assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{reads_type}_{strategy}_spades.fa",
     params:
         k=lambda wildcards: get_kmer_list(wildcards, "spades", "k"),
         optional_params=" ".join(
@@ -23,9 +25,9 @@ rule spades_merged:
         mem_mb=get_high_mem,
         partition=config["high"]["partition"],
     log:
-        "logs/{sample}/spades.log",
+        "logs/{sample}/spades_{reads_type}_{strategy}.log",
     benchmark:
-        "benchmark/{sample}/spades.txt"
+        "benchmark/{sample}/spades_{reads_type}_{strategy}.txt"
     conda:
         "../envs/spades.yaml"
     container:

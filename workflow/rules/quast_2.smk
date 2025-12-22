@@ -15,9 +15,9 @@ rule quast_2:
         mem_mb=get_low_mem,
         partition=config["low"]["partition"],
     log:
-        "logs/quast_best_assembly/{sample}/quast_best_assembly_pypolca.log",
+        "logs/{sample}/quast_best_assembly_pypolca.log",
     benchmark:
-        "benchmark/quast_best_assembly/{sample}/quast_best_assembly_pypolca.txt"
+        "benchmark/{sample}/quast_best_assembly_pypolca.txt"
     conda:
         "../envs/quast.yaml"
     container:

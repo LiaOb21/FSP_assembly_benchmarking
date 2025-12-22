@@ -2,13 +2,15 @@
 
 
 rule sparseassembler_merged:
+    wildcard_constraints:
+        reads_type="merged"
     input:
-        merged_in=f"{output_dir}" + "fqreads/{sample}/{sample}_merged.fq",
+        merged_in=f"{output_dir}" + "{reads_type}/fqreads/{sample}/{sample}_merged.fq",
         kmergenie_result=get_kmergenie_dependency,
     output:
-        scaffolds=f"{output_dir}" + "{sample}/sparseassembler/SuperContigs.txt",
+        scaffolds=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/sparseassembler/SuperContigs.txt",
         link_assembly=f"{output_dir}"
-        + "{sample}/assemblies/{sample}_sparseassembler.fa",
+        + "assemblies/{sample}/{sample}_{reads_type}_{strategy}_sparseassembler.fa",
     params:
         result_dir=lambda wildcards, output: os.path.dirname(output.scaffolds),
         k=lambda wildcards: get_single_kmer(wildcards, "sparseassembler", "k"),
@@ -25,9 +27,9 @@ rule sparseassembler_merged:
         mem_mb=get_medium_mem,
         partition=config["medium_high"]["partition"],
     log:
-        "logs/{sample}/sparseassembler.log",
+        "logs/{sample}/sparseassembler_{reads_type}_{strategy}.log",
     benchmark:
-        "benchmark/{sample}/sparseassembler.txt"
+        "benchmark/{sample}/sparseassembler_{reads_type}_{strategy}.txt"
     conda:
         "../envs/sparseassembler.yaml"
     container:

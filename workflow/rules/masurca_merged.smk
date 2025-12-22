@@ -2,14 +2,16 @@
 
 
 rule masurca_merged:
+    wildcard_constraints:
+        reads_type="merged"
     input:
         merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
         template="workflow/scripts/masurca_config_template_merged.txt",
         kmergenie_result=get_kmergenie_dependency,
     output:
-        masurca_config=f"{output_dir}" + "{sample}/masurca/masurca_config.txt",
-        scaffolds=f"{output_dir}" + "{sample}/masurca/CA/primary.genome.scf.fasta",
-        link_assembly=f"{output_dir}" + "{sample}/assemblies/{sample}_masurca.fa",
+        masurca_config=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/masurca/masurca_config.txt",
+        scaffolds=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/masurca/CA/primary.genome.scf.fasta",
+        link_assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{reads_type}_{strategy}_masurca.fa",
     params:
         fragment_mean=config["masurca"].get("fragment_mean", 500),
         fragment_stdev=config["masurca"].get("fragment_stdev", 50),
@@ -24,9 +26,9 @@ rule masurca_merged:
         mem_mb=get_high_mem,
         partition=config["high"]["partition"],
     log:
-        "logs/{sample}/masurca.log",
+        "logs/{sample}/masurca_{reads_type}_{strategy}.log",
     benchmark:
-        "benchmark/{sample}/masurca.txt"
+        "benchmark/{sample}/masurca_{reads_type}_{strategy}.txt"
     conda:
         "../envs/masurca.yaml"
     container:

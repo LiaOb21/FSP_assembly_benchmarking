@@ -19,9 +19,9 @@ rule samtools:
         mem_mb=get_medium_high_mem,
         partition=config["medium_high"]["partition"],
     log:
-        "logs/samtools_best_assembly/{sample}/samtools_best_assembly_pypolca.log",
+        "logs/{sample}/samtools_best_assembly_pypolca.log",
     benchmark:
-        "benchmark/samtools_best_assembly/{sample}/samtools_best_assembly_pypolca.txt"
+        "benchmark/{sample}/samtools_best_assembly_pypolca.txt"
     conda:
         "../envs/samtools.yaml"
     container:

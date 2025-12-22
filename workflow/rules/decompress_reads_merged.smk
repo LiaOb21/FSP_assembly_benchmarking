@@ -5,10 +5,12 @@
 
 
 rule decompress_reads_merged:
+    wildcard_constraints:
+        reads_type="merged"
     input:
         gz=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
     output:
-        fq=temp(f"{output_dir}" + "fqreads/{sample}/{sample}_merged.fq"),
+        fq=temp(f"{output_dir}" + "{reads_type}/fqreads/{sample}/{sample}_merged.fq"),
     threads: 1
     resources:
         mem_mb=get_very_low_mem,
@@ -18,9 +20,9 @@ rule decompress_reads_merged:
     container:
         "docker://debian:stable-slim"
     log:
-        "logs/{sample}/merged_decompress.log",
+        "logs/{sample}/{reads_type}_decompress.log",
     benchmark:
-        "benchmark/{sample}/merged_decompress.txt"
+        "benchmark/{sample}/{reads_type}_decompress.txt"
     shell:
         """
         echo "Decompressing {input.gz} to {output.fq}" >> {log} 2>&1

@@ -25,9 +25,9 @@ rule merquryfk_2:
         mem_mb=get_low_mem,
         partition=config["low"]["partition"],
     log:
-        "logs/merquryfk_best_assembly/{sample}/merquryfk_best_assembly_pypolca.log",
+        "logs/{sample}/merquryfk_best_assembly_pypolca.log",
     benchmark:
-        "benchmark/merquryfk_best_assembly/{sample}/merquryFK_best_assembly_pypolca.txt"
+        "benchmark/{sample}/merquryFK_best_assembly_pypolca.txt"
     conda:
         "../envs/merquryFK.yaml"
     container:

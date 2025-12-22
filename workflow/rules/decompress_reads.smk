@@ -5,10 +5,12 @@
 
 
 rule decompress_reads:
+    wildcard_constraints:
+        reads_type="R1R2"
     input:
         gz=f"{input_dir}" + "{sample}/{sample}_trimmed.{read}.fq.gz",
     output:
-        fq=temp(f"{output_dir}" + "fqreads/{sample}/{sample}_trimmed.{read}.fq"),
+        fq=temp(f"{output_dir}" + "{reads_type}/fqreads/{sample}/{sample}_trimmed.{read}.fq"),
     threads: 1
     resources:
         mem_mb=get_very_low_mem,
@@ -18,9 +20,9 @@ rule decompress_reads:
     container:
         "docker://debian:stable-slim"
     log:
-        "logs/fqreads/{sample}/{read}_decompress.log",
+        "logs/{sample}/{reads_type}_{read}_decompress.log",
     benchmark:
-        "benchmark/fqreads/{sample}/decompress_{read}.txt"
+        "benchmark/{sample}/{reads_type}_{read}_decompress.txt"
     shell:
         """
         echo "Decompressing {input.gz} to {output.fq}" >> {log} 2>&1

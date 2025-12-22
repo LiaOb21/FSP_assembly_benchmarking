@@ -19,9 +19,9 @@ checkpoint select_best_assembly:
         mem_mb=get_very_low_mem,
         partition=config["very_low"]["partition"],
     log:
-        "logs/select_best_assembly/{sample}/select_best_assembly.log",
+        "logs/{sample}/select_best_assembly.log",
     benchmark:
-        "benchmark/select_best_assembly/{sample}/select_best_assembly.txt"
+        "benchmark/{sample}/select_best_assembly.txt"
     conda:
         "../envs/basic.yaml"
     container:

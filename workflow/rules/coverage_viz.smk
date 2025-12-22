@@ -16,7 +16,7 @@ rule coverage_viz:
     log:
         "logs/coverage_viz_best_assembly/{sample}/coverage_viz_best_assembly_pypolca.log",
     benchmark:
-        "benchmark/coverage_viz_best_assembly/{sample}/coverage_viz_best_assembly_pypolca.txt"
+        "benchmark/{sample}/coverage_viz_best_assembly_pypolca.txt"
     conda:
         "../envs/data_viz.yaml"
     container:

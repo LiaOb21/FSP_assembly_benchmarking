@@ -15,9 +15,9 @@ rule bwa_mem2:
         mem_mb=get_medium_high_mem,
         partition=config["medium_high"]["partition"],
     log:
-        "logs/bwa_mem2_best_assembly/{sample}/bwa_mem2_best_assembly_pypolca.log",
+        "logs/{sample}/bwa_mem2_best_assembly_pypolca.log",
     benchmark:
-        "benchmark/bwa_mem2_best_assembly/{sample}/bwa_mem2_best_assembly_pypolca.txt"
+        "benchmark/{sample}/bwa_mem2_best_assembly_pypolca.txt"
     conda:
         "../envs/bwa_mem2.yaml"
     container:
