@@ -73,17 +73,23 @@ if "abyss" in ASSEMBLERS:
         include: "rules/abyss_merged.smk"
 
 
-# if sparseassembler is in ASSEMBLERS include sparseassembler rules
+# Decompress reads rules (needed for sparseassembler and potentially other assemblers)
 if "sparseassembler" in ASSEMBLERS:
     if "R1R2" in READS_TYPES:
         include: "rules/decompress_reads.smk"
-        include: "rules/sparseassembler.smk"
     if "merged" in READS_TYPES:
         include: "rules/decompress_reads_merged.smk"
+
+# if sparseassembler is in ASSEMBLERS include sparseassembler rules
+if "sparseassembler" in ASSEMBLERS:
+    if "R1R2" in READS_TYPES:
+        include: "rules/sparseassembler.smk"
+    if "merged" in READS_TYPES:
         include: "rules/sparseassembler_merged.smk"
 
 
 # if minia is in ASSEMBLERS include minia rules
+if "minia" in ASSEMBLERS:
     if "R1R2" in READS_TYPES:
         include: "rules/minia.smk"
     if "merged" in READS_TYPES:

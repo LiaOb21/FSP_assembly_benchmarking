@@ -62,12 +62,12 @@ kmergenie:
 
 # Choose which assemblers to run
 assemblers:
-  spades: True
+  spades: False
   megahit: True
   abyss: True
-  sparseassembler: True
+  sparseassembler: False
   minia: True
-  masurca: True
+  masurca: False
 
 # Customise spades parameters
 # please do not use the `-o` option here, it is set into the workflow
