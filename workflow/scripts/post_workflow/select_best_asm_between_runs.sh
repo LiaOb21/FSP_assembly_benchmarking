@@ -350,7 +350,7 @@ for sample in "${reference_samples[@]}"; do
         
         while read -r run assembler busco; do
             # Get auN score from QUAST report for this run
-            quast_file="$where_to_save/$run/$sample/best_assembly_info_and_QC/quast_pypolca/report.txt"
+            quast_file="$where_to_save/$run/$sample/best_assembly_info_and_QC/quast_pypolca/report.tsv"
             if [[ -f "$quast_file" ]]; then
                 # Since this is the best assembly QUAST report, there's only one column
                 # Just extract the auN value directly

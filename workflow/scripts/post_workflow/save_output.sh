@@ -397,7 +397,7 @@ for sample_dir in "$workflow_path/$results_directory_name"/*/quast; do
         
         echo "  Copying $sample_name QUAST results to $target_dir"
         mkdir -p "$target_dir"
-        cp -r "$sample_dir"/*report* "$target_dir/"
+        cp -r "$sample_dir"/*report.tsv "$target_dir/"
     fi
 done
 
@@ -469,7 +469,7 @@ for merqury_dir in "$workflow_path/$results_directory_name"/*/merquryfk; do
                 find "$assembler_dir" -name "merquryfk.completeness.stats" -exec cp {} "$target_dir/" \;
                 
                 # Copy plots (PNG files)
-                find "$assembler_dir" -name "*.png" -exec cp {} "$target_dir/" \;
+                find "$assembler_dir" -name "*ln.png" -exec cp {} "$target_dir/" \;
                 
                 # Copy BED files (optional - remove if too large)
                 find "$assembler_dir" -name "*.bed" -exec cp {} "$target_dir/" \;
@@ -512,7 +512,7 @@ for sample_dir in "$workflow_path/$results_directory_name"/*/best_assembly_qc/qu
         
         echo "  Copying $sample_name QUAST results to $target_dir"
         mkdir -p "$target_dir"
-        cp -r "$sample_dir"/*report* "$target_dir/"
+        cp -r "$sample_dir"/*report.tsv "$target_dir/"
     fi
 done
 
@@ -570,7 +570,7 @@ for merqury_dir in "$workflow_path/$results_directory_name"/*/best_assembly_qc/m
         find "$merqury_dir" -maxdepth 1 -name "merquryfk.completeness.stats" -exec cp {} "$target_dir/" \;
         
         # Copy plots (PNG files)
-        find "$merqury_dir" -maxdepth 1 -name "*.png" -exec cp {} "$target_dir/" \;
+        find "$merqury_dir" -maxdepth 1 -name "*ln.png" -exec cp {} "$target_dir/" \;
         
         # Copy BED files (optional - remove if too large)
         find "$merqury_dir" -maxdepth 1 -name "*.bed" -exec cp {} "$target_dir/" \;
