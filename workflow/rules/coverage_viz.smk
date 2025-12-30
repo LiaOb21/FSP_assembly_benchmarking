@@ -14,7 +14,7 @@ rule coverage_viz:
         mem_mb=get_very_low_mem,
         partition=config["very_low"]["partition"],
     log:
-        "logs/coverage_viz_best_assembly/{sample}/coverage_viz_best_assembly_pypolca.log",
+        "logs/{sample}/coverage_viz_best_assembly_pypolca.log",
     benchmark:
         "benchmark/{sample}/coverage_viz_best_assembly_pypolca.txt"
     conda:
