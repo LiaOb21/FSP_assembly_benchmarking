@@ -38,29 +38,46 @@ def extract_sample_info(busco_filename, best_assembly_source_path, polisher):
         try:
             with open(best_assembly_source_path, 'r') as f:
                 content = f.read().strip()
-                # Format: "06_EG_R1R2_reads_length_2samples_SP_Lia:masurca"
-                # or:     "06_EG_merged_kmergenie_2samples_SP_Lia:masurca"
-                # or:     "06_EG_R1R2_manual_2samples_SP_Lia:masurca"
                 
-                # Split by colon to separate run info from assembler
+                # Handle two formats:
+                # Old format: "06_EG_R1R2_reads_length_2samples_SP_Lia:masurca"
+                # New format: "R1R2_kmergenie_megahit"
+                
                 if ':' in content:
+                    # Old format with run info prefix and colon separator
                     run_info, assembler = content.split(':', 1)
+                    content_to_parse = run_info
+                else:
+                    # New format: reads_type_kmer_strategy_assembler
+                    content_to_parse = content
+                
+                # Split by underscore
+                parts = content_to_parse.split('_')
+                
+                # Extract reads type (should be first part in new format, or somewhere in old format)
+                if parts[0] in ['R1R2', 'merged']:
+                    # New format: R1R2_kmergenie_megahit
+                    reads_type = parts[0]
+                    if len(parts) >= 2:
+                        kmer_strategy = parts[1]
+                    if len(parts) >= 3:
+                        assembler = parts[2]
+                else:
+                    # Old format: search through parts
+                    for part in parts:
+                        if part in ['R1R2', 'merged']:
+                            reads_type = part
+                            break
                     
-                    # Extract reads type from run info
-                    # Look for either R1R2 or merged
-                    if 'R1R2' in run_info:
-                        reads_type = 'R1R2'
-                    elif 'merged' in run_info:
-                        reads_type = 'merged'
-                    
-                    # Extract kmer strategy from run info
-                    # Look for reads_length, kmergenie, or manual
-                    if 'reads_length' in run_info:
+                    # Extract kmer strategy from old format
+                    if 'reads_length' in content_to_parse:
                         kmer_strategy = 'reads_length'
-                    elif 'kmergenie' in run_info:
+                    elif 'kmergenie' in content_to_parse:
                         kmer_strategy = 'kmergenie'
-                    elif 'manual' in run_info:
+                    elif 'manual' in content_to_parse:
                         kmer_strategy = 'manual'
+                    
+                    # Assembler already extracted from colon separator
                 
         except FileNotFoundError:
             print(f"Warning: best_assembly_source.txt not found at {best_assembly_source_path}")
@@ -70,7 +87,6 @@ def extract_sample_info(busco_filename, best_assembly_source_path, polisher):
         return sample_id, lineage, reads_type, kmer_strategy, assembler
 
     return None, None, None, None, None
-
 
 def parse_busco_file(filepath):
     """

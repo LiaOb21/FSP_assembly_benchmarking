@@ -695,6 +695,15 @@ for sample_dir in "$workflow_path/$results_directory_name/best_assembly"/*; do
         else
             echo "  🍄 Warning: Logs directory not found: $logs_source"
         fi
+
+        # Copy the best assembly info file and rename for extract_metrics.py compatibility
+        best_info_file="$final_sample_dir/best_assembly_info_and_QC/info/best_assembly.txt"
+        if [[ -f "$best_info_file" ]]; then
+            # copy as best_assembly_source.txt for backward compatibility with extract_metrics.py
+            cp "$best_info_file" "$final_sample_dir/best_assembly_source.txt"
+            winner=$(cat "$best_info_file")
+            echo "  ✓ Best assembly was: $winner"
+        fi
         
         echo ""
     fi
