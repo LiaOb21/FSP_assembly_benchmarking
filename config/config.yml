@@ -18,13 +18,13 @@ medium:
 
 # Set memory and threads for low demanding rules
 low:
-  mem_mb: 4000 # memory in MB
+  mem_mb: 8000 # memory in MB
   t: 4 # number of threads
   partition: "short" # partition to use for low memory jobs
 
 # Set memory and threads for very low demanding rules
 very_low:
-  mem_mb: 500 # memory in MB
+  mem_mb: 3000 # memory in MB
   t: 4 # number of threads
   partition: "short" # partition to use for low memory jobs
 
@@ -93,7 +93,7 @@ abyss:
 # Customise sparseassembler parameters
 sparseassembler:
   "k": 21
-  "GS": 50000000 # genome size estimation in bp (used for memory pre-allocation), suggest a large value if possible.(e.g. ~ 3x genome size)
+  "GS": 150000000 # genome size estimation in bp (used for memory pre-allocation), suggest a large value if possible.(e.g. ~ 3x genome size)
   "Scaffold": 1 # for scaffolding with paired-end reads, set to 1
   "ExpCov": 10 # expected coverage (for scaffolding)
   optional_params: # if you do not want to use any optional parameters, add `{}` here
@@ -110,10 +110,10 @@ minia:
 
 # Customise masurca parameters
 masurca:
-  fragment_mean: 500 # mean insert size for your PE library (adjust to your data)
+  fragment_mean: 100 # mean insert size for your PE library (adjust to your data)
   fragment_stdev: 50 # stdev for your PE library (adjust to your data)
   k: auto # values between 25 and 127 are supported, auto will compute the optimal size based on the read data and GC content
-  jf_size: 100000000 # this is mandatory jellyfish hash size -- a safe value is estimated_genome_size*20
+  jf_size: 300000000 # this is mandatory jellyfish hash size -- a safe value is estimated_genome_size*20
   ca_parameters: cgwErrorRate=0.15 # set cgwErrorRate=0.25 for bacteria and 0.1<=cgwErrorRate<=0.15 for other organisms.
 # Note that the following parameters are always set as follows:
 # USE_GRID=0
