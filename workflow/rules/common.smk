@@ -306,22 +306,3 @@ def get_kmergenie_dependency(wildcards):
         return []
 
 
-def get_fastk_table_for_best_assembly(wildcards):
-    """
-    Get the correct FastK table based on the best assembly's reads_type.
-    This function is called after the checkpoint completes.
-    """
-    # Wait for checkpoint to complete
-    checkpoints.select_best_assembly.get(sample=wildcards.sample)
-    
-    # Now the file exists, so we can read it
-    best_assembly_file = f"{output_dir}best_assembly/{wildcards.sample}/best_assembly.txt"
-    
-    with open(best_assembly_file) as f:
-        best_assembly = f.read().strip()
-    
-    # Extract reads_type (first part)
-    reads_type = best_assembly.split("_")[0]
-    
-    # Return the ktab path for this reads_type
-    return f"{output_dir}{reads_type}/fastk/{wildcards.sample}/fastk_table.ktab"
