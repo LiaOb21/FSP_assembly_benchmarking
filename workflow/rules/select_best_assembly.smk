@@ -1,4 +1,4 @@
-checkpoint select_best_assembly:
+rule select_best_assembly:
     input:
         busco_dirs=expand(
             f"{output_dir}" + "{reads_type}/{strategy}/{{sample}}/busco_specific/{assembler}",
@@ -10,7 +10,6 @@ checkpoint select_best_assembly:
     output:
         best_assemblies_dir=directory(f"{output_dir}" + "best_assembly/{sample}/"),
         assembly=f"{output_dir}" + "best_assembly/{sample}/{sample}_best_assembly.fa",
-        best_assembly_txt=f"{output_dir}" + "best_assembly/{sample}/best_assembly.txt",
     params:
         sample="{sample}",
         results_dir=output_dir,
