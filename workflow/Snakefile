@@ -110,13 +110,8 @@ include: "rules/get_busco_db.smk"
 include: "rules/busco.smk"
 # include quast rule
 include: "rules/quast.smk"
-
 # include fastK rule
-if "R1R2" in READS_TYPES:
-    include: "rules/fastK.smk"
-if "merged" in READS_TYPES:
-    include: "rules/fastK_merged.smk"
-
+include: "rules/fastK.smk"
 # include merquryFK rule
 include: "rules/merquryFK.smk"
 # include select_best_assembly rule
