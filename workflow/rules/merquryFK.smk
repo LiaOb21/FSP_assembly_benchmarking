@@ -3,7 +3,7 @@
 
 rule merquryfk:
     input:
-        ktab=f"{output_dir}" + "{reads_type}/fastk/{sample}/fastk_table.ktab",
+        ktab=f"{output_dir}" + "fastk/{sample}/fastk_table.ktab",
         assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{reads_type}_{strategy}_{assembler}.fa",
     output:
         stats=f"{output_dir}"

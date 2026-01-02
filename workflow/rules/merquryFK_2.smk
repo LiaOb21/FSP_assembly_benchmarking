@@ -3,7 +3,7 @@
 
 rule merquryfk_2:
     input:
-        ktab=get_fastk_table_for_best_assembly,
+        ktab=f"{output_dir}" + "fastk/{sample}/fastk_table.ktab",
         assembly=f"{output_dir}"
         + "assemblies/{sample}/{sample}_best_assembly_pypolca.fa",
     output:
