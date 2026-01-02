@@ -75,12 +75,10 @@ mkdir -p "$output_dir"
 
 echo "processing sample: $sample"
 
-sample_results_dir="$results_dir/$sample"
-
 echo "=== Searching for assemblies across all strategies ==="
 
 # Extract BUSCO complete and single-copy for each assembly across all strategies and read types
-for reads_type_dir in "$results_dir"/*/; do
+for reads_type_dir in "${results_dir}"*/; do
     if [[ -d "$reads_type_dir" ]]; then
         reads_type=$(basename "$reads_type_dir")
         
@@ -144,8 +142,8 @@ if [[ $best_busco_count -eq 1 ]]; then
     # Single winner - print the assembly name
     best_assembly=$(cut -d' ' -f1 "$output_dir/best_buscos.txt")
     echo "$best_assembly is the best assembly for sample $sample based on BUSCO score."
-    echo "linking $results_dir/$sample/assemblies/${sample}_${best_assembly}.fa to $output_dir"
-    ln -srn $results_dir/$sample/assemblies/${sample}_${best_assembly}.fa $output_dir/${sample}_best_assembly.fa
+    echo "linking ${results_dir}$sample/assemblies/${sample}_${best_assembly}.fa to $output_dir"
+    ln -srn "${results_dir}$sample/assemblies/${sample}_${best_assembly}.fa" "$output_dir/${sample}_best_assembly.fa"
     echo "$best_assembly" > "$output_dir/best_assembly.txt"
     exit 0
 fi
@@ -155,7 +153,7 @@ echo "  Multiple assemblies with the highest BUSCOs, checking auN..."
 echo "Extracting auN scores..."
 
 # Extract auN from QUAST report
-quast_file="$results_dir/quast/$sample/report.txt"
+quast_file="${results_dir}/quast/$sample/report.txt"
 
 if [[ -f "$quast_file" ]]; then
     echo "  Found QUAST report at: $quast_file" >&2
@@ -164,24 +162,25 @@ if [[ -f "$quast_file" ]]; then
     awk '
         /Assembly/ {
             for(i=2;i<=NF;i++) {
-                # Store full assembly name (includes reads_type, strategy, assembler)
-                split($i, parts, "_");
-                # Extract reads_type_strategy_assembler from sample_reads_type_strategy_assembler.fa
-                a[i-1] = parts[2]"_"parts[3]"_"parts[4];
+                # Remove .fa extension
+                gsub(/\.fa$/, "", $i);
+                
+                # Extract everything starting from R1R2_ or merged_
+                # This handles any sample name format including underscores
+                if (match($i, /(R1R2|merged)_[^_]+_[^_]+$/)) {
+                    extracted = substr($i, RSTART);
+                    a[i-1] = extracted;
+                }
             }
         }
         /auN/ {
             for(i=2;i<=NF;i++) {
-                print a[i-1], $i
+                if (a[i-1] != "") {
+                    print a[i-1], $i
+                }
             }
         }
     ' "$quast_file" >> "$output_dir/auN_quast.txt"
-fi
-
-
-if [[ ! -f "$output_dir/auN_quast.txt" ]]; then
-    echo "  No QUAST data found for sample $sample"
-    exit 1
 fi
 
 # Get auN scores only for the tied BUSCO assemblers
@@ -210,8 +209,8 @@ if [[ -n "$best_assembly" ]]; then
     echo "$best_assembly is the best assembly for sample $sample based on auN score." >&2
     echo "  Best auN: $best_aun" >&2
     
-    echo "linking $results_dir/assemblies/$sample/${sample}_${best_assembly}.fa to $output_dir" >&2
-    ln -srn "$results_dir/assemblies/$sample/${sample}_${best_assembly}.fa" "$output_dir/${sample}_best_assembly.fa"
+    echo "linking ${results_dir}assemblies/$sample/${sample}_${best_assembly}.fa to $output_dir" >&2
+    ln -srn "${results_dir}assemblies/$sample/${sample}_${best_assembly}.fa" "$output_dir/${sample}_best_assembly.fa"
     echo "$best_assembly" > "$output_dir/best_assembly.txt"
     exit 0
 fi
