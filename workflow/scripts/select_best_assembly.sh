@@ -142,8 +142,8 @@ if [[ $best_busco_count -eq 1 ]]; then
     # Single winner - print the assembly name
     best_assembly=$(cut -d' ' -f1 "$output_dir/best_buscos.txt")
     echo "$best_assembly is the best assembly for sample $sample based on BUSCO score."
-    echo "linking ${results_dir}$sample/assemblies/${sample}_${best_assembly}.fa to $output_dir"
-    ln -srn "${results_dir}$sample/assemblies/${sample}_${best_assembly}.fa" "$output_dir/${sample}_best_assembly.fa"
+    echo "linking ${results_dir}assemblies/$sample/${sample}_${best_assembly}.fa to $output_dir"
+    ln -srn "${results_dir}assemblies/$sample/${sample}_${best_assembly}.fa" "$output_dir/${sample}_best_assembly.fa"
     echo "$best_assembly" > "$output_dir/best_assembly.txt"
     exit 0
 fi
