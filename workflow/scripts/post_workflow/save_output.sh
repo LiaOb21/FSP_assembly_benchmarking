@@ -655,6 +655,9 @@ fi
 echo "Final best assemblies location: $final_best_dir"
 mkdir -p "$final_best_dir"
 
+# Initialize overwrite flag
+overwrite_all=false
+
 # Copy best assembly and associated files for each sample
 for sample_dir in "$workflow_path/$results_directory_name/best_assembly"/*; do
     if [[ -d "$sample_dir" ]]; then
@@ -664,6 +667,31 @@ for sample_dir in "$workflow_path/$results_directory_name/best_assembly"/*; do
         
         # Create sample directory in final location
         final_sample_dir="$final_best_dir/$sample_name"
+        
+        # Check if destination folder already exists
+        if [[ -d "$final_sample_dir" ]]; then
+            echo "  🍄 Warning: Directory '$final_sample_dir' already exists!"
+            echo "  Overwrite? (y/N/a for all)"
+            read -r response
+            case "$response" in
+                [Yy])
+                    echo "  Overwriting $sample_name..."
+                    rm -rf "$final_sample_dir"
+                    ;;
+                [Aa])
+                    echo "  Overwriting all existing directories..."
+                    overwrite_all=true
+                    rm -rf "$final_sample_dir"
+                    ;;
+                *)
+                    echo "  Skipping $sample_name"
+                    continue
+                    ;;
+            esac
+        elif [[ "$overwrite_all" == true ]]; then
+            rm -rf "$final_sample_dir"
+        fi
+        
         mkdir -p "$final_sample_dir"
         
         # Copy the best assembly fasta file
