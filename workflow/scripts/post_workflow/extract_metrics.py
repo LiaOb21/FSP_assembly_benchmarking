@@ -41,7 +41,7 @@ def extract_sample_info(busco_filename, best_assembly_source_path, polisher):
                 
                 # Handle two formats:
                 # Old format: "06_EG_R1R2_reads_length_2samples_SP_Lia:masurca"
-                # New format: "R1R2_kmergenie_megahit"
+                # New format: "R1R2_kmergenie_megahit" or "merged_reads_length_spades"
                 
                 if ':' in content:
                     # Old format with run info prefix and colon separator
@@ -51,33 +51,34 @@ def extract_sample_info(busco_filename, best_assembly_source_path, polisher):
                     # New format: reads_type_kmer_strategy_assembler
                     content_to_parse = content
                 
-                # Split by underscore
-                parts = content_to_parse.split('_')
+                # First, extract reads_type by finding R1R2 or merged in the content
+                if 'R1R2' in content_to_parse:
+                    reads_type = 'R1R2'
+                elif 'merged' in content_to_parse:
+                    reads_type = 'merged'
                 
-                # Extract reads type (should be first part in new format, or somewhere in old format)
-                if parts[0] in ['R1R2', 'merged']:
-                    # New format: R1R2_kmergenie_megahit
-                    reads_type = parts[0]
-                    if len(parts) >= 2:
-                        kmer_strategy = parts[1]
-                    if len(parts) >= 3:
-                        assembler = parts[2]
-                else:
-                    # Old format: search through parts
-                    for part in parts:
-                        if part in ['R1R2', 'merged']:
-                            reads_type = part
+                # Extract kmer strategy - check for multi-word strategies first
+                if 'reads_length' in content_to_parse:
+                    kmer_strategy = 'reads_length'
+                elif 'kmergenie' in content_to_parse:
+                    kmer_strategy = 'kmergenie'
+                elif 'manual' in content_to_parse:
+                    kmer_strategy = 'manual'
+                
+                # Extract assembler if not already set (from old format with colon)
+                if assembler is None:
+                    # New format: need to extract assembler from the end
+                    # Known assemblers to look for
+                    known_assemblers = ['spades', 'megahit', 'masurca', 'minia']
+                    for known_asm in known_assemblers:
+                        if content_to_parse.endswith(known_asm) or f'_{known_asm}' in content_to_parse:
+                            # Find the last occurrence
+                            parts = content_to_parse.split('_')
+                            for part in reversed(parts):
+                                if part in known_assemblers:
+                                    assembler = part
+                                    break
                             break
-                    
-                    # Extract kmer strategy from old format
-                    if 'reads_length' in content_to_parse:
-                        kmer_strategy = 'reads_length'
-                    elif 'kmergenie' in content_to_parse:
-                        kmer_strategy = 'kmergenie'
-                    elif 'manual' in content_to_parse:
-                        kmer_strategy = 'manual'
-                    
-                    # Assembler already extracted from colon separator
                 
         except FileNotFoundError:
             print(f"Warning: best_assembly_source.txt not found at {best_assembly_source_path}")
