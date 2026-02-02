@@ -69,7 +69,7 @@ def extract_sample_info(busco_filename, best_assembly_source_path, polisher):
                 if assembler is None:
                     # New format: need to extract assembler from the end
                     # Known assemblers to look for
-                    known_assemblers = ['spades', 'megahit', 'masurca', 'minia']
+                    known_assemblers = ['spades', 'megahit', 'masurca', 'minia', 'abyss', 'sparseassembler']
                     for known_asm in known_assemblers:
                         if content_to_parse.endswith(known_asm) or f'_{known_asm}' in content_to_parse:
                             # Find the last occurrence
