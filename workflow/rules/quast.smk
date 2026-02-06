@@ -2,13 +2,13 @@ rule quast:
     input:
         assemblies=lambda wildcards: expand(
             f"{output_dir}assemblies/{{sample}}/{{sample}}_{{reads_type}}_{{strategy}}_{{assembler}}.fa",
-            sample=wildcards.sample,  # Only this wildcard exists
-            reads_type=READS_TYPES,   # Expand over all read types
-            strategy=KMER_STRATEGIES, # Expand over all strategies
-            assembler=ASSEMBLERS,     # Expand over all assemblers
+            sample=wildcards.sample,
+            reads_type=READS_TYPES,
+            strategy=KMER_STRATEGIES,
+            assembler=ASSEMBLERS,
         ),
     output:
-        report=f"{output_dir}" + "quast/{sample}/report.txt"
+        report=f"{output_dir}" + "quast/{sample}/report.txt",
     params:
         quast_dir=lambda wildcards, output: os.path.dirname(output.report),
         optional_params=" ".join(

@@ -3,16 +3,19 @@
 
 rule masurca:
     wildcard_constraints:
-        reads_type="R1R2"
+        reads_type="R1R2",
     input:
         r1=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
         r2=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
         template="workflow/scripts/masurca_config_template.txt",
         kmergenie_result=get_kmergenie_dependency,
     output:
-        masurca_config=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/masurca/masurca_config.txt",
-        scaffolds=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/masurca/CA/primary.genome.scf.fasta",
-        link_assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{reads_type}_{strategy}_masurca.fa",
+        masurca_config=f"{output_dir}"
+        + "{reads_type}/{strategy}/{sample}/masurca/masurca_config.txt",
+        scaffolds=f"{output_dir}"
+        + "{reads_type}/{strategy}/{sample}/masurca/CA/primary.genome.scf.fasta",
+        link_assembly=f"{output_dir}"
+        + "assemblies/{sample}/{sample}_{reads_type}_{strategy}_masurca.fa",
     params:
         fragment_mean=config["masurca"].get("fragment_mean", 500),
         fragment_stdev=config["masurca"].get("fragment_stdev", 50),

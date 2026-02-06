@@ -27,40 +27,39 @@ medium:
 
 # Set memory and threads for low demanding rules
 low:
-  mem_mb: 4000 # memory in MB
+  mem_mb: 8000 # memory in MB
   t: 4 # number of threads
   partition: "short" # partition to use for low memory jobs
 
 # Set memory and threads for very low demanding rules
 very_low:
-  mem_mb: 500 # memory in MB
+  mem_mb: 3000 # memory in MB
   t: 4 # number of threads
   partition: "short" # partition to use for low memory jobs
 ```
 
-This section of the `config.yml` allows to set memory, threads, and partition for the tools included in the snakemake workflow. The rules are divided in high, medium, and low based on empirical observations on memory requirements. Depending on the samples characteristics (e.g. number of reads, genome size) and HPC requirements, you may need to adjust these values. Note that this part of the config is not relevant if you are running Snakemake locally, in which case you should always use the `--cores` flag in the initial command, which allocates a number of cores to the whole workflow.
+This section of the `config.yml` allows to set memory, threads, and partition for the tools included in the snakemake workflow. The rules are divided in high, medium-high, medium, low, and very low based on empirical observations on memory requirements. Depending on the samples characteristics (e.g. number of reads, genome size) and HPC requirements, you may need to adjust these values. Note that this part of the config is not relevant if you are running Snakemake locally, in which case you should always use the `--cores` flag in the initial command, which allocates a number of cores to the whole workflow.
 
-| Rule                 | High (memory / CPUs / partition )                           | Medium-High (memory / CPUs / partition )                    | Medium (memory / CPUs / partition )                         | Low (memory / CPUs / partition )                            | Very Low (memory / CPUs / partition )                       |
-| -------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- |
-| kmergenie            |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |
-| seqkit               |                                                             |                                                             |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |
-| decompress           |                                                             |                                                             |                                                             |                                                             | :heavy_check_mark: / 1 CPU /:heavy_check_mark:              |
-| masurca_config       |                                                             |                                                             |                                                             |                                                             | :heavy_check_mark: / 1 CPU /:heavy_check_mark:              |
-| fastk                |                                                             |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |
-| spades               | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |                                                             |                                                             |
-| megahit              |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |                                                             |
-| abyss                | :heavy_check_mark: / :x: / :heavy_check_mark:               |                                                             | :x: / :heavy_check_mark: /:x:                               |                                                             |                                                             |
-| masurca              | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |                                                             |                                                             |
-| minia                |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |
-| sparseassembler      |                                                             | :x:/ 1CPU / :heavy_check_mark:                              | :heavy_check_mark: / 1 CPU /:x:                             |                                                             |                                                             |
-| get_busco_db         |                                                             |                                                             |                                                             |                                                             | :heavy_check_mark: / 1 CPU /:heavy_check_mark:              |
-| busco                |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |
-| quast                |                                                             |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |
-| merquryfk            |                                                             |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |
-| select_best_assembly |                                                             |                                                             |                                                             |                                                             | :heavy_check_mark: / 1 CPU /:heavy_check_mark:              |
-| bwa                  |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |                                                             |
-| pilon                | :heavy_check_mark: / :x: / :heavy_check_mark:               |                                                             | :x: / :heavy_check_mark: /:x:                               |                                                             |                                                             |
-| coverage_viz         |                                                             |                                                             |                                                             |                                                             | :heavy_check_mark: / 1 CPU /:heavy_check_mark:              |
+| Rule                 | High (memory / CPUs / partition )                            | Medium-High (memory / CPUs / partition )                    | Medium (memory / CPUs / partition )                         | Low (memory / CPUs / partition )                            | Very Low (memory / CPUs / partition )                       |
+| -------------------- | ------------------------------------------------------------ | ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- |
+| kmergenie            |                                                              |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |
+| seqkit               |                                                              |                                                             |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |
+| decompress           |                                                              |                                                             |                                                             |                                                             | :heavy_check_mark: / 1 CPU /:heavy_check_mark:              |
+| fastk                |                                                              |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |
+| spades               | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark:  |                                                             |                                                             |                                                             |                                                             |
+| megahit              |                                                              | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |                                                             |
+| abyss                | :heavy_check_mark: / :x: / :heavy_check_mark:                |                                                             | :x: / :heavy_check_mark: /:x:                               |                                                             |                                                             |
+| masurca              | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark:  |                                                             |                                                             |                                                             |                                                             |
+| minia                |                                                              |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |
+| sparseassembler      |                                                              | :x:/ 1CPU / :heavy_check_mark:                              | :heavy_check_mark: / 1 CPU /:x:                             |                                                             |                                                             |
+| get_busco_db         |                                                              |                                                             |                                                             |                                                             | :heavy_check_mark: / 1 CPU /:heavy_check_mark:              |
+| busco                |                                                              |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |
+| quast                |                                                              |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |
+| merquryfk            |                                                              |                                                             |                                                             | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |
+| select_best_assembly |                                                              |                                                             |                                                             |                                                             | :heavy_check_mark: / 1 CPU /:heavy_check_mark:              |
+| bwa                  |                                                              | :heavy_check_mark: / :heavy_check_mark: /:heavy_check_mark: |                                                             |                                                             |                                                             |
+| pypolca              | :heavy_check_mark: / :heavy_check_mark: / :heavy_check_mark: |                                                             |                                                             |                                                             |                                                             |
+| coverage_viz         |                                                              |                                                             |                                                             |                                                             | :heavy_check_mark: / 1 CPU /:heavy_check_mark:              |
 
 Note that the number of threads allocated in this section of the config file is only used when the tool allows multithreading. If not, the number of threads is set to 1 internally (shown in the table as "1 CPU").
 
@@ -73,6 +72,8 @@ Also, these are the starting values. If a rule does not complete successfully du
 Memory caps internally at 500GB, threads at 128.
 
 The values shown here in the `config/README.md` are suitable values for fungal samples. If dealing with organisms that typically have larger genomes (e.g. plants), or smaller genomes (e.g. bacteria), these values should be changed for a more efficient use of resources on HPC.
+
+If your HPC doesn't have multiple partitions, note that all the jobs can be submitted to the same partition, using always the same in the config.yml for high, medium-high, medium, low and very low rules. Using only one partition usually means that a high number of jobs are submitted to the same SLURM queue, and this will result in an overall longer run for the workflow.
 
 ## Input and output directories
 
@@ -90,19 +91,43 @@ This is simple as it is. You have to set up these directories in your `config.ym
 1. make sure the input directory follows the structure described in [Your input data directory structure](../README.md#1-your-input-data-directory-structure) in the main README.md
 2. make sure to add the trailing slash to your paths
 
+## Reads type
+
+```
+# Select reads type to be used:
+reads_type:
+  R1R2: True
+  merged: True
+```
+
+Here you can choose if:
+
+- you want to use forward and reverse reads only (set `R1R2` to `True` and `merged` to `False`)
+- you want to use merged reads only (set `R1R2` to `False` and `merged` to `True`)
+- you want to use both (set both to `True`)
+
+If you only want to run the workflow using forward and reverse reads, the only files you need in [your input data directory](../README.md#1-your-input-data-directory-structure) are `*_trimmed.R1.fq.gz` and `*_trimmed.R2.fq.gz`.
+
+If you want to use merged reads (that you have to merge previously) the input directory must contain all the files showed in [Your input data directory structure](../README.md#1-your-input-data-directory-structure), including `*_unmerged.R1.fq.gz`, `*_unmerged.R2.fq.gz`, `*_trimmed.R1.fq.gz`, and `*_trimmed.R2.fq.gz`, as some of the assemblers needs these file in order to run in this mode, and the reads alignment (bwa mem2) and the k-mer computing (fastk) are always performed using `*_trimmed.R1.fq.gz` and `*_trimmed.R2.fq.gz`.
+
+Make sure to always name the files as shown in [Your input data directory structure](../README.md#1-your-input-data-directory-structure) section.
+
 ## K-mer strategy
 
 ```
 # K-mer size determination strategy
-# Note that if you set this to "manual", you must also set the k-mer size for spades, megahit, abyss, sparseassembler, minia, and masurca.
-# If you set this to "kmergenie", kmergenie will be used to determine the optimal k-mer size and the values defined below for each rule will be ignored.
-# If you set this to "reads_length", seqkit will be used to calculate the median length of the reads, and the kmer will be set to 2/3rds of this value. Note that the k-mer values defined below for each rule will be ignored.
-# For spades when kmer_strategy is set to "kmergenie" or "reads_length" the values found by these two methods will be added to this list: 21, 33, 55,77.
-# For megahit when kmer_strategy is set to "kmergenie" or "reads_length" the values found by these two methods will be added to this list:21, 29, 39, 59, 79, 99, 119, 141
-# For the other assemblers only the predicted k-mer will be used when kmer_strategy is set to "kmergenie" or "reads_length".
+# Note that if you set "manual" to be True, you must also set the k-mer size for spades, megahit, abyss, sparseassembler, minia, and masurca. If "manual" is set to False, the k-mer size set for the assemblers will be ignored and the k-mer size will be determined by the other two strategies (kmergenie and reads_length), if they are set to True.
+# If you set "kmergenie" to be True, kmergenie will be used to determine the optimal k-mer size.
+# If you set "reads_length" to be True, seqkit will be used to calculate the median length of the reads, and the kmer will be set to 2/3rds of this value.
+# For spades when "kmergenie" or "reads_length" are set to True the values found by these two methods will be added to this list: 21, 33, 55,77.
+# For megahit when "kmergenie" or "reads_length" are set to True the values found by these two methods will be added to this list:21, 29, 39, 59, 79, 99, 119, 141
+# For the other assemblers only the predicted k-mer will be used when "kmergenie" or "reads_length" are set to True.
+# At least one of the three strategies must be set to True, otherwise the workflow will fail.
 
 kmer_strategy:
-  mode: "manual" # "kmergenie" for KmerGenie, "reads_length" to calculate the k-mer size based on the median reads length, "manual" for user-defined k-mer sizes.
+  manual: True
+  kmergenie: True
+  reads_length: True
 
 # Customise kmergenie parameters
 kmergenie:
@@ -114,9 +139,11 @@ kmergenie:
 
 As explained in the comments of the `config.yml` itself, this section allows the user to select between three different strategies to determine the k-mer size used for the genome assembly process:
 
-1. `mode: "manual"`, allows the user to set the k-mer size manually for each assembler. This means that when this strategy is chosen, the user must set the k-mer size in each assembler's section of the `config.yml`.
-2. `mode: "kmergenie"`, when this is set the workflow uses kmergenie to estimate an ideal k-mer size based on library characteristics. Note that this tool must be used only when dealing with haploid or diploid samples.
-3. `mode: reads_length`, uses Seqkit to calculate the median read length for each library and the k-mer size is set to be 2/3rds of this value.
+1. `manual`, allows the user to set the k-mer size manually for each assembler. This means that when this strategy is set to `True`, the user must set the k-mer size in each assembler's section of the `config.yml`.
+2. `kmergeni"`, when this is set to `True` the workflow uses kmergenie to estimate an ideal k-mer size based on library characteristics. Note that this tool must be used only when dealing with haploid or diploid samples.
+3. `reads_length`, when this is set to `True` the workflow uses Seqkit to calculate the median read length for each library and the k-mer size is set to be 2/3rds of this value.
+
+Multiple strategies can be set to `True` simultaneously. At least one of the strategies must be set to `True` for the workflow to run.
 
 ### Notes for kmergenie usage
 
@@ -159,7 +186,7 @@ This is the section of the `config.yml` where the user can set parameters for sp
 ```
 # Customise megahit parameters
 megahit:
-  "k": "31,51,71,91,99" #comma-separated list of kmer size all must be odd, in the range 15-255, increment <= 28 [21,29,39,59,79,99,119,141]
+  "k": "21,29,39,59,79,99,119,141" #comma-separated list of kmer size all must be odd, in the range 15-255, increment <= 28 [21,29,39,59,79,99,119,141]
   optional_params: # if you do not want to use any optional parameters, add `{}` here
     "--no-mercy": True
     "--min-count": 3 # suggested value for single genome assembly
@@ -187,14 +214,14 @@ This is the section of the `config.yml` where the user can set parameters for ab
 # Customise sparseassembler parameters
 sparseassembler:
   "k": 21
-  "GS": 50000000 # genome size estimation in bp (used for memory pre-allocation), suggest a large value if possible.(e.g. ~ 3x genome size)
+  "GS": 150000000 # genome size estimation in bp (used for memory pre-allocation), suggest a large value if possible.(e.g. ~ 3x genome size)
   "Scaffold": 1 # for scaffolding with paired-end reads, set to 1
   "ExpCov": 10 # expected coverage (for scaffolding)
-  optional_params: # if you do not want to use any optional parameters, add `{}` here
-    "g": 10
-    "LD": 0
-    "NodeCovTh": 1
-    "EdgeCovTh": 0
+  optional_params: {} # if you do not want to use any optional parameters, add `{}` here
+#    "g": 10
+#    "LD": 0
+#    "NodeCovTh": 1
+#    "EdgeCovTh": 0
 ```
 
 This is the section of the `config.yml` where the user can set parameters for sparseassembler assembler. Note that when using `kmergenie` or `reads_length` k-mer strategies the `k` parameter here is ignored. For further information about using sparseassembler parameters, refer to the [official documentation](https://github.com/yechengxi/SparseAssembler). We believe this tools is no longer maintained.
@@ -219,7 +246,7 @@ masurca:
   fragment_mean: 500 # mean insert size for your PE library (adjust to your data)
   fragment_stdev: 50 # stdev for your PE library (adjust to your data)
   k: auto # values between 25 and 127 are supported, auto will compute the optimal size based on the read data and GC content
-  jf_size: 100000000 # this is mandatory jellyfish hash size -- a safe value is estimated_genome_size*20
+  jf_size: 300000000 # this is mandatory jellyfish hash size -- a safe value is estimated_genome_size*20
   ca_parameters: cgwErrorRate=0.15 # set cgwErrorRate=0.25 for bacteria and 0.1<=cgwErrorRate<=0.15 for other organisms.
 # Note that the following parameters are always set as follows:
 # USE_GRID=0
@@ -310,6 +337,6 @@ pypolca:
 ```
 
 This section of the `config.yml` allows the user to set the parameters for pypolca. Pypolca replaces Pilon, that was used in the previous versions (1.x.x) to imporve the draft of the best selected assembly. The main reson for the replacement is a significant speed up of the workflow.
-The authors suggest to always use the `--careful` option, that sets  `--min_alt 4` (at least four reads supporting the alternative allele) and `--min_ratio 3` (at least three times as many reads supporting the alterative allele compared to the assembly allele), and prevents most false positives at low depths without sacrificing error removal.
+The authors suggest to always use the `--careful` option, that sets `--min_alt 4` (at least four reads supporting the alternative allele) and `--min_ratio 3` (at least three times as many reads supporting the alterative allele compared to the assembly allele), and prevents most false positives at low depths without sacrificing error removal.
 
 For further information about using pypolca parameters, refer to the [official documentation](https://github.com/gbouras13/pypolca).

@@ -4,11 +4,13 @@
 rule merquryfk:
     input:
         ktab=f"{output_dir}" + "fastk/{sample}/fastk_table.ktab",
-        assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{reads_type}_{strategy}_{assembler}.fa",
+        assembly=f"{output_dir}"
+        + "assemblies/{sample}/{sample}_{reads_type}_{strategy}_{assembler}.fa",
     output:
         stats=f"{output_dir}"
         + "{reads_type}/{strategy}/{sample}/merquryfk/{assembler}/merquryfk.completeness.stats",
-        qv=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/merquryfk/{assembler}/merquryfk.qv",
+        qv=f"{output_dir}"
+        + "{reads_type}/{strategy}/{sample}/merquryfk/{assembler}/merquryfk.qv",
     params:
         result_prefix=lambda wildcards, output: os.path.splitext(output.qv)[0],
         temp_dir=lambda wildcards, output: os.path.join(

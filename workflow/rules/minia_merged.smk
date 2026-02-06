@@ -3,13 +3,15 @@
 
 rule minia_merged:
     wildcard_constraints:
-        reads_type="merged"
+        reads_type="merged",
     input:
         merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
         kmergenie_result=get_kmergenie_dependency,
     output:
-        scaffolds=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/minia/{sample}.contigs.fa",
-        link_assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{reads_type}_{strategy}_minia.fa",
+        scaffolds=f"{output_dir}"
+        + "{reads_type}/{strategy}/{sample}/minia/{sample}.contigs.fa",
+        link_assembly=f"{output_dir}"
+        + "assemblies/{sample}/{sample}_{reads_type}_{strategy}_minia.fa",
     params:
         k=lambda wildcards: get_single_kmer(wildcards, "minia", "k"),
         result_prefix=lambda wildcards, output: os.path.splitext(output.scaffolds)[

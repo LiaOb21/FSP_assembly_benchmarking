@@ -3,7 +3,7 @@
 
 rule fastk_merged:
     wildcard_constraints:
-        reads_type="merged"
+        reads_type="merged",
     input:
         merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
     output:

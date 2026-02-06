@@ -1,0 +1,1 @@
+Command line: samtools index -@ /home/lobinu/git_repos/FSP_assembly_benchmarking/results_3/best_assembly/048ds/pypolca/temp/temp_bwa_sorted.bam

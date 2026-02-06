@@ -3,15 +3,17 @@
 
 rule abyss:
     wildcard_constraints:
-        reads_type="R1R2"
+        reads_type="R1R2",
     input:
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
         reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
         kmergenie_result=get_kmergenie_dependency,
     output:
         result_dir=directory(f"{output_dir}" + "{reads_type}/{strategy}/{sample}/abyss"),
-        scaffolds=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/abyss/abyss-scaffolds.fa",
-        link_assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{reads_type}_{strategy}_abyss.fa",
+        scaffolds=f"{output_dir}"
+        + "{reads_type}/{strategy}/{sample}/abyss/abyss-scaffolds.fa",
+        link_assembly=f"{output_dir}"
+        + "assemblies/{sample}/{sample}_{reads_type}_{strategy}_abyss.fa",
     params:
         k=lambda wildcards: get_single_kmer(wildcards, "abyss", "k"),
         B=config["abyss"]["B"],

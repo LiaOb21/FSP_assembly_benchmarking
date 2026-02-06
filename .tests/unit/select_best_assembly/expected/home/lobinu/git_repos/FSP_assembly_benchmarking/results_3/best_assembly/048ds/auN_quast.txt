@@ -1,0 +1,12 @@
+R1R2_manual_megahit 410.6
+R1R2_manual_abyss 317.6
+R1R2_manual_minia 302.7
+R1R2_kmergenie_megahit 585.8
+R1R2_kmergenie_abyss 311.1
+R1R2_kmergenie_minia 307.4
+merged_manual_megahit 255.0
+merged_manual_abyss 313.2
+merged_manual_minia 262.4
+merged_kmergenie_megahit 445.4
+merged_kmergenie_abyss 333.8
+merged_kmergenie_minia 262.4

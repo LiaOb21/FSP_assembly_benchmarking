@@ -91,7 +91,8 @@ def get_all_inputs():
             reads_type=READS_TYPES,
         ),
         expand(
-            f"{output_dir}" + "{reads_type}/{strategy}/{sample}/merquryfk/{assembler}/merquryfk.qv",
+            f"{output_dir}"
+            + "{reads_type}/{strategy}/{sample}/merquryfk/{assembler}/merquryfk.qv",
             sample=SAMPLES,
             assembler=ASSEMBLERS,
             strategy=KMER_STRATEGIES,
@@ -165,9 +166,7 @@ def get_kmer_list(wildcards, assembler, config_key):
 
     if strategy == "kmergenie":
         # Read best k-mer from kmergenie output
-        best_kmer_file = (
-            f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
-        )
+        best_kmer_file = f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
         with open(best_kmer_file, "r") as f:
             best_k = int(f.read().strip())
 
@@ -191,9 +190,7 @@ def get_kmer_list(wildcards, assembler, config_key):
 
     elif strategy == "reads_length":
         # Read best k-mer from seqkit output
-        kmer_file = (
-            f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
-        )
+        kmer_file = f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
         with open(kmer_file, "r") as f:
             best_k = int(f.read().strip())
 
@@ -256,9 +253,7 @@ def get_single_kmer(wildcards, assembler, config_key):
 
     if strategy == "kmergenie":
         # Read best k-mer from kmergenie output
-        best_kmer_file = (
-            f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
-        )
+        best_kmer_file = f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
         with open(best_kmer_file, "r") as f:
             best_k = int(f.read().strip())
 
@@ -270,9 +265,7 @@ def get_single_kmer(wildcards, assembler, config_key):
 
     elif strategy == "reads_length":
         # Read best k-mer from seqkit output
-        kmer_file = (
-            f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
-        )
+        kmer_file = f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
         with open(kmer_file, "r") as f:
             k_val = int(f.read().strip())
 
@@ -293,16 +286,10 @@ def get_kmergenie_dependency(wildcards):
     """Return kmergenie dependency if in kmergenie mode, empty list otherwise"""
     # Get strategy from wildcards
     strategy = wildcards.strategy
-    
+
     if strategy == "kmergenie":
-        return (
-            f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
-        )
+        return f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/kmergenie/{wildcards.sample}_best_kmer.txt"
     elif strategy == "reads_length":
-        return (
-            f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
-        )
+        return f"{output_dir}{wildcards.reads_type}/{wildcards.strategy}/{wildcards.sample}/seqkit/{wildcards.sample}_kmer_value.txt"
     else:
         return []
-
-

@@ -3,12 +3,14 @@
 
 rule seqkit_merged:
     wildcard_constraints:
-        reads_type="merged"
+        reads_type="merged",
     input:
         merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
     output:
-        seqkit_results=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/seqkit/{sample}_seqkit.txt",
-        kmer=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/seqkit/{sample}_kmer_value.txt",
+        seqkit_results=f"{output_dir}"
+        + "{reads_type}/{strategy}/{sample}/seqkit/{sample}_seqkit.txt",
+        kmer=f"{output_dir}"
+        + "{reads_type}/{strategy}/{sample}/seqkit/{sample}_kmer_value.txt",
     threads: get_very_low_threads
     resources:
         mem_mb=get_very_low_mem,

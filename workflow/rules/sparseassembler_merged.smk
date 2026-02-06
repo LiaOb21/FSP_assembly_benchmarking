@@ -3,12 +3,13 @@
 
 rule sparseassembler_merged:
     wildcard_constraints:
-        reads_type="merged"
+        reads_type="merged",
     input:
         merged_in=f"{output_dir}" + "{reads_type}/fqreads/{sample}/{sample}_merged.fq",
         kmergenie_result=get_kmergenie_dependency,
     output:
-        scaffolds=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/sparseassembler/SuperContigs.txt",
+        scaffolds=f"{output_dir}"
+        + "{reads_type}/{strategy}/{sample}/sparseassembler/SuperContigs.txt",
         link_assembly=f"{output_dir}"
         + "assemblies/{sample}/{sample}_{reads_type}_{strategy}_sparseassembler.fa",
     params:

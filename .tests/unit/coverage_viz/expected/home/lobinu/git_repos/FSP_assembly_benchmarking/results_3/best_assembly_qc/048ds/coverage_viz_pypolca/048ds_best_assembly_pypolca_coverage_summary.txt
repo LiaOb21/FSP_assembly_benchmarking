@@ -1,0 +1,31 @@
+Coverage Analysis Summary - 048ds (Best assembly improved with pypolca)
+============================================================
+
+sample: 048ds
+assembler: Best assembly improved with pypolca
+total_contigs: 4
+contigs_under_250bp: 0
+contigs_under_250bp_percent: 0.00
+contigs_250bp_to_1kb: 4
+contigs_250bp_to_1kb_percent: 100.00
+contigs_over_1kb: 0
+contigs_over_1kb_percent: 0.00
+total_bases: 1852
+mean_coverage: 9.89
+weighted_mean_coverage: 11.69
+median_coverage: 9.64
+peak_coverage: 15.14
+min_coverage: 5.13
+std_coverage: 5.33
+overall_coverage_pct: 99.30
+longest_contig: 869
+shortest_contig: 262
+mean_base_quality: 33.92
+median_base_quality: 33.90
+mean_mapping_quality: 48.75
+median_mapping_quality: 54.80
+total_reads: 13470
+mapped_reads: 219
+unmapped_reads: 13251
+mapping_rate: 1.63
+properly_paired: 208

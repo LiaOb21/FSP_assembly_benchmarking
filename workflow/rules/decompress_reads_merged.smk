@@ -6,7 +6,7 @@
 
 rule decompress_reads_merged:
     wildcard_constraints:
-        reads_type="merged"
+        reads_type="merged",
     input:
         gz=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
     output:

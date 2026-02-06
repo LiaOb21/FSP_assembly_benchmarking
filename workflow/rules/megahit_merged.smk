@@ -3,16 +3,20 @@
 
 rule megahit_merged:
     wildcard_constraints:
-        reads_type="merged"
+        reads_type="merged",
     input:
         merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
         kmergenie_result=get_kmergenie_dependency,
     output:
-        result_dir=directory(f"{output_dir}" + "{reads_type}/{strategy}/{sample}/megahit"),
-        link_assembly=f"{output_dir}" + "assemblies/{sample}/{sample}_{reads_type}_{strategy}_megahit.fa",
+        result_dir=directory(
+            f"{output_dir}" + "{reads_type}/{strategy}/{sample}/megahit"
+        ),
+        link_assembly=f"{output_dir}"
+        + "assemblies/{sample}/{sample}_{reads_type}_{strategy}_megahit.fa",
     params:
         k=lambda wildcards: get_kmer_list(wildcards, "megahit", "k"),
-        scaffolds=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/megahit/final.contigs.fa",
+        scaffolds=f"{output_dir}"
+        + "{reads_type}/{strategy}/{sample}/megahit/final.contigs.fa",
         optional_params=" ".join(
             f"{k}" if v is True else f"{k} {v}"
             for k, v in config["megahit"]["optional_params"].items()

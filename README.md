@@ -6,9 +6,9 @@
 [![workflow catalog](https://img.shields.io/badge/Snakemake%20workflow%20catalog-darkgreen)](https://snakemake.github.io/snakemake-workflow-catalog/docs/workflows/LiaOb21/FSP_assembly_benchmarking)
 [![DOI](https://zenodo.org/badge/998768660.svg)](https://doi.org/10.5281/zenodo.17454052)
 
-A Snakemake workflow for *de novo* genome assembly using Illumina reads. 
+A Snakemake workflow for _de novo_ genome assembly using Illumina reads.
 
-This workflow was developed for the [Fungarium Sequencing Project (FSP)](https://www.kew.org/science/our-science/projects/sequencing-kews-fungarium) at Royal Botanic Gardens, Kew. 
+This workflow was developed for the [Fungarium Sequencing Project (FSP)](https://www.kew.org/science/our-science/projects/sequencing-kews-fungarium) at Royal Botanic Gardens, Kew.
 
 <img width="1920" height="1080" alt="version2_FSP_assembly_benchmarking_DAG" src="https://github.com/user-attachments/assets/8f672376-730e-4d61-8999-58b059a02737" />
 
@@ -40,12 +40,11 @@ If you use this workflow in a paper, don't forget to give credits to the authors
 
 ## Overview
 
-
 The workflow was developed to benchmark the performance of different short reads assemblers using hDNA (historical DNA).
 
 It may be useful to other projects that deal with difficult samples as the FSP, and need to find the best short reads assembler(s) for their own case.
 
-The workflow was designed to process several samples in parallel. 
+The workflow was designed to process several samples in parallel.
 
 Each sample is assembled using the following assemblers:
 
@@ -57,18 +56,28 @@ Each sample is assembled using the following assemblers:
 - [MaSuRCA](https://github.com/alekseyzimin/masurca/tree/master) - single k-mer assembler
 
 Note: the workflow was designed to use previously pre-processed reads, although it works also with raw reads (but keep in mind that this doesn't pre-process reads automatically).
+The user can choose which assemblers to use by setting them as `True` or `False` in the [config.yml](config/config.yml).
 
 The user can choose between three different strategies to set the k-mer size for the genome assembly process:
-1) `manual`: the k-mer size is set manually for each assembler in [`config/README.md`](config/README.md).
-2) `kmergenie`: [KMerGenie](https://github.com/movingpictures83/KMerGenie) is used to estimate the best k-mer size for genome assembly for each library. Note that KMerGenie should be used with haploid or diploid genomes only.
-3) `reads_length`: [SeqKit](https://bioinf.shenwei.me/seqkit/) is used to calculate the median reads length and the k-mer size is set to be 2/3rds of the median.
+
+1. `manual`: the k-mer size is set manually for each assembler in the [config.yml](config/config.yml).
+2. `kmergenie`: [KMerGenie](https://github.com/movingpictures83/KMerGenie) is used to estimate the best k-mer size for genome assembly for each library. Note that KMerGenie should be used with haploid or diploid genomes only.
+3. `reads_length`: [SeqKit](https://bioinf.shenwei.me/seqkit/) is used to calculate the median reads length and the k-mer size is set to be 2/3rds of the median.
+
+The user can choose which k-mer strategues to use by setting them as `True` or `False` in the [config.yml](config/config.yml).
+
+Furthermore, the user can choose to use two different input reads:
+
+1. forward and reverse reads files
+2. merged reads
+
+The user can choose which type of reads to use by setting them as `True` or `False` in the [config.yml](config/config.yml).
 
 The assemblies produced by each assembler for each sample are then quality inspected with the following tools:
 
 - [BUSCO](https://busco.ezlab.org/busco_userguide.html) - evaluates each produced assembly quality in terms of expected gene content. It is run twice for each sample, once using a general dataset, and once using a more closely related dataset. See [`config/README.md`](config/README.md) for more details.
 - [QUAST](https://quast.sourceforge.net/docs/manual.html) - computes assembly statistics.
 - [MerquryFK](https://github.com/thegenemyers/MERQURY.FK) - computes k-mer analysis for each assembly and compares its content with the k-mer computed for raw reads by [FastK](https://github.com/thegenemyers/FASTK).
-
 
 The best assembly for each sample is then selected. The selection is based on the highest complete and single BUSCO content (absolute number, not percentage). If more than one assembly have the highest complete and single copy BUSCO score, the assembly with the highest aUN (calculated by QUAST) among those is selected.
 
@@ -89,6 +98,7 @@ git clone https://github.com/LiaOb21/FSP_assembly_benchmarking.git
 #### 1. Your input data directory structure
 
 The directory that contains your input samples (e.g. `data`) must be structured in the following way:
+
 ```
 data/
 ├── 048ds
@@ -105,24 +115,24 @@ data/
     └── 048ss_unmerged.R2.fq.gz
 ```
 
-In this example `048ds` and `048ss` are the only two samples present in the input directory. Note how each subdirectory is named after the sample, and the files inside each sample subdirectory have a standardised name. This is crucial for Snakemake to work properly.
+In this example `048ds` and `048ss` are the only two samples present in the input directory. Note how each subdirectory is named after the sample, and the files inside each sample subdirectory have a standardised name. This is crucial for Snakemake to work properly. Even in the case in which you want to use raw reads, the name of the fastq (gzipped) files must match those shown in the snippet above.
 
 #### 2. Download BUSCO databases
 
 This workflow runs BUSCO on each produced assembly twice using two different databases. One database more "general" (e.g. fungi_odb), and one as closely related as possible to the organisms analysed (e.g. agaricales_odb).
 
-The recommendation here is to store all the BUSCO databases in a single directory, to allow the workflow to automatically use the closest database to the organism for the second busco run.
+The recommendation here is to store all the BUSCO databases for the group of organisms of interest in a single directory, to allow the workflow to automatically use the closest database to the target organism for the second BUSCO run.
 
 First of all, obtain the full list of busco lineages and use the awk command to extract the lineages of the group of interest (e.g. fungi). The `_odb12` suffix refers to the version of the busco databases. The following commands can be used also with other groups of organisms or database versions, modifying the relevant parts of the code.
 
 ```
 cd to/where/you/want/to/store/busco/databases
 
-conda activate busco 
+conda activate busco
 
 busco --list > busco_lineages.txt
 
-awk '/fungi_odb12/{flag=1; indent=length($0)-length(ltrim($0)); print "fungi_odb12"; next} 
+awk '/fungi_odb12/{flag=1; indent=length($0)-length(ltrim($0)); print "fungi_odb12"; next}
      flag && /- [a-z_]*_odb12/ {
          current_indent=length($0)-length(ltrim($0))
          if(current_indent <= indent) flag=0
@@ -132,6 +142,7 @@ awk '/fungi_odb12/{flag=1; indent=length($0)-length(ltrim($0)); print "fungi_odb
 ```
 
 `fungi_busco_lineages.txt` will be the input for this field in the config file:
+
 ```
 busco:
   database_list: "to/where/you/want/to/store/busco/databases/fungi_busco_lineages.txt"
@@ -164,21 +175,25 @@ Here the column 'Genus' will be ignored (as BUSCO databases are available up to 
 
 #### 1. Set up Snakemake environment
 
-First install snakemake using conda (be sure to install version 9+):
+First install snakemake using conda (make sure to install version 9+):
+
 ```
 conda create -n snakemake snakemake
 conda activate snakemake
 ```
 
 If you want to monitor the workflow through a console you can install the [`snkmt` plugin](https://github.com/cademirch/snkmt) within the snakemake environment (this is not mandatory):
+
 ```
 pip install snakemake-logger-plugin-snkmt # used for monitoring resources
 ```
+
 #### 2. Run the workflow
 
 :mushroom::mushroom::mushroom: **IMPORTANT:** Snakemake workflows must be always run from the cloned directory. :mushroom::mushroom::mushroom:
 
-To run the workflow, you can use the following command for using the regular inputs reads forward and reverse (R1 and R2):
+To run the workflow, you can use the following command:
+
 ```
 cd ~/FSP_assembly_benchmarking
 snakemake --configfile config/config.yml --software-deployment-method conda --snakefile workflow/Snakefile --cores 8
@@ -186,21 +201,11 @@ snakemake --configfile config/config.yml --software-deployment-method conda --sn
 
 If you want to use `snkmt` add this flag to the previous command: `--logger snkmt`.
 
-When you use `workflow/Snakefile`, the only files you need in [your input data directory](README.md#1-your-input-data-directory-structure) are `*_trimmed.R1.fq.gz` and `*_trimmed.R2.fq.gz`.
+If you only want to run the workflow using forward and reverse reads, the only files you need in [your input data directory](README.md#1-your-input-data-directory-structure) are `*_trimmed.R1.fq.gz` and `*_trimmed.R2.fq.gz`.
 
-If you want to use merged reads (that you have to merge previously) you can run the following command:
+If you want to use merged reads (that you have to merge previously) the input directory must contain all the files showed in [Your input data directory structure](README.md#1-your-input-data-directory-structure), including `*_unmerged.R1.fq.gz`, `*_unmerged.R2.fq.gz`, `*_trimmed.R1.fq.gz`, and `*_trimmed.R2.fq.gz`, as some of the assemblers needs these file in order to run in this mode, and the reads alignment (bwa mem2) and the k-mer computing (fastk) are always performed using `*_trimmed.R1.fq.gz` and `*_trimmed.R2.fq.gz`.
 
-```
-cd ~/FSP_assembly_benchmarking
-snakemake --configfile config/config.yml --software-deployment-method conda --snakefile workflow/Snakefile_merged --cores 8
-```
-
-Note that for the workflow to run properly when using `workflow/Snakefile_merged` the input directory must contain all the files showed in [Your input data directory structure](README.md#1-your-input-data-directory-structure), including `*_unmerged.R1.fq.gz`, `*_unmerged.R2.fq.gz`, `*_trimmed.R1.fq.gz`, and `*_trimmed.R2.fq.gz`, as some of the assemblers needs these file in order to run, and the reads alignment is always performed using `*_trimmed.R1.fq.gz` and `*_trimmed.R2.fq.gz`.
-
-Even in this case you can add the `--logger snkmt` flag.
-
-Be sure to always name the files as shown in `1. Your data directory structure` section.
-
+Make sure to always name the files as shown in [Your input data directory structure](README.md#1-your-input-data-directory-structure) section.
 
 ### Running the workflow on the cluster
 
@@ -242,35 +247,7 @@ snakemake --profile profile/ --logger snkmt
 echo "Workflow completed at $(date)"
 ```
 
-With this sbatch script example, Snakemake will look for the default snakefil, which is `workflow/Snakefile`, and will run the workflow using that file. The only files you need in [your input data directory](README.md#1-your-input-data-directory-structure) in this case are `*_trimmed.R1.fq.gz` and `*_trimmed.R2.fq.gz`.
-
-
-If you want to use (previously) merged reads, you should modify the above script to use `workflow/Snakefile_merged` instead:
-
-```
-#!/bin/bash
-#SBATCH --job-name=snakemake-fsp
-#SBATCH --partition=medium
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=8G
-#SBATCH --time=48:00:00
-#SBATCH --output=snakemake-%j.out
-#SBATCH --error=snakemake-%j.err
-
-# Create logs directory
-mkdir -p logs
-
-# Load conda environment
-source ~/.bashrc
-conda activate snakemake
-
-# Run Snakemake (individual jobs will be distributed to appropriate partitions)
-echo "Starting Snakemake workflow at $(date)"
-snakemake --snakefile workflow/Snakefile_merged --profile profile/ --logger snkmt
-echo "Workflow completed at $(date)"
-```
-
-Note that for the workflow to run properly when using `workflow/Snakefile_merged` the input directory must contain all the files showed in [Your input data directory structure](README.md#1-your-input-data-directory-structure), including `*_unmerged.R1.fq.gz`, `*_unmerged.R2.fq.gz`, `*_trimmed.R1.fq.gz`, and `*_trimmed.R2.fq.gz`, as some of the assemblers needs these file in order to run, and the reads alignment is always performed using `*_trimmed.R1.fq.gz` and `*_trimmed.R2.fq.gz`.
+With this sbatch script example, Snakemake will look for the default Snakefile, which is `workflow/Snakefile`, and will run the workflow using that file.
 
 :mushroom::mushroom::mushroom: **IMPORTANT**: These are examples of sbatch script. Make sure to set up your sbatch script according to your system settings. :mushroom::mushroom::mushroom:
 
@@ -342,9 +319,5 @@ The other members of the FSP bioinformatics team, [Wu Huang](https://github.com/
 
 ## TODO
 
-
-
-
 - Update the [deployment](#deployment-options) and [references](#references) sections.
 - Update the `README.md` badges. Add or remove badges for `conda`/`singularity`/`apptainer` usage depending on the workflow's [deployment](#deployment-options) options.
-

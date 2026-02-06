@@ -3,12 +3,14 @@
 
 rule kmergenie_merged:
     wildcard_constraints:
-        reads_type="merged"
+        reads_type="merged",
     input:
         merged_in=f"{input_dir}" + "{sample}/{sample}_merge.fq.gz",
     output:
-        kmergenie_report=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/kmergenie/{sample}_report.html",
-        best_kmer=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/kmergenie/{sample}_best_kmer.txt",
+        kmergenie_report=f"{output_dir}"
+        + "{reads_type}/{strategy}/{sample}/kmergenie/{sample}_report.html",
+        best_kmer=f"{output_dir}"
+        + "{reads_type}/{strategy}/{sample}/kmergenie/{sample}_best_kmer.txt",
     params:
         k=config["kmergenie"]["k"],
         l=config["kmergenie"]["l"],

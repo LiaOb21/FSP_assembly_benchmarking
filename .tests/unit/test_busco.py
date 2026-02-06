@@ -22,17 +22,19 @@ def test_busco():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/busco_general/spades /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/busco_specific/spades", file=sys.stderr)
+        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results_3/R1R2/manual/048ds/busco_general/megahit /home/lobinu/git_repos/FSP_assembly_benchmarking/results_3/R1R2/manual/048ds/busco_specific/megahit", file=sys.stderr)
 
         # Run the test job.
         sp.check_output([
             "python",
             "-m",
             "snakemake", 
-            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/busco_general/spades /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/busco_specific/spades",
+            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results_3/R1R2/manual/048ds/busco_general/megahit /home/lobinu/git_repos/FSP_assembly_benchmarking/results_3/R1R2/manual/048ds/busco_specific/megahit",
             "-f", 
             "-j1",
             "--target-files-omit-workdir-adjustment",
+            "--configfile",
+            /home/lobinu/git_repos/FSP_assembly_benchmarking/config/test_config.yml
     
             "--directory",
             workdir,

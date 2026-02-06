@@ -1,12 +1,13 @@
 rule select_best_assembly:
     input:
         busco_dirs=expand(
-            f"{output_dir}" + "{reads_type}/{strategy}/{{sample}}/busco_specific/{assembler}",
+            f"{output_dir}"
+            + "{reads_type}/{strategy}/{{sample}}/busco_specific/{assembler}",
             reads_type=READS_TYPES,
             strategy=KMER_STRATEGIES,
             assembler=ASSEMBLERS,
         ),
-        report=f"{output_dir}" + "quast/{sample}/report.txt"
+        report=f"{output_dir}" + "quast/{sample}/report.txt",
     output:
         best_assemblies_dir=directory(f"{output_dir}" + "best_assembly/{sample}/"),
         assembly=f"{output_dir}" + "best_assembly/{sample}/{sample}_best_assembly.fa",

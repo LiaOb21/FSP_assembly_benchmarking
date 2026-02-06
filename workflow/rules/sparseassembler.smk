@@ -3,13 +3,16 @@
 
 rule sparseassembler:
     wildcard_constraints:
-        reads_type="R1R2"
+        reads_type="R1R2",
     input:
-        forward_in=f"{output_dir}" + "{reads_type}/fqreads/{sample}/{sample}_trimmed.R1.fq",
-        reverse_in=f"{output_dir}" + "{reads_type}/fqreads/{sample}/{sample}_trimmed.R2.fq",
+        forward_in=f"{output_dir}"
+        + "{reads_type}/fqreads/{sample}/{sample}_trimmed.R1.fq",
+        reverse_in=f"{output_dir}"
+        + "{reads_type}/fqreads/{sample}/{sample}_trimmed.R2.fq",
         kmergenie_result=get_kmergenie_dependency,
     output:
-        scaffolds=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/sparseassembler/SuperContigs.txt",
+        scaffolds=f"{output_dir}"
+        + "{reads_type}/{strategy}/{sample}/sparseassembler/SuperContigs.txt",
         link_assembly=f"{output_dir}"
         + "assemblies/{sample}/{sample}_{reads_type}_{strategy}_sparseassembler.fa",
     params:

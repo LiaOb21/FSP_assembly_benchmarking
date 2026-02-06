@@ -22,17 +22,19 @@ def test_samtools():
         shutil.copytree(data_path, workdir)
 
         # dbg
-        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/samtools_pypolca/048ds_best_assembly_pypolca.bam /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/samtools_pypolca/048ds_best_assembly_pypolca_sorted.bam /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/samtools_pypolca/048ds_best_assembly_pypolca_coverage_stats.txt /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/samtools_pypolca/048ds_best_assembly_pypolca_flagstat.txt", file=sys.stderr)
+        print("/home/lobinu/git_repos/FSP_assembly_benchmarking/results_3/best_assembly_qc/048ds/samtools_pypolca/048ds_best_assembly_pypolca.bam /home/lobinu/git_repos/FSP_assembly_benchmarking/results_3/best_assembly_qc/048ds/samtools_pypolca/048ds_best_assembly_pypolca_sorted.bam /home/lobinu/git_repos/FSP_assembly_benchmarking/results_3/best_assembly_qc/048ds/samtools_pypolca/048ds_best_assembly_pypolca_coverage_stats.txt /home/lobinu/git_repos/FSP_assembly_benchmarking/results_3/best_assembly_qc/048ds/samtools_pypolca/048ds_best_assembly_pypolca_flagstat.txt", file=sys.stderr)
 
         # Run the test job.
         sp.check_output([
             "python",
             "-m",
             "snakemake", 
-            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/samtools_pypolca/048ds_best_assembly_pypolca.bam /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/samtools_pypolca/048ds_best_assembly_pypolca_sorted.bam /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/samtools_pypolca/048ds_best_assembly_pypolca_coverage_stats.txt /home/lobinu/git_repos/FSP_assembly_benchmarking/results/048ds/best_assembly_qc/samtools_pypolca/048ds_best_assembly_pypolca_flagstat.txt",
+            "/home/lobinu/git_repos/FSP_assembly_benchmarking/results_3/best_assembly_qc/048ds/samtools_pypolca/048ds_best_assembly_pypolca.bam /home/lobinu/git_repos/FSP_assembly_benchmarking/results_3/best_assembly_qc/048ds/samtools_pypolca/048ds_best_assembly_pypolca_sorted.bam /home/lobinu/git_repos/FSP_assembly_benchmarking/results_3/best_assembly_qc/048ds/samtools_pypolca/048ds_best_assembly_pypolca_coverage_stats.txt /home/lobinu/git_repos/FSP_assembly_benchmarking/results_3/best_assembly_qc/048ds/samtools_pypolca/048ds_best_assembly_pypolca_flagstat.txt",
             "-f", 
             "-j1",
             "--target-files-omit-workdir-adjustment",
+            "--configfile",
+            /home/lobinu/git_repos/FSP_assembly_benchmarking/config/test_config.yml
     
             "--directory",
             workdir,

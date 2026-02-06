@@ -6,11 +6,14 @@
 
 rule decompress_reads:
     wildcard_constraints:
-        reads_type="R1R2"
+        reads_type="R1R2",
     input:
         gz=f"{input_dir}" + "{sample}/{sample}_trimmed.{read}.fq.gz",
     output:
-        fq=temp(f"{output_dir}" + "{reads_type}/fqreads/{sample}/{sample}_trimmed.{read}.fq"),
+        fq=temp(
+            f"{output_dir}"
+            + "{reads_type}/fqreads/{sample}/{sample}_trimmed.{read}.fq"
+        ),
     threads: 1
     resources:
         mem_mb=get_very_low_mem,

@@ -3,12 +3,14 @@
 
 rule seqkit:
     wildcard_constraints:
-        reads_type="R1R2"
+        reads_type="R1R2",
     input:
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
     output:
-        seqkit_results=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/seqkit/{sample}_seqkit.txt",
-        kmer=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/seqkit/{sample}_kmer_value.txt",
+        seqkit_results=f"{output_dir}"
+        + "{reads_type}/{strategy}/{sample}/seqkit/{sample}_seqkit.txt",
+        kmer=f"{output_dir}"
+        + "{reads_type}/{strategy}/{sample}/seqkit/{sample}_kmer_value.txt",
     threads: get_very_low_threads
     resources:
         mem_mb=get_very_low_mem,

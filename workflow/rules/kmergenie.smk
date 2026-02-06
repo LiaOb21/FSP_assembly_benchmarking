@@ -3,13 +3,15 @@
 
 rule kmergenie:
     wildcard_constraints:
-        reads_type="R1R2"
+        reads_type="R1R2",
     input:
         forward_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R1.fq.gz",
         reverse_in=f"{input_dir}" + "{sample}/{sample}_trimmed.R2.fq.gz",
     output:
-        kmergenie_report=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/kmergenie/{sample}_report.html",
-        best_kmer=f"{output_dir}" + "{reads_type}/{strategy}/{sample}/kmergenie/{sample}_best_kmer.txt",
+        kmergenie_report=f"{output_dir}"
+        + "{reads_type}/{strategy}/{sample}/kmergenie/{sample}_report.html",
+        best_kmer=f"{output_dir}"
+        + "{reads_type}/{strategy}/{sample}/kmergenie/{sample}_best_kmer.txt",
     params:
         k=config["kmergenie"]["k"],
         l=config["kmergenie"]["l"],

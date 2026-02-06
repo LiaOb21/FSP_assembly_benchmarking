@@ -1,0 +1,5 @@
+#rname	startpos	endpos	numreads	covbases	coverage	meandepth	meanbaseq	meanmapq
+k141_3	1	262	14	249	95.0382	5.12977	33.3	25.4
+k141_1	1	336	16	336	100	5.45238	34.6	60
+k141_0	1	385	61	385	100	13.8208	34.1	52.8
+k141_2	1	869	128	869	100	15.1381	33.7	56.8

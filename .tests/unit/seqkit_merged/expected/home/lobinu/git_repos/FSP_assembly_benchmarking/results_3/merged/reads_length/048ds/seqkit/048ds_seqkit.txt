@@ -1,0 +1,2 @@
+file                                                                                format  type  num_seqs  sum_len  min_len  avg_len  max_len  Q1   Q2   Q3  sum_gap  N50  N50_num  Q20(%)  Q30(%)  AvgQual  GC(%)  sum_n
+/home/lobinu/git_repos/FSP_assembly_benchmarking/test_data/048ds/048ds_merge.fq.gz  FASTQ   DNA      5,022  602,328       21    119.9      273  80  114  153        0  139      131   92.31   79.85    21.76  43.95      0
