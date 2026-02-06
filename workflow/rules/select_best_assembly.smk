@@ -13,7 +13,10 @@ rule select_best_assembly:
         assembly=f"{output_dir}" + "best_assembly/{sample}/{sample}_best_assembly.fa",
     params:
         sample="{sample}",
-        results_dir=lambda w, output: os.path.dirname(os.path.dirname(os.path.dirname(output.assembly))) + "/",
+        results_dir=lambda w, output: os.path.dirname(
+            os.path.dirname(os.path.dirname(output.assembly))
+        )
+        + "/",
     threads: 1
     resources:
         mem_mb=get_very_low_mem,
