@@ -230,7 +230,6 @@ Create `run_snakemake.sh`:
 #SBATCH --partition=medium
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=8G
-#SBATCH --time=48:00:00
 #SBATCH --output=snakemake-%j.out
 #SBATCH --error=snakemake-%j.err
 
