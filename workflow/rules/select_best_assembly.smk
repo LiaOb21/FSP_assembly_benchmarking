@@ -16,8 +16,7 @@ rule select_best_assembly:
             os.path.dirname(os.path.dirname(output.assembly))
         )
         + "/",
-        best_assemblies_dir=lambda w, output: os.path.dirname(output.assembly)
-        + "/",
+        best_assemblies_dir=lambda w, output: os.path.dirname(output.assembly) + "/",
     threads: 1
     resources:
         mem_mb=get_very_low_mem,
