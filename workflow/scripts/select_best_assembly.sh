@@ -153,7 +153,7 @@ echo "  Multiple assemblies with the highest BUSCOs, checking auN..."
 echo "Extracting auN scores..."
 
 # Extract auN from QUAST report
-quast_file="${results_dir}/quast/$sample/report.txt"
+quast_file="${results_dir}quast/$sample/report.txt"
 
 if [[ -f "$quast_file" ]]; then
     echo "  Found QUAST report at: $quast_file" >&2
@@ -166,8 +166,8 @@ if [[ -f "$quast_file" ]]; then
                 gsub(/\.fa$/, "", $i);
                 
                 # Extract everything starting from R1R2_ or merged_
-                # This handles any sample name format including underscores
-                if (match($i, /(R1R2|merged)_[^_]+_[^_]+$/)) {
+                # Also handles strategies with underscores like reads_length
+                if (match($i, /(R1R2|merged)_.+/)) {
                     extracted = substr($i, RSTART);
                     a[i-1] = extracted;
                 }
