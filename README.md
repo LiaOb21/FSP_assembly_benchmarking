@@ -132,7 +132,7 @@ conda activate busco
 
 busco --list > busco_lineages.txt
 
-awk '/fungi_odb12/{flag=1; indent=length($0)-length(ltrim($0)); print "fungi_odb12"; next}
+gawk '/fungi_odb12/{flag=1; indent=length($0)-length(ltrim($0)); print "fungi_odb12"; next}
      flag && /- [a-z_]*_odb12/ {
          current_indent=length($0)-length(ltrim($0))
          if(current_indent <= indent) flag=0
